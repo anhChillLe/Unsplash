@@ -1,3 +1,5 @@
+import { Topic } from "../api/type";
+
 export const topics = [
     {
         "id": "Mr49Evh5Sks",

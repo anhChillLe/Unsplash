@@ -1,37 +1,91 @@
-import {ScrollView} from 'react-native';
-import {Card} from 'react-native-paper';
+import {ScrollView, Share, View} from 'react-native';
 import {StyleProp, ViewStyle} from 'react-native';
+import {ImageCard} from '..';
+import {Photo} from '../../services/api/type';
+import {photos} from 'unsplash-js/dist/internals';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
+export interface Props {
+  data: Photo[];
+  itemWidth: number;
+  itemHeight: number;
+  space: number;
+  onItemPress?: (photo: Photo) => void;
+  isLoading?: boolean;
+  cardStyle?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+}
 export default function HorizontalImageList({
   data,
   itemWidth,
   itemHeight,
   space,
+  isLoading = false,
+  onItemPress = (photo: Photo) => {},
   cardStyle,
   containerStyle,
-}: {
-  data: any[];
-  itemWidth: number;
-  itemHeight: number;
-  space: number;
-  cardStyle?: StyleProp<ViewStyle>;
-  containerStyle?: StyleProp<ViewStyle>;
-}) {
+}: Props) {
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={containerStyle}>
-      {data.map((item, index) => (
-        <Card
-          key={index.toString()}
-          style={[{marginRight: space, width: itemWidth, height: itemHeight}, cardStyle]}>
-          <Card.Cover
-            style={{width: itemWidth, height: itemHeight}}
-            source={{uri: item.urls.thumb}}
+      {isLoading ? (
+        <ListSkeleton width={itemWidth} height={itemHeight} space={space} />
+      ) : (
+        data.map((item, index) => (
+          <ImageCard
+            key={index.toString()}
+            style={[
+              index + 1 < data.length ? {marginRight: space} : null,
+              cardStyle,
+            ]}
+            photo={item}
+            width={itemWidth}
+            height={itemHeight}
+            onPress={() => onItemPress(item)}
+            placeHolderMode="color"
+            quality="auto"
           />
-        </Card>
-      ))}
+        ))
+      )}
     </ScrollView>
+  );
+}
+
+function ListSkeleton({
+  width,
+  height,
+  space,
+}: {
+  width: number;
+  height: number;
+  space: number;
+}) {
+  return (
+    <SkeletonPlaceholder borderRadius={8}>
+      <SkeletonPlaceholder.Item style={{flexDirection: 'row'}}>
+        <SkeletonPlaceholder.Item
+          width={width}
+          height={height}
+          marginEnd={space}
+        />
+        <SkeletonPlaceholder.Item
+          width={width}
+          height={height}
+          marginEnd={space}
+        />
+        <SkeletonPlaceholder.Item
+          width={width}
+          height={height}
+          marginEnd={space}
+        />
+        <SkeletonPlaceholder.Item
+          width={width}
+          height={height}
+          marginEnd={space}
+        />
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder>
   );
 }

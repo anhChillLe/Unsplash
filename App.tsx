@@ -1,15 +1,14 @@
-import {Center, NativeBaseProvider, Text} from 'native-base';
 import {store} from './src/redux/store/store';
 import {Provider as ReduxProvider} from 'react-redux';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Root from './src/navigations/root_navigation';
 
 export default function App() {
   return (
-    <NativeBaseProvider>
+    <SafeAreaProvider>
       <ReduxProvider store={store}>
-        <Center flex={1}>
-          <Text fontSize="xl">Hello world!</Text>
-        </Center>
+        <Root />
       </ReduxProvider>
-    </NativeBaseProvider>
+    </SafeAreaProvider>
   );
 }

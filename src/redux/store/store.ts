@@ -1,9 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
-import homeReducer from '../features/home';
+import photoReducer from '../features/photos';
+import topicReducer from '../features/topics';
+import collectionReducer from '../features/collections';
 
 export const store = configureStore({
   reducer: {
-    home: homeReducer,
+    photo: photoReducer,
+    topic: topicReducer,
+    collection: collectionReducer
   },
 });
 

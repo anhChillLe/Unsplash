@@ -5,15 +5,19 @@ import ImageCard from '../ImageCard/ImageCard';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 type Props = {
-  data: Topic[] | Collection[] | any[];
+  data: Topic[] | Collection[];
   column: number;
   space: number;
   width: number;
+  header?: React.ReactElement;
+  onItemPress?: (item: Topic | Collection) => void;
   isLoading?: boolean;
   mode?: 'compact' | 'list';
   itemRatio?: number;
   maxItems?: number;
-  containerStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
+  onEndReached?: () => void;
 };
 
 function ListAlbums({
@@ -24,8 +28,12 @@ function ListAlbums({
   isLoading = false,
   mode = 'compact',
   itemRatio = 3 / 2,
-  maxItems = 4,
-  containerStyle,
+  maxItems,
+  header,
+  onEndReached,
+  onItemPress,
+  contentContainerStyle,
+  style,
 }: Props) {
   const itemWidth = (width - (column - 1) * space) / column;
 
@@ -36,7 +44,7 @@ function ListAlbums({
 
   const getItemMarginBottom = (index: number) => {
     if (index < data.length - column) return space;
-    else return 2;
+    else return 0;
   };
 
   if (maxItems && data.length > maxItems) {
@@ -46,7 +54,7 @@ function ListAlbums({
     return (
       <SkeletonPlaceholder borderRadius={8}>
         <SkeletonPlaceholder.Item
-          style={[{flexDirection: 'row', flexWrap: 'wrap'}, containerStyle]}>
+          style={[{flexDirection: 'row', flexWrap: 'wrap'}, style]}>
           {[...Array(maxItems)].map((_, index) => {
             const marginEnd = getItemMarginEnd(index);
             const marginBottom = getItemMarginBottom(index);
@@ -65,9 +73,11 @@ function ListAlbums({
     );
   }
 
-  function Album({item, index}: {item: any; index: number}) {
+  function Album({item, index}: {item: Topic | Collection; index: number}) {
     const marginEnd = getItemMarginEnd(index);
     const marginBottom = getItemMarginBottom(index);
+
+    if(!item.cover_photo) return null
 
     return (
       <View style={{marginEnd, marginBottom}}>
@@ -75,6 +85,8 @@ function ListAlbums({
           photo={item.cover_photo}
           width={itemWidth}
           height={itemWidth / itemRatio}
+          placeHolderMode="skeleton"
+          onPress={onItemPress ? () => onItemPress(item) : undefined}
         />
         <View
           style={{
@@ -106,10 +118,8 @@ function ListAlbums({
   switch (mode) {
     case 'compact':
       if (isLoading) return <SkeletonList />;
-
       return (
-        <View
-          style={[{flexDirection: 'row', flexWrap: 'wrap'}, containerStyle]}>
+        <View style={[{flexDirection: 'row', flexWrap: 'wrap'}, style]}>
           {data.map((item, index) => (
             <Album key={index} item={item} index={index} />
           ))}
@@ -121,8 +131,12 @@ function ListAlbums({
           data={data}
           renderItem={Album}
           numColumns={column}
-          contentContainerStyle={containerStyle}
+          onEndReached={onEndReached}
+          style={style}
+          ListHeaderComponent={header}
+          contentContainerStyle={contentContainerStyle}
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item: Topic | Collection, index: number) => item.id}
         />
       );
   }

@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {Topic} from '../../services/api/type';
-import unsplash from '../../services/api/unsplash';
+import {Topic} from '../../../services/api/type';
+import unsplash from '../../../services/api/unsplash';
 
 interface TopicsState {
   isLoadingTopics: boolean;
@@ -8,7 +8,7 @@ interface TopicsState {
 }
 
 const initialState: TopicsState = {
-  isLoadingTopics: false,
+  isLoadingTopics: true,
   topics: [],
 };
 

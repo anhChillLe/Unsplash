@@ -4,6 +4,8 @@ import ListAlbums from './List/ListAlbum';
 import ImageCard from './ImageCard/ImageCard';
 import MyAppBar from './Appbar/Appbar';
 import UserElement from './User/User';
+import ListImageLite from './List/ListImageLite';
+import BackAppBar from './Appbar/BackAppBar';
 
 export {
   HorizontalImageList,
@@ -12,4 +14,6 @@ export {
   ImageCard,
   MyAppBar,
   UserElement,
+  ListImageLite,
+  BackAppBar
 };

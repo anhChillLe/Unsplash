@@ -1,0 +1,1 @@
+export type PlaceHolderMode = 'color' | 'skeleton' | 'blurhash' | 'none';

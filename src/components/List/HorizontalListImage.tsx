@@ -10,6 +10,7 @@ export interface Props {
   itemWidth: number;
   itemHeight: number;
   space: number;
+  maxItem?: number;
   onItemPress?: (photo: Photo) => void;
   isLoading?: boolean;
   cardStyle?: StyleProp<ViewStyle>;
@@ -21,10 +22,16 @@ export default function HorizontalImageList({
   itemHeight,
   space,
   isLoading = false,
+  maxItem = 10,
   onItemPress = (photo: Photo) => {},
   cardStyle,
   containerStyle,
 }: Props) {
+
+  if(data.length >= maxItem){
+    data = data.slice(0, maxItem)
+  }
+
   return (
     <ScrollView
       horizontal
@@ -45,7 +52,7 @@ export default function HorizontalImageList({
             height={itemHeight}
             onPress={() => onItemPress(item)}
             placeHolderMode="color"
-            quality="auto"
+            quality="regular"
           />
         ))
       )}

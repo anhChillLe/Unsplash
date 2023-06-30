@@ -1,13 +1,21 @@
 import {configureStore} from '@reduxjs/toolkit';
-import photoReducer from '../features/photos';
-import topicReducer from '../features/topics';
-import collectionReducer from '../features/collections';
+import topicReducer from '../features/topic/topics';
+import collectionReducer from '../features/collection/collections';
+import photoLatestReducer from '../features/photo/latest';
+import photoOldestReducer from '../features/photo/oldest';
+import photoPopularReducer from '../features/photo/popular';
+import collectionPhotosReducer from '../features/collection/photos';
+import topicPhotosReducer from '../features/topic/detail';
 
 export const store = configureStore({
   reducer: {
-    photo: photoReducer,
+    photoLatest: photoLatestReducer,
+    photoOldest: photoOldestReducer,
+    photoPopular: photoPopularReducer,
     topic: topicReducer,
-    collection: collectionReducer
+    topicPhoto: topicPhotosReducer,
+    collection: collectionReducer,
+    collectionPhotos: collectionPhotosReducer,
   },
 });
 

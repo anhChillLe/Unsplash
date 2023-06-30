@@ -1,16 +1,14 @@
 import {useState} from 'react';
-import {Dimensions, PixelRatio, StyleProp, View, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {Card, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {Photo} from '../../services/api/type';
 import {Blurhash} from 'react-native-blurhash';
 import FastImage from 'react-native-fast-image';
-
-export function getImageUrl(baseUrl: string, width: number, height: number) {
-  const imageWidthPixel = PixelRatio.getPixelSizeForLayoutSize(width);
-  const imageHeightPixel = PixelRatio.getPixelSizeForLayoutSize(height);
-  return baseUrl + `&w=${imageWidthPixel}&h=${imageHeightPixel}`;
-}
+import {PlaceHolderMode} from '../../constants/place_holder';
+import {Quality} from '../../constants/quality';
+import {getImageUrl} from '../../ultilities/image_ulti';
+import { Colors } from '../../constants/colors';
 
 interface Props {
   photo: Photo;
@@ -20,8 +18,8 @@ interface Props {
   onPress?: (photo: Photo) => void;
   mode?: 'elevated' | 'contained' | 'outlined';
   style?: StyleProp<ViewStyle>;
-  quality?: 'thumb' | 'full' | 'raw' | 'regular' | 'small' | 'auto';
-  placeHolderMode?: 'color' | 'skeleton' | 'blurhash' | 'none';
+  quality?: Quality;
+  placeHolderMode?: PlaceHolderMode;
 }
 
 export default function ImageCard({
@@ -35,20 +33,27 @@ export default function ImageCard({
   placeHolderMode = 'none',
   quality = 'auto',
 }: Props) {
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const startLoading = () => setLoading(true);
   const endLoading = () => setLoading(false);
 
   const theme = useTheme();
   if (width === 'full') width = Dimensions.get('window').width;
-  if (height === 'auto') height = (width * photo.width) / photo.height;
+  if (height === 'auto') height = (width * photo.height) / photo.width;
   if (roundness === undefined) roundness = theme.roundness;
+
+  const uri =
+    quality === 'auto'
+      ? getImageUrl(photo.urls.raw, width, height)
+      : photo.urls[quality];
 
   return (
     <Card
       style={[style, {overflow: 'hidden'}]}
       mode={mode}
-      theme={{roundness}}
+      theme={{roundness, colors: {
+        outline: Colors.transparent
+      }}}
       onPress={() => onPress(photo)}>
       <FastImage
         onLoadStart={startLoading}
@@ -59,12 +64,8 @@ export default function ImageCard({
             ? {backgroundColor: photo.color}
             : null,
         ]}
-        source={{
-          uri:
-            quality === 'auto'
-              ? getImageUrl(photo.urls.raw, width, height)
-              : photo.urls[quality],
-        }}
+        source={{uri}}
+        resizeMode="cover"
       />
       {placeHolderMode === 'skeleton' && isLoading ? (
         <View style={{position: 'absolute'}}>

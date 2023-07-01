@@ -13,7 +13,7 @@ type Props = {
   column: number;
   itemThreshold?: number;
   onEndReached?: () => void;
-  onItemPress?: (photo: Photo) => void;
+  onItemPress?: (photo: Photo, index: number) => void;
   style?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   itemPlaceHolderMode?: PlaceHolderMode;
@@ -27,20 +27,20 @@ export default function ListImageLite({
   style,
   itemThreshold = 0,
   onEndReached = () => {},
-  onItemPress = photo => {},
+  onItemPress = (photo, index) => {},
   contentContainerStyle,
   header,
 }: Props) {
   const itemWidth = (width - column * space) / column;
 
-  function Item({item}: {item: Photo}) {
+  function Item({item, index}: {item: Photo, index: number}) {
     const photo = item as Photo;
 
     const itemHeight = (itemWidth * 4) / 3;
     const uri = getImageUrl(photo.urls.raw, itemWidth, itemHeight);
 
     return (
-      <Pressable onPress={() => onItemPress(photo)}>
+      <Pressable onPress={() => onItemPress(photo, index)}>
         <FastImage
           source={{uri}}
           style={{
@@ -61,20 +61,20 @@ export default function ListImageLite({
   ) => prevProps.item.urls.raw === nextProps.item.urls.raw;
 
   const RenderItem = React.memo(Item, compareItem);
-  
-  const length = photos.length
-  const threshold = length === 0 ? 0 : itemThreshold / length
+
+  const length = photos.length;
+  const threshold = length === 0 ? 0 : itemThreshold / length;
 
   return (
     <FlatList
       data={photos}
-      renderItem={({item, index}) => <RenderItem item={item} />}
+      renderItem={({item, index}) => <RenderItem item={item} index={index}/>}
       numColumns={column}
       keyExtractor={item => item.id}
       style={style}
       ListFooterComponent={<ActivityIndicator style={{margin: 8}} />}
       ListHeaderComponent={header}
-      onEndReached={onEndReached}
+      onEndReached={length !== 0 ? onEndReached : () => {}}
       onEndReachedThreshold={threshold}
       contentContainerStyle={contentContainerStyle}
       showsVerticalScrollIndicator={false}

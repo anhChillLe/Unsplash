@@ -41,7 +41,7 @@ export default function TopicPhotos({route}: {route: Props}) {
         space={4}
         photos={state.photos}
         header={<ListHeader topic={topic} />}
-        onItemPress={photo => navigation?.navigate(ScreenName.detail, {photo})}
+        onItemPress={(photo, index) => navigation?.navigate(ScreenName.detailPager, {position: index, type: 'topic'})}
         column={3}
         itemThreshold={6}
         onEndReached={loadMore}

@@ -16,6 +16,7 @@ export const fetchTopics = createAsyncThunk('fetchTopics', async () => {
   const result = await unsplash.topics.list({
     orderBy: 'latest'
   })
+
   return result.response?.results ?? []
 })
 

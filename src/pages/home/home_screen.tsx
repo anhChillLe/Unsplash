@@ -12,6 +12,7 @@ import {fetchCollections} from '../../redux/features/collection/collections';
 import {getPhotosPopular} from '../../redux/features/photo/action';
 
 export default function HomeScreen() {
+  const navigation = useContext(NavigationContext);
   const {width} = Dimensions.get('window');
   const {top, bottom, left, right} = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
@@ -53,6 +54,7 @@ export default function HomeScreen() {
             placeholder="Search for image"
             focusable={false}
             value={''}
+            onPressIn={() => navigation?.navigate(ScreenName.SearchScreen)}
           />
           <PhotoGroup />
           <TopicGroup width={safeAreaWidth} />

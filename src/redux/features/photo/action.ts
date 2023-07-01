@@ -29,7 +29,7 @@ export function getPhotosAction(typePrefix: string, order: OrderBy) {
     typePrefix,
     async (_, thunkApi) => {
       const {photoLatest, photoOldest, photoPopular} = thunkApi.getState();
-      let page = -1;
+      let page = 0;
 
       switch (order) {
         case OrderBy.LATEST:

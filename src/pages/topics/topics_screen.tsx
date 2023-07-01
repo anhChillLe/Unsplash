@@ -21,7 +21,6 @@ export default function TopicScreen() {
         style={{
           flex: 1,
           height: '100%',
-          paddingHorizontal: 16,
           paddingTop: top,
         }}>
         <BackAppBar />
@@ -38,7 +37,7 @@ export default function TopicScreen() {
             </Text>
           }
           style={{flex: 1}}
-          contentContainerStyle={{paddingBottom: bottom + 16}}
+          contentContainerStyle={{paddingBottom: bottom + 16, paddingHorizontal: 16}}
           isLoading={state.isLoadingTopics}
           width={safeAreaWidth}
           onItemPress={topic =>

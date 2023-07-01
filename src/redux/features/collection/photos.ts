@@ -4,8 +4,8 @@ import {RootState} from '../../store/store';
 import unsplash from '../../../services/api/unsplash';
 
 type CollectionPhotosState = {
-  isLoadingDetail: boolean
-  detail: CollectionWithTags | null,
+  isLoadingDetail: boolean;
+  detail: CollectionWithTags | null;
   isLoading: boolean;
   page: number;
   photos: Photo[];
@@ -19,25 +19,31 @@ const initialState: CollectionPhotosState = {
   photos: [],
 };
 
-const condition = (collectionId: string, {getState}: {getState: () => RootState}) => {
+const condition = (
+  collectionId: string,
+  {getState}: {getState: () => RootState},
+) => {
   const {collectionPhotos} = getState();
   return !collectionPhotos.isLoading;
 };
 export const getCollectionPhotos = createAsyncThunk<
   Photo[],
-  string,
+  string | 'nextPage',
   {state: RootState}
 >(
   'getCollectionPhotos',
   async (collectionId, thunkApi) => {
     const state = thunkApi.getState().collectionPhotos;
 
-    if(collectionId !== state.detail?.id){
-      state.photos = []
+    if (collectionId !== state.detail?.id) {
+      state.photos = [];
     }
 
     const result = await unsplash.collections.getPhotos({
-      collectionId,
+      collectionId:
+        collectionId === 'nextPage'
+          ? state.detail?.id ?? collectionId
+          : collectionId,
       page: state.page + 1,
       perPage: 21,
     });
@@ -61,11 +67,11 @@ const collectionPhotosSlice = createSlice({
   name: 'collectionPhotos',
   initialState,
   reducers: {
-    clear(state, action: PayloadAction<{id: string}>){
-      if(state.detail?.id !== action.payload.id){
-        state = initialState
+    clear(state, action: PayloadAction<{id: string}>) {
+      if (state.detail?.id !== action.payload.id) {
+        state = initialState;
       }
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(getCollectionPhotos.pending, state => {
@@ -81,17 +87,17 @@ const collectionPhotosSlice = createSlice({
     });
 
     builder.addCase(getCollectionDetail.pending, state => {
-      state.isLoadingDetail = true
+      state.isLoadingDetail = true;
     });
     builder.addCase(getCollectionDetail.fulfilled, (state, action) => {
-      state.isLoadingDetail = false
-      state.detail = action.payload
+      state.isLoadingDetail = false;
+      state.detail = action.payload;
     });
     builder.addCase(getCollectionDetail.rejected, state => {
-      state.isLoadingDetail = false
+      state.isLoadingDetail = false;
     });
   },
 });
 
-export const {clear} = collectionPhotosSlice.actions
+export const {clear} = collectionPhotosSlice.actions;
 export default collectionPhotosSlice.reducer;

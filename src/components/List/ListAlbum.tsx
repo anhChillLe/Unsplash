@@ -77,10 +77,10 @@ function ListAlbums({
     const marginEnd = getItemMarginEnd(index);
     const marginBottom = getItemMarginBottom(index);
 
-    if(!item.cover_photo) return null
+    if (!item.cover_photo) return null;
 
     return (
-      <View style={{marginEnd, marginBottom}}>
+      <View style={{marginEnd, marginBottom, width: itemWidth}}>
         <ImageCard
           photo={item.cover_photo}
           width={itemWidth}
@@ -88,29 +88,16 @@ function ListAlbums({
           placeHolderMode="skeleton"
           onPress={onItemPress ? () => onItemPress(item) : undefined}
         />
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            paddingLeft: 12,
-            paddingBottom: 12,
-            paddingEnd: 8,
-            paddingTop: 8,
-          }}>
-          <Text
-            variant="titleLarge"
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{color: 'white', fontWeight: '500'}}>
-            {item.title}
-          </Text>
-          <Text
-            variant="titleSmall"
-            style={{color: 'white', fontWeight: '500'}}>
-            {item.total_photos} wallpapers
-          </Text>
-        </View>
+        <Text
+          variant="titleMedium"
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={{fontWeight: 'bold'}}>
+          {item.title}
+        </Text>
+        <Text variant="bodySmall" style={{fontWeight: '500'}}>
+          {item.total_photos} wallpapers
+        </Text>
       </View>
     );
   }

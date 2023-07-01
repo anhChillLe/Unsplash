@@ -9,6 +9,7 @@ import {Surface} from 'react-native-paper';
 import {getPhotos} from '../../redux/features/photo/action';
 import {PhotosParamList} from '../../navigations/list_top_navigation';
 import {OrderBy} from 'unsplash-js';
+import {ListType} from '../../constants/list_type';
 
 type Props = RouteProp<
   PhotosParamList,
@@ -34,6 +35,7 @@ export default function AllImageScreen({route}: {route: Props}) {
   });
 
   const dispatch = useDispatch<AppDispatch>();
+
   const loadMore = () => {
     dispatch(getPhotos(order)());
   };
@@ -41,6 +43,22 @@ export default function AllImageScreen({route}: {route: Props}) {
   useEffect(() => {
     dispatch(getPhotos(order)());
   }, []);
+
+  let type: ListType;
+  switch (order) {
+    case OrderBy.LATEST:
+      type = 'latest';
+      break;
+    case OrderBy.POPULAR:
+      type = 'popular';
+      break;
+    case OrderBy.OLDEST:
+      type = 'oldest';
+      break;
+    default:
+      type = 'latest';
+      break;
+  }
 
   return (
     <Surface
@@ -56,7 +74,9 @@ export default function AllImageScreen({route}: {route: Props}) {
         column={3}
         style={{flex: 1}}
         onEndReached={loadMore}
-        onItemPress={photo => navigation?.navigate(ScreenName.detail, {photo})}
+        onItemPress={(photo, index) =>
+          navigation?.navigate(ScreenName.detailPager, {position: index, type})
+        }
       />
     </Surface>
   );

@@ -23,7 +23,7 @@ const condition = (id: string, {getState}: {getState: () => RootState}) => {
 };
 export const getTopicPhotos = createAsyncThunk<
   Photo[],
-  string,
+  string | 'nextPage',
   {state: RootState}
 >(
   'getTopicPhotos',
@@ -31,7 +31,7 @@ export const getTopicPhotos = createAsyncThunk<
     const state = thunkApi.getState().topicPhoto;
 
     const result = await unsplash.topics.getPhotos({
-      topicIdOrSlug: id,
+      topicIdOrSlug: id === 'nextPage' ? state.id : id,
       page: state.page + 1,
       perPage: 21,
       orderBy: OrderBy.LATEST,

@@ -27,7 +27,6 @@ export default function CollectionScreen() {
         style={{
           flex: 1,
           height: '100%',
-          paddingHorizontal: 16,
           paddingTop: top,
         }}>
         <BackAppBar />
@@ -48,7 +47,10 @@ export default function CollectionScreen() {
           onItemPress={collection =>
             navigation?.navigate(ScreenName.CollectionPhotos, {collection})
           }
-          contentContainerStyle={{paddingBottom: bottom + 16}}
+          contentContainerStyle={{
+            paddingBottom: bottom + 16,
+            paddingHorizontal: 16,
+          }}
           isLoading={state.isLoadingCollections}
           width={safeAreaWidth}
         />

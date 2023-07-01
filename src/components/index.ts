@@ -6,6 +6,7 @@ import MyAppBar from './Appbar/Appbar';
 import UserElement from './User/User';
 import ListImageLite from './List/ListImageLite';
 import BackAppBar from './Appbar/BackAppBar';
+import SelectableChip from './CustomChip/SelectableChip';
 
 export {
   HorizontalImageList,
@@ -15,5 +16,6 @@ export {
   MyAppBar,
   UserElement,
   ListImageLite,
-  BackAppBar
+  BackAppBar,
+  SelectableChip
 };

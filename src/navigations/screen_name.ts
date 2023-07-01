@@ -1,6 +1,7 @@
 export enum ScreenName {
   home = 'HomeScreen',
   detail= 'DetailScreen',
+  detailPager = 'detailPager',
   topics = 'AllTopicScreen',
   collections = 'AllCollection',
   allImage = 'AllImage',
@@ -10,5 +11,8 @@ export enum ScreenName {
   ListTopic = 'ListTopic',
   ListCollection = 'ListCollection',
   CollectionPhotos = 'CollectionPhotos',
-  TopicPhotos = 'TopicPhotos'
+  TopicPhotos = 'TopicPhotos',
+  SearchScreen = 'Search',
+  SearchFilter = 'SearchFilter',
+  SearchResult = 'SearchResult',
 }

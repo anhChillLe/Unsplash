@@ -2,7 +2,7 @@ import {Avatar, Chip, Surface, Text} from 'react-native-paper';
 import {BackAppBar, ListImageLite} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux/store/store';
-import {Collection, Tag} from '../../services/api/type';
+import {Tag} from '../../services/api/type';
 import {Dimensions, View} from 'react-native';
 import {RootStackParamList} from '../../navigations/root_navigation';
 import {ScreenName} from '../../navigations/screen_name';
@@ -15,7 +15,6 @@ import {
 } from '../../redux/features/collection/photos';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {formatDate} from '../../ultilities/date_distance';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 type Props = RouteProp<RootStackParamList, ScreenName.CollectionPhotos>;
 export default function CollectionPhoto({route}: {route: Props}) {
@@ -33,6 +32,10 @@ export default function CollectionPhoto({route}: {route: Props}) {
     dispatch(getCollectionDetail(collection.id));
   }, []);
 
+  const loadMore = () => {
+    dispatch(getCollectionPhotos(collection.id));
+  };
+
   return (
     <Surface mode="flat" style={{flex: 1, height: '100%', paddingTop: top}}>
       <BackAppBar />
@@ -41,10 +44,17 @@ export default function CollectionPhoto({route}: {route: Props}) {
         space={4}
         photos={state.photos}
         header={<ListHeader />}
-        onItemPress={photo => navigation?.navigate(ScreenName.detail, {photo})}
+        onItemPress={(photo, index) =>
+          navigation?.navigate(ScreenName.detailPager, {
+            position: index,
+            type: 'collection',
+          })
+        }
         column={3}
+        itemThreshold={6}
+        onEndReached={loadMore}
         contentContainerStyle={{
-          paddingHorizontal: 8,
+          paddingHorizontal: 8
         }}
       />
     </Surface>
@@ -58,7 +68,11 @@ const ListHeader = () => {
   if (collection === null) return null;
 
   return (
-    <Surface mode="flat" style={{paddingVertical: 4}}>
+    <Surface
+      mode="flat"
+      style={{
+        paddingVertical: 4,
+      }}>
       <Text
         variant="headlineLarge"
         numberOfLines={1}
@@ -66,15 +80,16 @@ const ListHeader = () => {
         {collection.title}
       </Text>
 
-      <View
-        style={{flexDirection: 'row', alignItems: 'center', marginVertical: 4}}>
-        <Avatar.Image
-          size={24}
-          source={{uri: collection.user.profile_image.small}}
-        />
-        <Text variant="bodySmall" style={{marginStart: 8, fontWeight: 'bold'}}>
+      <View style={{flexDirection: 'row'}}>
+        <Chip
+          avatar={
+            <Avatar.Image
+              size={24}
+              source={{uri: collection.user.profile_image.medium}}
+            />
+          }>
           {collection.user.name}
-        </Text>
+        </Chip>
       </View>
 
       {collection.description ? (

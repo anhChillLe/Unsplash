@@ -6,6 +6,7 @@ import photoOldestReducer from '../features/photo/oldest';
 import photoPopularReducer from '../features/photo/popular';
 import collectionPhotosReducer from '../features/collection/photos';
 import topicPhotosReducer from '../features/topic/detail';
+import searchReducer from '../features/search/search'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     topicPhoto: topicPhotosReducer,
     collection: collectionReducer,
     collectionPhotos: collectionPhotosReducer,
+    search: searchReducer,
   },
 });
 

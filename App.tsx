@@ -14,13 +14,7 @@ export default function App() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
   const theme = isDarkMode ? MD3DarkTheme : MD3LightTheme;
-  const backgroundColor = theme.colors.elevation.level1;
-
-  // if (Platform.OS === 'android') {
-  //   StatusBar.setBackgroundColor(backgroundColor);
-  //   changeNavigationBarColor('transparent', !isDarkMode)
-  // }
-
+  
   return (
     <SafeAreaProvider>
       <ReduxProvider store={store}>

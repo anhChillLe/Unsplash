@@ -6,8 +6,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '../constants/colors';
 import {useContext} from 'react';
 import {NavigationContext} from '@react-navigation/native';
-import { OrderBy } from 'unsplash-js';
-import { BackAppBar } from '../components';
+import {OrderBy} from 'unsplash-js';
+import {BackAppBar} from '../components';
 
 export type PhotosParamList = {
   [ScreenName.ListImageLatest]: {order: OrderBy};
@@ -19,7 +19,6 @@ const Tab = createMaterialTopTabNavigator<PhotosParamList>();
 
 export default function TopNavigationListImage() {
   const {top, bottom} = useSafeAreaInsets();
-  const navigation = useContext(NavigationContext);
   const theme = useTheme();
 
   return (
@@ -29,11 +28,13 @@ export default function TopNavigationListImage() {
       <BackAppBar />
       <Divider />
       <Tab.Navigator
+        initialRouteName={ScreenName.ListImagePopular}
+        offscreenPageLimit={2}
         screenOptions={{
           tabBarStyle: {backgroundColor: Colors.transparent},
           tabBarActiveTintColor: theme.colors.primary,
           tabBarIndicatorStyle: {backgroundColor: theme.colors.primary},
-          tabBarPressColor: Colors.transparent
+          tabBarPressColor: Colors.transparent,
         }}>
         <Tab.Screen
           name={ScreenName.ListImageLatest}

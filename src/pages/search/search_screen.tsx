@@ -1,6 +1,6 @@
 import {NavigationContext} from '@react-navigation/native';
-import {useContext, useRef, useState} from 'react';
-import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import React, {useContext, useRef, useState} from 'react';
+import {ScrollView, StyleProp, TextInput, View, ViewStyle} from 'react-native';
 import {Chip, Searchbar, Surface, Text} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SearchFilterParams} from '../../services/api/type';
@@ -9,13 +9,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux/store/store';
 import {SearchInput, searchImage} from '../../redux/features/search/actions';
 import {ScreenName} from '../../navigations/screen_name';
-import { removeHistory } from '../../redux/features/search/search';
+import {removeHistory} from '../../redux/features/search/search';
+import {BackAppBar} from '../../components';
 
 export default function SearchScreen() {
   const {top, bottom} = useSafeAreaInsets();
   const navigation = useContext(NavigationContext);
   const [searchValue, setSearchValue] = useState<string>('');
   const filter = useRef<SearchFilterParams>({});
+  const searchRef = useRef<TextInput>(null);
 
   const onSearchSubmit = (query: string) => {
     const input: SearchInput = {
@@ -23,6 +25,7 @@ export default function SearchScreen() {
       ...filter.current,
     };
     navigation?.navigate(ScreenName.SearchResult, {searchInput: input});
+    setSearchValue('');
   };
 
   return (
@@ -37,20 +40,26 @@ export default function SearchScreen() {
         <Searchbar
           mode="bar"
           placeholder="Search for image"
-          focusable={false}
+          ref={searchRef}
           value={searchValue}
-          autoCapitalize='none'
+          // autoFocus={true}
+          onLayout={() => searchRef.current?.focus()}
+          autoCapitalize="none"
           onChangeText={setSearchValue}
           onSubmitEditing={() => onSearchSubmit(searchValue)}
           style={{flex: 1}}
         />
       </View>
 
-      <Text variant='headlineLarge' style={{fontWeight: 'bold', marginTop: 16}}>Histories</Text>
+      <Text variant="headlineLarge" style={{fontWeight: 'bold', marginTop: 16}}>
+        Histories
+      </Text>
 
       <Histories onItemPress={onSearchSubmit} />
 
-      <Text variant='headlineLarge' style={{fontWeight: 'bold', marginTop: 32}}>Filter</Text>
+      <Text variant="headlineLarge" style={{fontWeight: 'bold', marginTop: 32}}>
+        Filter
+      </Text>
 
       <FilterCard
         title="Order by"
@@ -138,16 +147,17 @@ function FilterCard({
   );
 }
 
-function Histories({onItemPress} : {
-  onItemPress: (query: string) => void
-}) {
+function Histories({onItemPress}: {onItemPress: (query: string) => void}) {
   const state = useSelector((state: RootState) => state.search);
   const navigation = useContext(NavigationContext);
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   const removeItem = (value: string) => {
-    dispatch(removeHistory({value}))
-  }
+    dispatch(removeHistory({value}));
+  };
+
+  let histories = [...state.histories].reverse();
+  const nonDuplicateHistories = Array.from(new Set(histories));
 
   return (
     <View
@@ -157,7 +167,7 @@ function Histories({onItemPress} : {
         marginHorizontal: -4,
         marginTop: 8,
       }}>
-      {state.histories.map((query, index) => (
+      {nonDuplicateHistories.map((query, index) => (
         <Chip
           key={index}
           style={{margin: 4}}

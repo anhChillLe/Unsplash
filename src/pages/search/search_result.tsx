@@ -1,37 +1,70 @@
-import {Surface} from 'react-native-paper';
-import {ListImageLite} from '../../components';
-import {Dimensions} from 'react-native';
-import {RouteProp} from '@react-navigation/native';
+import {Surface, Text} from 'react-native-paper';
+import {BackAppBar, ListImageLite} from '../../components';
+import {Dimensions, View} from 'react-native';
+import {NavigationContext, RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigations/root_navigation';
 import {ScreenName} from '../../navigations/screen_name';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux/store/store';
-import {searchImage} from '../../redux/features/search/actions';
-import {useEffect} from 'react';
+import {loadMoreSearchResult, searchImage} from '../../redux/features/search/actions';
+import {useContext, useEffect} from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SearchState} from '../../redux/features/search/search';
 
 type Props = RouteProp<RootStackParamList, ScreenName.SearchResult>;
 export default function SearchResultScreen({route}: {route: Props}) {
   const {width} = Dimensions.get('window');
+  const {top, bottom} = useSafeAreaInsets();
   const input = route.params;
   const state = useSelector((state: RootState) => state.search);
+  const navigation = useContext(NavigationContext)
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const loadMore = () => {
+    dispatch(loadMoreSearchResult(input.searchInput))
+  }
+
   useEffect(() => {
-    // console.log(input)
     dispatch(searchImage(input.searchInput));
   }, []);
 
   return (
     <Surface
       mode="flat"
-      style={{flex: 1, height: '100%', paddingHorizontal: 4}}>
+      style={{
+        flex: 1,
+        height: '100%',
+        paddingTop: top,
+        paddingBottom: bottom,
+      }}>
+      <BackAppBar />
+
       <ListImageLite
         width={width - 8}
         space={4}
-        photos={state.result}
+        photos={state.photos}
+        header={<SearchHeader state={state} />}
         column={2}
+        onEndReached={loadMore}
+        onItemPress={(photo, index) =>
+          navigation?.navigate(ScreenName.detailPager, {position: index, type: 'search'})
+        }
+        contentContainerStyle={{paddingHorizontal: 4}}
       />
     </Surface>
+  );
+}
+
+function SearchHeader({state}: {state: SearchState}) {
+  return (
+    <View style={{paddingStart: 8, paddingBottom: 8}}>
+      <Text variant="headlineLarge">
+        Found <Text style={{fontWeight: 'bold'}}>{state.total}</Text> images for{' '}
+        <Text style={{fontWeight: 'bold'}}>
+          {state.histories[state.histories.length - 1]}
+        </Text>
+      </Text>
+    </View>
   );
 }

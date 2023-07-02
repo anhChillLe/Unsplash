@@ -1,5 +1,11 @@
-import {Dimensions, ScrollView} from 'react-native';
-import {Text, Searchbar, Surface} from 'react-native-paper';
+import {Dimensions, Pressable, ScrollView, Touchable, View} from 'react-native';
+import {
+  Text,
+  Searchbar,
+  Surface,
+  IconButton,
+  TouchableRipple,
+} from 'react-native-paper';
 import {GroupHeading, HorizontalImageList, ListAlbums} from '../../components';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -44,18 +50,36 @@ export default function HomeScreen() {
           contentContainerStyle={{
             paddingBottom,
           }}>
-          <Text
-            variant="displayLarge"
-            style={{fontWeight: '500', marginVertical: 16}}>
-            Home
-          </Text>
-          <Searchbar
-            mode="bar"
-            placeholder="Search for image"
-            focusable={false}
-            value={''}
-            onPressIn={() => navigation?.navigate(ScreenName.SearchScreen)}
-          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 16,
+              alignItems: 'center',
+            }}>
+            <Text variant="displaySmall" style={{fontWeight: 'bold', flex: 1}}>
+              Hi chill!
+            </Text>
+            <IconButton icon="cog" size={28} />
+          </View>
+          <Pressable
+            onPress={() => navigation?.navigate(ScreenName.SearchScreen)}>
+            <Searchbar
+              mode="bar"
+              placeholder="Search for image"
+              editable={false}
+              value=""
+              onPressIn={() => navigation?.navigate(ScreenName.SearchScreen)}
+            />
+            {/* <View
+              style={{
+                width: '100%',
+                height: 64,
+                backgroundColor: 'red',
+                borderRadius: 16,
+              }}
+            /> */}
+          </Pressable>
+
           <PhotoGroup />
           <TopicGroup width={safeAreaWidth} />
           <CollectionGroup width={safeAreaWidth} />
@@ -87,7 +111,6 @@ function CollectionGroup({width}: {width: number}) {
         width={width}
         onItemPress={item => {
           navigation?.navigate(ScreenName.CollectionPhotos, {collection: item});
-          // console.log(item)
         }}
         style={{
           marginTop: 12,
@@ -114,7 +137,9 @@ function TopicGroup({width}: {width: number}) {
         space={8}
         maxItems={4}
         isLoading={topicsState.isLoadingTopics}
-        onItemPress={topic => navigation?.navigate(ScreenName.TopicPhotos, {topic})}
+        onItemPress={topic =>
+          navigation?.navigate(ScreenName.TopicPhotos, {topic})
+        }
         mode="compact"
         width={width}
         style={{

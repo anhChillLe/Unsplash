@@ -15,6 +15,7 @@ import {
 } from '../../redux/features/collection/photos';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {formatDate} from '../../ultilities/date_distance';
+import {SearchInput} from '../../redux/features/search/actions';
 
 type Props = RouteProp<RootStackParamList, ScreenName.CollectionPhotos>;
 export default function CollectionPhoto({route}: {route: Props}) {
@@ -54,7 +55,7 @@ export default function CollectionPhoto({route}: {route: Props}) {
         itemThreshold={6}
         onEndReached={loadMore}
         contentContainerStyle={{
-          paddingHorizontal: 8
+          paddingHorizontal: 8,
         }}
       />
     </Surface>
@@ -63,6 +64,7 @@ export default function CollectionPhoto({route}: {route: Props}) {
 
 const ListHeader = () => {
   const state = useSelector((state: RootState) => state.collectionPhotos);
+  const navigation = useContext(NavigationContext);
   const collection = state.detail;
 
   if (collection === null) return null;
@@ -109,7 +111,17 @@ const ListHeader = () => {
         }}>
         {collection.tags.map((tag: Tag, index: number) => {
           return (
-            <Chip key={tag.title} style={{margin: 4}}>
+            <Chip
+              key={tag.title}
+              style={{margin: 4}}
+              onPress={() => {
+                const input: SearchInput = {
+                  query: tag.title,
+                };
+                navigation?.navigate(ScreenName.SearchResult, {
+                  searchInput: input,
+                });
+              }}>
               {tag.title}
             </Chip>
           );

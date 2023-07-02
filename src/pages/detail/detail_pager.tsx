@@ -35,6 +35,8 @@ export default function DetailViewPager({route}: {route: Props}) {
         return state.topicPhoto;
       case 'collection':
         return state.collectionPhotos;
+        case 'search':
+          return state.search
     }
   });
 
@@ -73,9 +75,12 @@ export default function DetailViewPager({route}: {route: Props}) {
         style={{flex: 1}}
         offscreenPageLimit={1}
         initialPage={initalPage}
+        pageMargin={8}
+        overdrag={false}
         onPageSelected={position => {
           onPageChange(position.nativeEvent.position);
-        }}>
+        }}
+        >
         {state.photos.map((photo: Photo) => (
           <Page key={photo.id} photo={photo} />
         ))}

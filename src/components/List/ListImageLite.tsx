@@ -44,7 +44,7 @@ export default function ListImageLite({
         <FastImage
           source={{uri}}
           style={{
-            backgroundColor: photo.color ?? 'white',
+            backgroundColor: photo.color ?? 'gray',
             borderRadius: 4,
             margin: space / 2,
             width: itemWidth,

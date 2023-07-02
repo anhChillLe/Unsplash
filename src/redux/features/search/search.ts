@@ -2,19 +2,23 @@ import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import unsplash from '../../../services/api/unsplash';
 import {RootState} from '../../store/store';
 import {Photo, SearchFilterParams} from '../../../services/api/type';
-import { searchImage } from './actions';
+import { loadMoreSearchResult, searchImage } from './actions';
 
-type SearchState = {
+export type SearchState = {
   isLoading: boolean;
   histories: string[];
-  result: Photo[];
+  photos: Photo[];
+  total: number;
+  total_page: number;
   page: number;
 };
 
 const initialState: SearchState = {
   isLoading: false,
   histories: [],
-  result: [],
+  photos: [],
+  total: 0,
+  total_page: 0,
   page: 0,
 };
 
@@ -24,7 +28,7 @@ const searchSlice = createSlice({
   reducers: {
     clearResult(state){
       state.page = 0;
-      state.result = []
+      state.photos = []
     },
     removeHistory(state, action: PayloadAction<{value: string}>){
       state.histories = state.histories.filter(it => it !== action.payload.value)
@@ -37,12 +41,19 @@ const searchSlice = createSlice({
     })
     .addCase(searchImage.fulfilled, (state, action) => {
       state.isLoading = false
-      state.page += 1
-      state.result = action.payload.photos
+      state.page = 1
+      state.photos = action.payload.photos
       state.histories.push(action.payload.query)
+      state.total = action.payload.total
+      state.total_page = action.payload.total_page
     })
     .addCase(searchImage.rejected, (state, action) => {
       state.isLoading = false
+    })
+    .addCase(loadMoreSearchResult.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.page += 1
+      state.photos.push(...action.payload)
     })
   }
 })

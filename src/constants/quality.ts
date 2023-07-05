@@ -1,0 +1,1 @@
+export type Quality = 'thumb' | 'full' | 'raw' | 'regular' | 'small' | 'auto'

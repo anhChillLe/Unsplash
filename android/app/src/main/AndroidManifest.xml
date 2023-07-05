@@ -6,10 +6,10 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="false"
-        android:icon="@drawable/app_logo"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/app_logo"
-        android:theme="@style/AppTheme"
+        android:roundIcon="@drawable/logo"
+        android:theme="@style/BootTheme"
         tools:ignore="DataExtractionRules">
         <activity
             android:name=".MainActivity"

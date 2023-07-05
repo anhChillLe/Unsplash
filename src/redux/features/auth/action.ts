@@ -8,7 +8,7 @@ const getToken = createAsyncThunk<string | undefined, void, {state: RootState}>(
   'getToken',
   async (_, thunkApi) => {
     const credential = await Keychain.getGenericPassword();
-    if (!credential) return;
+    if (!credential) return undefined;
     const token = credential.password;
     return token;
   },

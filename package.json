@@ -22,6 +22,7 @@
     "react-content-loader": "^6.2.1",
     "react-native": "0.71.11",
     "react-native-blurhash": "^1.1.10",
+    "react-native-bootsplash": "^4.7.4",
     "react-native-dotenv": "^3.4.9",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.12.0",

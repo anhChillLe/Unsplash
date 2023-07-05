@@ -47,7 +47,7 @@ export const loadMoreSearchResult = createAsyncThunk<
   const result = await unsplash.search.getPhotos({
     ...input,
     page: state.page + 1,
-    perPage: 21,
+    perPage: 10,
   });
 
   return result.response?.results ?? []

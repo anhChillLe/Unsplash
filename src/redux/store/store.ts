@@ -6,19 +6,27 @@ import photoOldestReducer from '../features/photo/oldest';
 import photoPopularReducer from '../features/photo/popular';
 import collectionPhotosReducer from '../features/collection/photos';
 import topicPhotosReducer from '../features/topic/detail';
-import searchReducer from '../features/search/search'
+import searchReducer from '../features/search/search';
+import authReducer from '../features/auth/auth'
 
 export const store = configureStore({
   reducer: {
     photoLatest: photoLatestReducer,
     photoOldest: photoOldestReducer,
     photoPopular: photoPopularReducer,
+
     topic: topicReducer,
-    topicPhoto: topicPhotosReducer,
+    topicPhotos: topicPhotosReducer,
     collection: collectionReducer,
     collectionPhotos: collectionPhotosReducer,
     search: searchReducer,
+    auth: authReducer,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,6 +1,6 @@
-import { createApi } from "unsplash-js";
-const accessKey = "rD-fWhmRpQk_I21l6buelyqI9U9rQK0dlECQ5VMDRkw";
+import { ACCESS_KEY } from '@env';
+import {createApi} from 'unsplash-js';
 
-const unsplash = createApi({ accessKey });
+const unsplash = createApi({accessKey: ACCESS_KEY});
 
 export default unsplash;

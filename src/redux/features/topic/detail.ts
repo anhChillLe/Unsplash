@@ -5,21 +5,21 @@ import unsplash from '../../../services/api/unsplash';
 
 type TopicDetailState = {
   id: string;
-  isLoadingPhoto: boolean;
+  isLoading: boolean;
   page: number;
   photos: Photo[];
 };
 
 const initialState: TopicDetailState = {
   id: '',
-  isLoadingPhoto: false,
+  isLoading: false,
   page: 0,
   photos: [],
 };
 
 const condition = (id: string, {getState}: {getState: () => RootState}) => {
-  const {collectionPhotos} = getState();
-  return !collectionPhotos.isLoading;
+  const {topicPhotos} = getState();
+  return !topicPhotos.isLoading;
 };
 export const getTopicPhotos = createAsyncThunk<
   Photo[],
@@ -28,7 +28,7 @@ export const getTopicPhotos = createAsyncThunk<
 >(
   'getTopicPhotos',
   async (id, thunkApi) => {
-    const state = thunkApi.getState().topicPhoto;
+    const state = thunkApi.getState().topicPhotos;
 
     const result = await unsplash.topics.getPhotos({
       topicIdOrSlug: id === 'nextPage' ? state.id : id,
@@ -45,23 +45,19 @@ const topicPhotosSlice = createSlice({
   name: 'topicPhotos',
   initialState,
   reducers: {
-    clear(state, action: PayloadAction<{id: string}>) {
-      if (state.id === action.payload.id) {
-        (state = initialState), (state.id = action.payload.id);
-      }
-    },
+    clear: () => initialState
   },
   extraReducers: builder => {
     builder.addCase(getTopicPhotos.pending, state => {
-      state.isLoadingPhoto = true;
+      state.isLoading = true;
     });
     builder.addCase(getTopicPhotos.fulfilled, (state, action) => {
       state.page += 1;
-      state.isLoadingPhoto = false;
+      state.isLoading = false;
       state.photos.push(...action.payload);
     });
     builder.addCase(getTopicPhotos.rejected, (state, action) => {
-      state.isLoadingPhoto = false;
+      state.isLoading = false;
     });
   },
 });

@@ -45,7 +45,7 @@ export default function CollectionScreen() {
           }
           onEndReached={loadMore}
           onItemPress={collection =>
-            navigation?.navigate(ScreenName.CollectionPhotos, {collection})
+            navigation?.navigate(ScreenName.collectionPhotos, {collection})
           }
           contentContainerStyle={{
             paddingBottom: bottom + 16,
@@ -53,6 +53,7 @@ export default function CollectionScreen() {
           }}
           isLoading={state.isLoadingCollections}
           width={safeAreaWidth}
+          showLoadingFooter={true}
         />
       </Surface>
     </SafeAreaView>

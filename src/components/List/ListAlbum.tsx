@@ -1,5 +1,5 @@
 import {FlatList, StyleProp, View, ViewStyle} from 'react-native';
-import {Text} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 import {Collection, Topic} from '../../services/api/type';
 import ImageCard from '../ImageCard/ImageCard';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -9,6 +9,7 @@ type Props = {
   column: number;
   space: number;
   width: number;
+  showLoadingFooter?: boolean;
   header?: React.ReactElement;
   onItemPress?: (item: Topic | Collection) => void;
   isLoading?: boolean;
@@ -28,6 +29,7 @@ function ListAlbums({
   isLoading = false,
   mode = 'compact',
   itemRatio = 3 / 2,
+  showLoadingFooter = false,
   maxItems,
   header,
   onEndReached,
@@ -121,6 +123,11 @@ function ListAlbums({
           onEndReached={onEndReached}
           style={style}
           ListHeaderComponent={header}
+          ListFooterComponent={
+            showLoadingFooter ? (
+              <ActivityIndicator size="small" style={{margin: 8}} />
+            ) : null
+          }
           contentContainerStyle={contentContainerStyle}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item: Topic | Collection, index: number) => item.id}

@@ -24,7 +24,7 @@ export default function SearchScreen() {
       query,
       ...filter.current,
     };
-    navigation?.navigate(ScreenName.SearchResult, {searchInput: input});
+    navigation?.navigate(ScreenName.searchResult, {searchInput: input});
     setSearchValue('');
   };
 
@@ -42,7 +42,6 @@ export default function SearchScreen() {
           placeholder="Search for image"
           ref={searchRef}
           value={searchValue}
-          // autoFocus={true}
           onLayout={() => searchRef.current?.focus()}
           autoCapitalize="none"
           onChangeText={setSearchValue}

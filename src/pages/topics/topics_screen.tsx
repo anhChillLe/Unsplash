@@ -41,7 +41,7 @@ export default function TopicScreen() {
           isLoading={state.isLoadingTopics}
           width={safeAreaWidth}
           onItemPress={topic =>
-            navigation?.navigate(ScreenName.TopicPhotos, {topic})
+            navigation?.navigate(ScreenName.topicPhotos, {topic})
           }
         />
       </Surface>

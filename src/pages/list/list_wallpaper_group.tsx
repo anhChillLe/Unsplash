@@ -1,18 +1,18 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ScreenName} from './screen_name';
-import AllImageScreen from '../pages/list/list_wallpaper';
+import {ScreenName} from '../../navigations/screen_name';
+import AllImageScreen from './list_wallpaper';
 import {Appbar, Divider, Surface, useTheme} from 'react-native-paper';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from '../constants/colors';
+import {Colors} from '../../constants/colors';
 import {useContext} from 'react';
 import {NavigationContext} from '@react-navigation/native';
 import {OrderBy} from 'unsplash-js';
-import {BackAppBar} from '../components';
+import {BackAppBar} from '../../components';
 
 export type PhotosParamList = {
-  [ScreenName.ListImageLatest]: {order: OrderBy};
-  [ScreenName.ListImageOldest]: {order: OrderBy};
-  [ScreenName.ListImagePopular]: {order: OrderBy};
+  [ScreenName.imagesLatest]: {order: OrderBy};
+  [ScreenName.imagesOldest]: {order: OrderBy};
+  [ScreenName.imagesPopular]: {order: OrderBy};
 };
 
 const Tab = createMaterialTopTabNavigator<PhotosParamList>();
@@ -28,7 +28,7 @@ export default function TopNavigationListImage() {
       <BackAppBar />
       <Divider />
       <Tab.Navigator
-        initialRouteName={ScreenName.ListImagePopular}
+        initialRouteName={ScreenName.imagesPopular}
         offscreenPageLimit={2}
         screenOptions={{
           tabBarStyle: {backgroundColor: Colors.transparent},
@@ -37,7 +37,7 @@ export default function TopNavigationListImage() {
           tabBarPressColor: Colors.transparent,
         }}>
         <Tab.Screen
-          name={ScreenName.ListImageLatest}
+          name={ScreenName.imagesLatest}
           component={AllImageScreen}
           options={{
             title: 'Latest',
@@ -45,7 +45,7 @@ export default function TopNavigationListImage() {
           initialParams={{order: OrderBy.LATEST}}
         />
         <Tab.Screen
-          name={ScreenName.ListImageOldest}
+          name={ScreenName.imagesOldest}
           component={AllImageScreen}
           options={{
             title: 'Oldest',
@@ -53,7 +53,7 @@ export default function TopNavigationListImage() {
           initialParams={{order: OrderBy.OLDEST}}
         />
         <Tab.Screen
-          name={ScreenName.ListImagePopular}
+          name={ScreenName.imagesPopular}
           component={AllImageScreen}
           options={{
             title: 'Popular',

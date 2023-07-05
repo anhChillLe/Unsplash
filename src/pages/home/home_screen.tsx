@@ -62,13 +62,13 @@ export default function HomeScreen() {
             <IconButton icon="cog" size={28} />
           </View>
           <Pressable
-            onPress={() => navigation?.navigate(ScreenName.SearchScreen)}>
+            onPress={() => navigation?.navigate(ScreenName.search)}>
             <Searchbar
               mode="bar"
               placeholder="Search for image"
               editable={false}
               value=""
-              onPressIn={() => navigation?.navigate(ScreenName.SearchScreen)}
+              onPressIn={() => navigation?.navigate(ScreenName.search)}
             />
             {/* <View
               style={{
@@ -110,7 +110,7 @@ function CollectionGroup({width}: {width: number}) {
         mode="compact"
         width={width}
         onItemPress={item => {
-          navigation?.navigate(ScreenName.CollectionPhotos, {collection: item});
+          navigation?.navigate(ScreenName.collectionPhotos, {collection: item});
         }}
         style={{
           marginTop: 12,
@@ -138,7 +138,7 @@ function TopicGroup({width}: {width: number}) {
         maxItems={4}
         isLoading={topicsState.isLoadingTopics}
         onItemPress={topic =>
-          navigation?.navigate(ScreenName.TopicPhotos, {topic})
+          navigation?.navigate(ScreenName.topicPhotos, {topic})
         }
         mode="compact"
         width={width}

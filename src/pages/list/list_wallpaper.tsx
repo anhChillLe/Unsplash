@@ -7,15 +7,15 @@ import {NavigationContext, RouteProp} from '@react-navigation/native';
 import {ScreenName} from '../../navigations/screen_name';
 import {Surface} from 'react-native-paper';
 import {getPhotos} from '../../redux/features/photo/action';
-import {PhotosParamList} from '../../navigations/list_top_navigation';
+import {PhotosParamList} from './list_wallpaper_group';
 import {OrderBy} from 'unsplash-js';
 import {ListType} from '../../constants/list_type';
 
 type Props = RouteProp<
   PhotosParamList,
-  | ScreenName.ListImageLatest
-  | ScreenName.ListImageOldest
-  | ScreenName.ListImagePopular
+  | ScreenName.imagesLatest
+  | ScreenName.imagesOldest
+  | ScreenName.imagesPopular
 >;
 export default function AllImageScreen({route}: {route: Props}) {
   const navigation = useContext(NavigationContext);

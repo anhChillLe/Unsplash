@@ -4,21 +4,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Surface, Text} from 'react-native-paper';
 import {BackAppBar, ImageCard, UserElement} from '../../components';
 import {Photo} from '../../services/api/type';
-import {ScrollView} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
-import {RootStackParamList} from '../../navigations/root_navigation';
 import {ScreenName} from '../../navigations/screen_name';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
-  getPhotos,
   getPhotosLatest,
   getPhotosOldest,
   getPhotosPopular,
 } from '../../redux/features/photo/action';
 import {getTopicPhotos} from '../../redux/features/topic/detail';
 import {getCollectionPhotos} from '../../redux/features/collection/photos';
+import Page from './image_page';
+import PageContainer from './image_page';
+import { AppParamList } from '../../navigations/param_list';
 
-type Props = RouteProp<RootStackParamList, ScreenName.detailPager>;
+type Props = RouteProp<AppParamList, ScreenName.detailPager>;
 export default function DetailViewPager({route}: {route: Props}) {
   const {top, bottom} = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +32,7 @@ export default function DetailViewPager({route}: {route: Props}) {
       case 'popular':
         return state.photoPopular;
       case 'topic':
-        return state.topicPhoto;
+        return state.topicPhotos;
       case 'collection':
         return state.collectionPhotos;
         case 'search':
@@ -82,37 +82,9 @@ export default function DetailViewPager({route}: {route: Props}) {
         }}
         >
         {state.photos.map((photo: Photo) => (
-          <Page key={photo.id} photo={photo} />
+          <PageContainer key={photo.id} photo={photo} />
         ))}
       </PagerView>
     </Surface>
-  );
-}
-
-function Page({photo}: {photo: Photo}) {
-  return (
-    <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-      <UserElement
-        user={photo.user}
-        avatarSize={48}
-        quality="large"
-        style={{
-          padding: 8,
-        }}
-      />
-      {photo.description ? (
-        <Text style={{padding: 8}}>{photo.description}</Text>
-      ) : null}
-
-      <ImageCard
-        roundness={0}
-        mode="contained"
-        photo={photo}
-        placeHolderMode="blurhash"
-        width="full"
-        height="auto"
-        quality="auto"
-      />
-    </ScrollView>
   );
 }

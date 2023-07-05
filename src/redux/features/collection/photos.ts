@@ -1,4 +1,4 @@
-import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {CollectionWithTags, Photo} from '../../../services/api/type';
 import {RootState} from '../../store/store';
 import unsplash from '../../../services/api/unsplash';
@@ -67,11 +67,7 @@ const collectionPhotosSlice = createSlice({
   name: 'collectionPhotos',
   initialState,
   reducers: {
-    clear(state, action: PayloadAction<{id: string}>) {
-      if (state.detail?.id !== action.payload.id) {
-        state = initialState;
-      }
-    },
+    clear: () => initialState
   },
   extraReducers: builder => {
     builder.addCase(getCollectionPhotos.pending, state => {

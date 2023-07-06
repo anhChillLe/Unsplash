@@ -1,6 +1,6 @@
 #import "AppDelegate.h"
 #import "RNBootSplash.h"
-
+#import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
@@ -44,6 +44,13 @@
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; // ⬅️ initialize the splash screen
 
   return rootView;
+}
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 @end

@@ -14,6 +14,7 @@ import TopicDetail from '../pages/topics/topic_photos';
 import DetailViewPager from '../pages/detail/detail_pager';
 import SearchScreen from '../pages/search/search_screen';
 import SearchResultScreen from '../pages/search/search_result';
+import UserPage from '../pages/user/user_page';
 
 const Stack = createStackNavigator<AppParamList>();
 
@@ -41,18 +42,17 @@ export default function AppStack() {
         component={CollectionPhoto}
       />
       <Stack.Screen name={ScreenName.topicPhotos} component={TopicDetail} />
-      <Stack.Screen
-        name={ScreenName.detailPager}
-        component={DetailViewPager}
-      />
-      <Stack.Screen
-        name={ScreenName.search}
-        component={SearchScreen}
-      />
+      <Stack.Screen name={ScreenName.detailPager} component={DetailViewPager} />
+      <Stack.Screen name={ScreenName.search} component={SearchScreen} />
 
       <Stack.Screen
         name={ScreenName.searchResult}
         component={SearchResultScreen}
+      />
+
+      <Stack.Screen
+        name={ScreenName.user}
+        component={UserPage}
       />
     </Stack.Navigator>
   );

@@ -45,11 +45,11 @@ export default function RootStack() {
 }
 
 const linking: LinkingOptions<AuthParamList> = {
-  prefixes: ['unsplash://app'],
+  prefixes: ['unsplash://'],
   config: {
     screens: {
-      [ScreenName.login]: 'login_request',
-      [ScreenName.loginResult]: 'login_success',
+      [ScreenName.login]: 'app/login_request',
+      [ScreenName.loginResult]: 'app/login_success',
     },
   },
 };

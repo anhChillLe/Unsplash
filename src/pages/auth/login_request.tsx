@@ -1,4 +1,4 @@
-import {ImageBackground, Linking, StatusBar} from 'react-native';
+import {ImageBackground, Linking, Platform, StatusBar} from 'react-native';
 import {Button, Surface, Text} from 'react-native-paper';
 import {Icons} from '../../assets/icons';
 import {Images} from '../../assets/images';
@@ -6,12 +6,15 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {ACCESS_KEY} from '@env';
 
 export default function LoginRequest() {
-  StatusBar.setBackgroundColor('transparent');
-  StatusBar.setBarStyle('dark-content');
-  changeNavigationBarColor('transparent');
+
+  if(Platform.OS === 'android'){
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setBarStyle('dark-content');
+    changeNavigationBarColor('transparent');
+  }
 
   return (
-    <Surface mode="flat" style={{flex: 1}}>
+    <Surface mode="flat" style={{flex: 1, height: '100%'}}>
       <ImageBackground
         source={Images.landing}
         style={{

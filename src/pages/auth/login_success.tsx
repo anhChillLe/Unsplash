@@ -10,6 +10,7 @@ import { AuthParamList } from '../../navigations/param_list';
 type Props = RouteProp<AuthParamList, ScreenName.loginResult>;
 export default function LoginSuccess({route}: {route: Props}) {
   const code = route.params?.code;
+  console.log(code)
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {

@@ -1,8 +1,11 @@
-import { ACCESS_KEY, API_URL } from '@env';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import {ACCESS_KEY, API_URL} from '@env';
+import * as Keychain from 'react-native-keychain';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
-
-const baseURL = API_URL;
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -12,7 +15,7 @@ const headers = {
 };
 
 const API = axios.create({
-  baseURL,
+  baseURL: API_URL,
   timeout: 30000,
   headers,
   transformResponse: data => {
@@ -29,12 +32,15 @@ const API = axios.create({
 });
 
 API.interceptors.request.use(
-  async (config: any) => {
-    config.headers = headers;
+  async (config: InternalAxiosRequestConfig) => {
+    const credential = await Keychain.getGenericPassword();
+    config.headers.Authorization = credential
+      ? `Bearer ${credential.password}`
+      : `Client-ID ${ACCESS_KEY}`;
     return config;
   },
   (error: any) => {
-    console.log("request error: ", error);
+    console.log('request error: ', error);
     Promise.reject(error);
   },
 );
@@ -44,7 +50,7 @@ API.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    console.log("response error: ", error);
+    console.log('response error: ', error);
     const originalRequest = error.config;
     return Promise.reject(error);
   },

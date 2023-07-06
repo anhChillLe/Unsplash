@@ -11,7 +11,7 @@ import {ScreenName} from '../../navigations/screen_name';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux/store/store';
 import {clear, getTopicPhotos} from '../../redux/features/topic/detail';
-import { AppParamList } from '../../navigations/param_list';
+import {AppParamList} from '../../navigations/param_list';
 
 type Props = RouteProp<AppParamList, ScreenName.topicPhotos>;
 export default function TopicDetail({route}: {route: Props}) {
@@ -65,6 +65,7 @@ export default function TopicDetail({route}: {route: Props}) {
 
 const ListHeader = ({topic}: {topic: Topic}) => {
   if (topic === null) return null;
+  const navigation = useContext(NavigationContext);
 
   return (
     <Surface mode="flat" style={{paddingVertical: 4}}>
@@ -85,6 +86,9 @@ const ListHeader = ({topic}: {topic: Topic}) => {
                   size={24}
                   source={{uri: user.profile_image.medium}}
                 />
+              }
+              onPress={() =>
+                navigation?.navigate(ScreenName.user, {username: user.username})
               }>
               {user.name}
             </Chip>

@@ -7,6 +7,7 @@ import {BackAppBar, ImageCard, UserElement} from '../../components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '../../constants/colors';
 import { AppParamList } from '../../navigations/param_list';
+import PageContainer from './image_page';
 
 type Props = RouteProp<AppParamList, ScreenName.detail>;
 export default function DetailScreen({route}: {route: Props}) {
@@ -17,25 +18,7 @@ export default function DetailScreen({route}: {route: Props}) {
   return (
     <Surface style={{flex: 1, height: '100%', paddingTop: top}}>
       <BackAppBar />
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-        <UserElement
-          user={photo.user}
-          avatarSize={48}
-          quality="large"
-          style={{
-            padding: 8,
-          }}
-        />
-        <ImageCard
-          roundness={0}
-          mode="contained"
-          photo={photo}
-          placeHolderMode="blurhash"
-          width="full"
-          height="auto"
-          quality="auto"
-        />
-      </ScrollView>
+      <PageContainer photo={photo}/>
     </Surface>
   );
 }

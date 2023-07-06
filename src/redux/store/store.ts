@@ -8,6 +8,7 @@ import collectionPhotosReducer from '../features/collection/photos';
 import topicPhotosReducer from '../features/topic/detail';
 import searchReducer from '../features/search/search';
 import authReducer from '../features/auth/auth'
+import currentUserReducer from '../features/user/user'
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,8 @@ export const store = configureStore({
     collectionPhotos: collectionPhotosReducer,
     search: searchReducer,
     auth: authReducer,
+
+    user: currentUserReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -92,7 +92,8 @@ const ListHeader = () => {
               size={24}
               source={{uri: collection.user.profile_image.medium}}
             />
-          }>
+          }
+          onPress={() => navigation?.navigate(ScreenName.user, {username: collection.user.username})}>
           {collection.user.name}
         </Chip>
       </View>

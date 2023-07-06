@@ -14,6 +14,7 @@ export type AppParamList = {
   [ScreenName.detailPager]: {position: number; type: ListType};
   [ScreenName.search]: {query?: string};
   [ScreenName.searchResult]: {searchInput: SearchInput};
+  [ScreenName.user]: {username: string}
 };
 
 export type AuthParamList = {

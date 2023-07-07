@@ -3,6 +3,7 @@ import {ActivityIndicator, Text} from 'react-native-paper';
 import {Collection, Topic} from '../../services/api/type';
 import ImageCard from '../ImageCard/ImageCard';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import CollectionCard from '../Collection/Collection';
 
 type Props = {
   data: Topic[] | Collection[];
@@ -14,6 +15,7 @@ type Props = {
   onItemPress?: (item: Topic | Collection) => void;
   isLoading?: boolean;
   mode?: 'compact' | 'list';
+  itemMode?: 'single' | 'group'
   itemRatio?: number;
   maxItems?: number;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -28,6 +30,7 @@ function ListAlbums({
   width,
   isLoading = false,
   mode = 'compact',
+  itemMode = 'single',
   itemRatio = 3 / 2,
   showLoadingFooter = false,
   maxItems,
@@ -38,6 +41,7 @@ function ListAlbums({
   style,
 }: Props) {
   const itemWidth = (width - (column - 1) * space) / column;
+  const itemHeight = itemWidth / itemRatio;
 
   const getItemMarginEnd = (index: number) => {
     if ((index + 1) % column == 0) return 0;
@@ -75,7 +79,26 @@ function ListAlbums({
     );
   }
 
-  function Album({item, index}: {item: Topic | Collection; index: number}) {
+  const Group = ({
+    item,
+    index,
+  }: {
+    item: Collection | Topic;
+    index: number;
+  }) => {
+    const marginEnd = getItemMarginEnd(index);
+    const marginBottom = getItemMarginBottom(index);
+    return (
+      <CollectionCard
+        collection={item}
+        space={2}
+        style={{marginEnd, marginBottom, width: itemWidth, height: itemHeight}}
+        onPress={onItemPress ? () => onItemPress(item) : undefined}
+      />
+    );
+  };
+
+  function Single({item, index}: {item: Topic | Collection; index: number}) {
     const marginEnd = getItemMarginEnd(index);
     const marginBottom = getItemMarginBottom(index);
 
@@ -86,7 +109,7 @@ function ListAlbums({
         <ImageCard
           photo={item.cover_photo}
           width={itemWidth}
-          height={itemWidth / itemRatio}
+          height={itemHeight}
           placeHolderMode="skeleton"
           onPress={onItemPress ? () => onItemPress(item) : undefined}
         />
@@ -104,13 +127,15 @@ function ListAlbums({
     );
   }
 
+  const RenderItem = itemMode === 'single' ? Single : Group
+
   switch (mode) {
     case 'compact':
       if (isLoading) return <SkeletonList />;
       return (
         <View style={[{flexDirection: 'row', flexWrap: 'wrap'}, style]}>
           {data.map((item, index) => (
-            <Album key={index} item={item} index={index} />
+            <RenderItem key={index} item={item} index={index} />
           ))}
         </View>
       );
@@ -118,7 +143,7 @@ function ListAlbums({
       return (
         <FlatList
           data={data}
-          renderItem={Album}
+          renderItem={RenderItem}
           numColumns={column}
           onEndReached={onEndReached}
           style={style}

@@ -13,6 +13,7 @@ import VerticalDivider from './Devider/VetticalDivider';
 import TagGroup from './Tags/TagGroup';
 import SingleTag from './Tags/SingleTag';
 import StatGroup from './Stats/StatGroup';
+import CollectionCard from './Collection/Collection';
 
 export {
   HorizontalImageList,
@@ -29,5 +30,6 @@ export {
   VerticalDivider,
   TagGroup,
   StatGroup,
-  SingleTag
+  SingleTag,
+  CollectionCard
 };

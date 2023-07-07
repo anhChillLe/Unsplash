@@ -23,12 +23,33 @@ export default function ImageGrid({
   total,
   style,
   space = 0,
-  onPress = () => {},
+  onPress,
 }: Props) {
   const colors = useTheme().colors;
 
+  console.log(photos.length);
+
   if (photos.length === 0) {
-    return null;
+    return (
+      <Pressable
+        style={[
+          {
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.75,
+            backgroundColor: colors.secondary,
+            borderRadius: 8,
+          },
+          style,
+        ]}
+        onPress={onPress}>
+        <Text
+          variant="headlineSmall"
+          style={{fontWeight: 'bold', color: colors.onSecondary}}>
+          Add photos
+        </Text>
+      </Pressable>
+    );
   }
 
   if (photos.length === 1) {
@@ -47,30 +68,32 @@ export default function ImageGrid({
           source={{uri: photos[0].urls.regular}}
           style={{flex: 1, margin: space, borderRadius: 4}}
         />
-        <Pressable style={{flex: 1, margin: space}}>
+        <Pressable style={{flex: 1, margin: space}} onPress={onPress}>
           <FastImage
             source={{uri: photos[1].urls.regular}}
             style={{flex: 1, borderRadius: 4}}
           />
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: 0.75,
-              backgroundColor: colors.secondary,
-              borderRadius: 4,
-            }}>
-            <Text
-              variant="headlineSmall"
-              style={{fontWeight: 'bold', color: colors.onSecondary}}>
-              {total ? `+${total - 3}` : 'All photos'}
-            </Text>
-          </View>
+          {onPress && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.75,
+                backgroundColor: colors.secondary,
+                borderRadius: 4,
+              }}>
+              <Text
+                variant="headlineSmall"
+                style={{fontWeight: 'bold', color: colors.onSecondary}}>
+                {total ? `+${total - 3}` : 'All photos'}
+              </Text>
+            </View>
+          )}
         </Pressable>
       </View>
     );
@@ -91,30 +114,33 @@ export default function ImageGrid({
           source={{uri: photos[1].urls.regular}}
           style={{flex: 1, margin: space, borderRadius: 4}}
         />
-        <Pressable style={{flex: 1, margin: space}}>
+        <Pressable style={{flex: 1, margin: space}} onPress={onPress}>
           <FastImage
             source={{uri: photos[2].urls.regular}}
             style={{flex: 1, borderRadius: 4}}
           />
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: 0.75,
-              backgroundColor: colors.secondary,
-              borderRadius: 4,
-            }}>
-            <Text
-              variant="headlineSmall"
-              style={{fontWeight: 'bold', color: colors.onSecondary}}>
-              {total ? `+${total - 3}` : 'All photos'}
-            </Text>
-          </View>
+
+          {onPress && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: 0.6,
+                backgroundColor: colors.secondary,
+                borderRadius: 4,
+              }}>
+              <Text
+                variant="headlineSmall"
+                style={{fontWeight: 'bold', color: colors.onSecondary}}>
+                {total ? `+${total - 3}` : 'All photos'}
+              </Text>
+            </View>
+          )}
         </Pressable>
       </View>
     </View>

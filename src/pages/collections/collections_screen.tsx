@@ -32,9 +32,10 @@ export default function CollectionScreen() {
         <BackAppBar />
         <ListAlbums
           data={state.collections}
-          column={2}
+          column={1}
           space={8}
           mode="list"
+          itemMode='group'
           style={{flex: 1}}
           header={
             <Text

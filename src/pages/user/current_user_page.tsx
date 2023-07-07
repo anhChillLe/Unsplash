@@ -1,6 +1,7 @@
 import {Chip, Surface, Text} from 'react-native-paper';
 import {
   BackAppBar,
+  CollectionCard,
   GroupHeading,
   ImageGrid,
   LoadingScreen,
@@ -128,16 +129,14 @@ export default function CurrentUserPage() {
           }}
         />
 
-        {photos.length > 0 && (
+        {photos.length >= 0 && (
           <ImageGrid
             photos={photos}
-            style={{height: 200, marginTop: 4}}
+            style={{height: 200, width: '100%' ,marginTop: 4}}
             space={4}
           />
         )}
 
-        {/* <GroupHeading containerStyle={{marginTop: 12}}>Interests</GroupHeading>
-        <TagGroup tags={custom} /> */}
       </ScrollView>
     </Surface>
   );

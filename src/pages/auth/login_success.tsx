@@ -5,9 +5,9 @@ import {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../redux/store/store';
 import {requestToken} from '../../redux/features/auth/action';
-import { AuthParamList } from '../../navigations/param_list';
+import { RootParamList } from '../../navigations/param_list';
 
-type Props = RouteProp<AuthParamList, ScreenName.loginResult>;
+type Props = RouteProp<RootParamList, ScreenName.loginResult>;
 export default function LoginSuccess({route}: {route: Props}) {
   const code = route.params?.code;
   console.log(code)

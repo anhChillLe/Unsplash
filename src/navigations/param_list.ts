@@ -15,6 +15,7 @@ export type AppParamList = {
   [ScreenName.search]: {query?: string};
   [ScreenName.searchResult]: {searchInput: SearchInput};
   [ScreenName.user]: {username: string}
+  [ScreenName.currentUser] : undefined
 };
 
 export type AuthParamList = {

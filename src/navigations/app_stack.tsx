@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/stack';
 import {AppParamList} from './param_list';
 import {ScreenName} from './screen_name';
-import HomeScreen from '../pages/home/home_screen';
+import HomeScreen from '../pages/home/HomeScreen';
 import DetailScreen from '../pages/detail/detail_screen';
 import TopicScreen from '../pages/topics/topics_screen';
 import CollectionScreen from '../pages/collections/collections_screen';
@@ -15,6 +15,7 @@ import DetailViewPager from '../pages/detail/detail_pager';
 import SearchScreen from '../pages/search/search_screen';
 import SearchResultScreen from '../pages/search/search_result';
 import UserPage from '../pages/user/user_page';
+import CurrentUserPage from '../pages/user/current_user_page';
 
 const Stack = createStackNavigator<AppParamList>();
 
@@ -53,6 +54,11 @@ export default function AppStack() {
       <Stack.Screen
         name={ScreenName.user}
         component={UserPage}
+      />
+
+      <Stack.Screen 
+        name={ScreenName.currentUser}
+        component={CurrentUserPage}
       />
     </Stack.Navigator>
   );

@@ -8,8 +8,11 @@ import ListImageLite from './List/ListImageLite';
 import BackAppBar from './Appbar/BackAppBar';
 import SelectableChip from './CustomChip/SelectableChip';
 import LoadingScreen from './Loading/LoadingScreen'
-import HomeMenu from './HomeMenu/HomeMenu';
 import ImageGrid from './List/ImageGrid';
+import VerticalDivider from './Devider/VetticalDivider';
+import TagGroup from './Tags/TagGroup';
+import SingleTag from './Tags/SingleTag';
+import StatGroup from './Stats/StatGroup';
 
 export {
   HorizontalImageList,
@@ -22,6 +25,9 @@ export {
   BackAppBar,
   SelectableChip,
   LoadingScreen,
-  HomeMenu,
-  ImageGrid
+  ImageGrid,
+  VerticalDivider,
+  TagGroup,
+  StatGroup,
+  SingleTag
 };

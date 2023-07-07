@@ -1,44 +1,99 @@
-import {ImageBackground, Linking, Platform, StatusBar} from 'react-native';
-import {Button, Surface, Text} from 'react-native-paper';
+import {
+  ImageBackground,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {Button, Text} from 'react-native-paper';
 import {Icons} from '../../assets/icons';
 import {Images} from '../../assets/images';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import {ACCESS_KEY} from '@env';
+import {LoginWidthUnsplash} from '../../actions/link_actions';
+import { useContext } from 'react';
+import { NavigationContext } from '@react-navigation/native';
+import { ScreenName } from '../../navigations/screen_name';
 
 export default function LoginRequest() {
-
-  if(Platform.OS === 'android'){
+  if (Platform.OS === 'android') {
     StatusBar.setBackgroundColor('transparent');
     StatusBar.setBarStyle('dark-content');
     changeNavigationBarColor('transparent');
   }
 
+  const navigation = useContext(NavigationContext)
+  const openApp = () => {
+    navigation?.navigate(ScreenName.main)
+    console.log('Open app')
+  }
+
   return (
-    <Surface mode="flat" style={{flex: 1, height: '100%'}}>
-      <ImageBackground
-        source={Images.landing}
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        resizeMode="cover">
-        <Button mode="contained" onPress={() => Login()} icon={Icons.unsplash}>
-          Login with unsplash
+    <ImageBackground
+      source={Images.landing2}
+      style={{
+        flex: 1,
+        paddingHorizontal: 32,
+        paddingVertical: 96,
+        justifyContent: 'space-between',
+      }}>
+      <View style={{alignItems: 'flex-start'}}>
+        <Text
+          variant="displayMedium"
+          style={[
+            styles.heading,
+            {
+              fontWeight: 'bold',
+              color: 'white',
+            },
+          ]}>
+          Chill Paper
+        </Text>
+        <Text
+          variant="headlineSmall"
+          style={[
+            styles.heading,
+            {
+              fontWeight: '500',
+              marginTop: 8,
+            },
+          ]}>
+          Wallpaper app base on Unsplash API
+        </Text>
+      </View>
+      <View style={{alignItems: 'flex-end'}}>
+        <Button
+          mode ="contained"
+          rippleColor='transparent'
+          onPress={openApp}
+          theme={{roundness: 2}}
+          style={{paddingVertical: 8}}
+          labelStyle={{fontSize: 16}}>
+          Maybe laster
         </Button>
-      </ImageBackground>
-    </Surface>
+        <Button
+          mode="contained"
+          onPress={LoginWidthUnsplash}
+          icon={Icons.unsplash}
+          theme={{roundness: 2}}
+          rippleColor='transparent'
+          style={{marginTop: 16, paddingVertical: 8}}
+          labelStyle={{fontSize: 16}}>
+          Login with Unsplash
+        </Button>
+      </View>
+    </ImageBackground>
   );
 }
 
-function Login() {
-  const baseUrl = 'https://unsplash.com/oauth/authorize';
-  const clientId = `client_id=${ACCESS_KEY}`;
-  const redirect = `redirect_uri=unsplash://app/login_success`;
-  const responseType = `response_type=code`;
-  const scope =
-    'scope=public+read_user+write_user+read_photos+write_photos+write_likes+write_followers+read_collections+write_collections';
-
-  const url = `${baseUrl}?${clientId}&${redirect}&${responseType}&${scope}`;
-  Linking.openURL(url);
-}
+const styles = StyleSheet.create({
+  heading: {
+    color: 'white',
+    marginTop: 8,
+    textShadowColor: 'rgba(0,0,0,0.2)',
+    textShadowRadius: 8,
+    textShadowOffset: {
+      width: 1,
+      height: 1,
+    },
+  },
+});

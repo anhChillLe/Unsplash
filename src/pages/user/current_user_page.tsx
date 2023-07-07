@@ -1,55 +1,31 @@
-import {Chip, Divider, Surface, Text} from 'react-native-paper';
+import {Chip, Surface, Text} from 'react-native-paper';
 import {
   BackAppBar,
+  GroupHeading,
   ImageGrid,
   LoadingScreen,
   SingleTag,
   StatGroup,
   TagGroup,
-  VerticalDivider,
 } from '../../components';
 import {Linking, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
-import '../../ultilities/shortenNumber';
-import {Tag} from '../../services/api/type';
-import {useEffect, useState} from 'react';
-import {Full} from 'unsplash-js/dist/methods/users/types';
-import unsplash from '../../services/api/unsplash';
-import {RouteProp} from '@react-navigation/native';
-import {AppParamList} from '../../navigations/param_list';
-import {ScreenName} from '../../navigations/screen_name';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/store/store';
 import {
   openInstagramProfile,
   openTwitterProfile,
 } from '../../actions/link_actions';
 
-type Props = RouteProp<AppParamList, ScreenName.user>;
-export default function UserPage({route}: {route: Props}) {
+export default function CurrentUserPage() {
   const inset = useSafeAreaInsets();
-  const username = route.params?.username;
-
-  const [profile, setProfile] = useState<Full | undefined>();
-
-  async function getUser() {
-    console.log('getting user');
-    if (!username) return null;
-    const apiResponse = await unsplash.users.get({username: username});
-    const data = apiResponse.response;
-    console.log(data);
-    setProfile(data);
-  }
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  if (profile === undefined) {
-    return <LoadingScreen />;
-  }
+  const profile = useSelector((state: RootState) => state.user.profile);
+  if (!profile) return <LoadingScreen />;
 
   const {
     profile_image: {large: avatar},
+    username,
     portfolio_url,
     twitter_username,
     instagram_username,
@@ -61,7 +37,7 @@ export default function UserPage({route}: {route: Props}) {
     followers_count,
     location,
     photos,
-    // tags: {custom},
+    tags: {custom},
   } = profile;
 
   return (
@@ -105,6 +81,7 @@ export default function UserPage({route}: {route: Props}) {
             {location}
           </SingleTag>
         ) : null}
+
         {(twitter_username || instagram_username || portfolio_url) && (
           <ScrollView
             horizontal
@@ -138,7 +115,7 @@ export default function UserPage({route}: {route: Props}) {
           </ScrollView>
         )}
         {bio && (
-          <Text numberOfLines={4} ellipsizeMode="tail">
+          <Text style={{marginTop: 8}} numberOfLines={4} ellipsizeMode="tail">
             {bio}
           </Text>
         )}
@@ -152,19 +129,15 @@ export default function UserPage({route}: {route: Props}) {
         />
 
         {photos.length > 0 && (
-          <>
-            {/* <GroupHeading containerStyle={{marginTop: 8}}>Photos</GroupHeading> */}
-            <ImageGrid
-              photos={photos}
-              style={{height: 200, marginTop: 4}}
-              space={4}
-              // total={total_photos}
-            />
-          </>
+          <ImageGrid
+            photos={photos}
+            style={{height: 200, marginTop: 4}}
+            space={4}
+          />
         )}
 
-        {/* <GroupHeading containerStyle={{marginTop: 12}}>Interests</GroupHeading> */}
-        {/* <TagGroup tags={custom} /> */}
+        {/* <GroupHeading containerStyle={{marginTop: 12}}>Interests</GroupHeading>
+        <TagGroup tags={custom} /> */}
       </ScrollView>
     </Surface>
   );

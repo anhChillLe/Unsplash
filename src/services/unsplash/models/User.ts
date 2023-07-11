@@ -1,5 +1,5 @@
 import { Photo } from "./Photo"
-import { Links, ProfileImage, Social } from "./base"
+import { Links, Meta, ProfileImage, Social } from "./base"
 
 export interface User {
   id: string
@@ -23,4 +23,24 @@ export interface User {
   social: Social
   followed_by_user: boolean
   photos: Photo[]
+}
+
+export interface FullUser extends User{
+  badge: any | null;
+  // tags: Tags;
+  // tags_preview: Tags;
+  followers_count: number;
+  following_count: number;
+  allow_messages: boolean;
+  numeric_id: number;
+  downloads: number;
+  meta: Meta;
+  uid: string;
+  confirmed: boolean;
+  uploads_remaining: number;
+  unlimited_uploads: boolean;
+  email: string;
+  dmca_verification: string;
+  unread_in_app_notifications: boolean;
+  unread_highlight_notifications: boolean;
 }

@@ -1,3 +1,10 @@
+export interface UserStatistics {
+  id: string
+  username: string
+  downloads: Statistic
+  views: Statistic
+}
+
 export interface Statistics {
   id: string;
   slug: string;
@@ -6,19 +13,20 @@ export interface Statistics {
   likes: Statistic;
 }
 
-export interface Historical {
-  change: number;
-  resolution: string;
-  quantity: number;
-  values: Value[];
+interface Historical {
+  change: number
+  average: number | null
+  resolution: string
+  quantity: number
+  values: Value[]
 }
 
-export interface Statistic {
+interface Statistic {
   total: number;
   historical: Historical;
 }
 
-export interface Value {
+interface Value {
   date: string;
   value: number;
 }

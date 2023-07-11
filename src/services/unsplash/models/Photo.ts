@@ -1,5 +1,5 @@
 import {Collection, User} from '../../api/type';
-import {Exif, Links, Location, Meta, Urls} from './base';
+import { Exif, Links, Location, Meta, TopicSubmissions, Urls } from './base';
 
 export interface Photo {
   id: string;
@@ -33,10 +33,9 @@ export interface FullPhoto extends Photo {
   related_collections: RelatedCollections;
 }
 
-type RelatedCollections = {
+
+export type RelatedCollections = {
   total: number;
   type: string;
   results: Collection[];
 };
-
-export interface TopicSubmissions {}

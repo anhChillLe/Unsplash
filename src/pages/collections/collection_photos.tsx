@@ -103,7 +103,7 @@ const ListHeader = () => {
           {collection.description}
         </Text>
       ) : null}
-      <Text style={{fontSize: 12, opacity: 0.6}}>
+      <Text style={{fontSize: 12, opacity: 0.6, marginVertical: 2}}>
         {collection.total_photos} photos · {formatDate(collection.published_at)}
       </Text>
       <View

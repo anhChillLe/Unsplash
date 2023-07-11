@@ -3,6 +3,7 @@ import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {Card, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {Photo} from '../../services/api/type';
+import { Photo as CustomPhoto } from '../../services/unsplash/models/Photo';
 import {Blurhash} from 'react-native-blurhash';
 import FastImage from 'react-native-fast-image';
 import {PlaceHolderMode} from '../../constants/place_holder';
@@ -11,11 +12,11 @@ import {getImageUrl} from '../../ultilities/image_ulti';
 import { Colors } from '../../constants/colors';
 
 interface Props {
-  photo: Photo;
+  photo: Photo | CustomPhoto;
   width: number | 'full';
   height: number | 'auto';
   roundness?: number;
-  onPress?: (photo: Photo) => void;
+  onPress?: (photo: Photo | CustomPhoto) => void;
   mode?: 'elevated' | 'contained' | 'outlined';
   style?: StyleProp<ViewStyle>;
   quality?: Quality;

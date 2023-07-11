@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { getToken } from '../redux/features/auth/action';
 import { AuthParamList } from './param_list';
 import RNBootSplash from "react-native-bootsplash";
+import { LoadingScreen } from '../components';
 
 export default function RootStack() {
   const state = useSelector((state: RootState) => state.auth);
@@ -20,15 +21,7 @@ export default function RootStack() {
 
   if (state.isGettingToken) {
     return (
-      <Surface
-        style={{
-          flex: 1,
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" />
-      </Surface>
+      <LoadingScreen />
     );
   }
 

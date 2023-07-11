@@ -1,3 +1,6 @@
+import { Basic } from "unsplash-js/dist/methods/photos/types";
+import { Links, Meta, ProfileImage, Social, Tags } from "./base";
+
 export interface UserProfile {
   id: string;
   updated_at: string;
@@ -7,8 +10,8 @@ export interface UserProfile {
   last_name: string;
   twitter_username: string | null;
   portfolio_url: string | null;
-  bio: string | null;
-  location: string | null;
+  bio: string;
+  location: string;
   links: Links;
   profile_image: ProfileImage;
   instagram_username: string | null;
@@ -19,9 +22,10 @@ export interface UserProfile {
   for_hire: boolean;
   social: Social;
   followed_by_user: boolean;
-  photos: any[];
-  badge: null;
-  tags: Tags;
+  photos: Basic[];
+  badge: any | null;
+  // tags: Tags;
+  // tags_preview: Tags;
   followers_count: number;
   following_count: number;
   allow_messages: boolean;
@@ -36,36 +40,4 @@ export interface UserProfile {
   dmca_verification: string;
   unread_in_app_notifications: boolean;
   unread_highlight_notifications: boolean;
-}
-
-export interface Links {
-  self: string;
-  html: string;
-  photos: string;
-  likes: string;
-  portfolio: string;
-  following: string;
-  followers: string;
-}
-
-export interface ProfileImage {
-  small: string;
-  medium: string;
-  large: string;
-}
-
-export interface Social {
-  instagram_username: string | null;
-  portfolio_url: string | null;
-  twitter_username: string | null;
-  paypal_email: string | null;
-}
-
-export interface Tags {
-  custom: any[];
-  aggregated: any[];
-}
-
-export interface Meta {
-  index: boolean;
 }

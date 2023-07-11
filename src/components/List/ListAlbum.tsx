@@ -5,14 +5,16 @@ import ImageCard from '../ImageCard/ImageCard';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import CollectionCard from '../Collection/Collection';
 
+type Album = Topic | Collection
+
 type Props = {
-  data: Topic[] | Collection[];
+  data: Topic[] | Collection[]
   column: number;
   space: number;
   width: number;
   showLoadingFooter?: boolean;
   header?: React.ReactElement;
-  onItemPress?: (item: Topic | Collection) => void;
+  onItemPress?: (item: Album) => void;
   isLoading?: boolean;
   mode?: 'compact' | 'list';
   itemMode?: 'single' | 'group'
@@ -83,7 +85,7 @@ function ListAlbums({
     item,
     index,
   }: {
-    item: Collection | Topic;
+    item: Album;
     index: number;
   }) => {
     const marginEnd = getItemMarginEnd(index);
@@ -98,7 +100,7 @@ function ListAlbums({
     );
   };
 
-  function Single({item, index}: {item: Topic | Collection; index: number}) {
+  function Single({item, index}: {item: Album; index: number}) {
     const marginEnd = getItemMarginEnd(index);
     const marginBottom = getItemMarginBottom(index);
 

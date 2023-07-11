@@ -1,13 +1,11 @@
 import {Chip, Surface, Text} from 'react-native-paper';
 import {
   BackAppBar,
-  CollectionCard,
-  GroupHeading,
   ImageGrid,
   LoadingScreen,
   SingleTag,
   StatGroup,
-  TagGroup,
+  UserElement,
 } from '../../components';
 import {Linking, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -25,7 +23,7 @@ export default function CurrentUserPage() {
   if (!profile) return <LoadingScreen />;
 
   const {
-    profile_image: {large: avatar},
+    profile_image,
     username,
     portfolio_url,
     twitter_username,
@@ -38,7 +36,6 @@ export default function CurrentUserPage() {
     followers_count,
     location,
     photos,
-    tags: {custom},
   } = profile;
 
   return (
@@ -59,23 +56,13 @@ export default function CurrentUserPage() {
           paddingBottom: 16,
           alignItems: 'flex-start',
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <FastImage
-            source={{uri: avatar}}
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 12,
-            }}
-            resizeMode="cover"
-          />
-          <View style={{marginStart: 8}}>
-            <Text variant="headlineMedium" style={{fontWeight: 'bold'}}>
-              {name}
-            </Text>
-            <Text style={{opacity: 0.75}}>@{username}</Text>
-          </View>
-        </View>
+          
+        <UserElement
+          profile_image={profile_image}
+          username={username}
+          name={name}
+          size="large"
+        />
 
         {location ? (
           <SingleTag mode="outlined" icon="map-marker-outline">
@@ -129,14 +116,13 @@ export default function CurrentUserPage() {
           }}
         />
 
-        {photos.length >= 0 && (
+        {photos.length > 0 && (
           <ImageGrid
             photos={photos}
-            style={{height: 200, width: '100%' ,marginTop: 4}}
+            style={{height: 200, width: '100%', marginTop: 4}}
             space={4}
           />
         )}
-
       </ScrollView>
     </Surface>
   );

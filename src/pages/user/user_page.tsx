@@ -1,22 +1,22 @@
-import {Chip, Divider, Surface, Text} from 'react-native-paper';
+import React, { useContext } from 'react';
+import {Chip, Surface, Text, useTheme} from 'react-native-paper';
 import {
   BackAppBar,
   ImageGrid,
+  ListAlbums,
   LoadingScreen,
   SingleTag,
   StatGroup,
-  TagGroup,
-  VerticalDivider,
+  UserElement,
 } from '../../components';
-import {Linking, ScrollView, View} from 'react-native';
+import {Linking, Pressable, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import '../../ultilities/shortenNumber';
-import {Tag} from '../../services/api/type';
 import {useEffect, useState} from 'react';
 import {Full} from 'unsplash-js/dist/methods/users/types';
 import unsplash from '../../services/api/unsplash';
-import {RouteProp} from '@react-navigation/native';
+import {NavigationContext, RouteProp} from '@react-navigation/native';
 import {AppParamList} from '../../navigations/param_list';
 import {ScreenName} from '../../navigations/screen_name';
 import {
@@ -27,13 +27,17 @@ import {
 type Props = RouteProp<AppParamList, ScreenName.user>;
 export default function UserPage({route}: {route: Props}) {
   const inset = useSafeAreaInsets();
+  const colors = useTheme().colors;
+  const navigation = useContext(NavigationContext)
   const username = route.params?.username;
 
   const [profile, setProfile] = useState<Full | undefined>();
 
   async function getUser() {
     console.log('getting user');
-    if (!username) return null;
+    if (!username) {
+      return null;
+    }
     const apiResponse = await unsplash.users.get({username: username});
     const data = apiResponse.response;
     console.log(data);
@@ -49,7 +53,7 @@ export default function UserPage({route}: {route: Props}) {
   }
 
   const {
-    profile_image: {large: avatar},
+    profile_image,
     portfolio_url,
     twitter_username,
     instagram_username,
@@ -82,24 +86,9 @@ export default function UserPage({route}: {route: Props}) {
           paddingBottom: 16,
           alignItems: 'flex-start',
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <FastImage
-            source={{uri: avatar}}
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 12,
-            }}
-            resizeMode="cover"
-          />
-          <View style={{marginStart: 8}}>
-            <Text variant="headlineMedium" style={{fontWeight: 'bold'}}>
-              {name}
-            </Text>
-            <Text style={{opacity: 0.75}}>@{username}</Text>
-          </View>
-        </View>
 
+        <UserElement profile_image={profile_image} username={username} name={name} size='large'/>
+      
         {location ? (
           <SingleTag mode="outlined" icon="map-marker-outline">
             {location}
@@ -158,13 +147,31 @@ export default function UserPage({route}: {route: Props}) {
               photos={photos}
               style={{height: 200, marginTop: 4}}
               space={4}
+              onPress={() => navigation?.navigate(ScreenName.userPhotos, {user: profile})}
               // total={total_photos}
             />
           </>
         )}
 
-        {/* <GroupHeading containerStyle={{marginTop: 12}}>Interests</GroupHeading> */}
-        {/* <TagGroup tags={custom} /> */}
+        <Pressable
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.75,
+            backgroundColor: colors.secondary,
+            borderRadius: 8,
+            width: '100%',
+            height: 200,
+            marginTop: 16,
+          }}
+          onPress={() => navigation?.navigate(ScreenName.userCollections, {user: profile})}
+          >
+          <Text
+            variant="headlineSmall"
+            style={{fontWeight: 'bold', color: colors.onSecondary}}>
+            View collection
+          </Text>
+        </Pressable>
       </ScrollView>
     </Surface>
   );

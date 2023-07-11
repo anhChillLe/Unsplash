@@ -5,7 +5,7 @@ import {
 import {AuthParamList} from './param_list';
 import {ScreenName} from './screen_name';
 import LoginSuccess from '../pages/auth/login_success';
-import LoginRequest from '../pages/auth/login_request';
+import LoginRequest from '../pages/auth/landing_page';
 
 const Stack = createStackNavigator<AuthParamList>();
 

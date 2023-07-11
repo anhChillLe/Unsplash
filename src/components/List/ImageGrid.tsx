@@ -1,8 +1,6 @@
 import {
-  Dimensions,
   Pressable,
   StyleProp,
-  StyleSheet,
   View,
   ViewStyle,
 } from 'react-native';
@@ -26,31 +24,6 @@ export default function ImageGrid({
   onPress,
 }: Props) {
   const colors = useTheme().colors;
-
-  console.log(photos.length);
-
-  if (photos.length === 0) {
-    return (
-      <Pressable
-        style={[
-          {
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: 0.75,
-            backgroundColor: colors.secondary,
-            borderRadius: 8,
-          },
-          style,
-        ]}
-        onPress={onPress}>
-        <Text
-          variant="headlineSmall"
-          style={{fontWeight: 'bold', color: colors.onSecondary}}>
-          Add photos
-        </Text>
-      </Pressable>
-    );
-  }
 
   if (photos.length === 1) {
     return (
@@ -107,17 +80,17 @@ export default function ImageGrid({
       ]}>
       <FastImage
         source={{uri: photos[0].urls.regular}}
-        style={{height: '100%', flex: 1, margin: space, borderRadius: 4}}
+        style={{height: '100%', flex: 1, margin: space, borderRadius: 4, backgroundColor: 'gray'}}
       />
       <View style={{flexDirection: 'column', flex: 1, marginVertical: -space}}>
         <FastImage
           source={{uri: photos[1].urls.regular}}
-          style={{flex: 1, margin: space, borderRadius: 4}}
+          style={{flex: 1, margin: space, borderRadius: 4, backgroundColor: 'gray'}}
         />
         <Pressable style={{flex: 1, margin: space}} onPress={onPress}>
           <FastImage
             source={{uri: photos[2].urls.regular}}
-            style={{flex: 1, borderRadius: 4}}
+            style={{flex: 1, borderRadius: 4, backgroundColor: 'gray'}}
           />
 
           {onPress && (

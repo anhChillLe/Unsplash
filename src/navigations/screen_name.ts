@@ -18,5 +18,7 @@ export enum ScreenName {
   loginResult = 'LoginSuccess',
   login = 'LoginRequest',
   user = 'user',
-  currentUser = 'currentUser'
+  currentUser = 'currentUser',
+  userCollections = 'userCollections',
+  userPhotos = 'userPhotos',
 }

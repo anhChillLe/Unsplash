@@ -1,6 +1,6 @@
 import { ListType } from "../constants/list_type";
 import { SearchInput } from "../redux/features/search/actions";
-import { Collection, Photo, Topic } from "../services/api/type";
+import { Collection, Photo, Topic, User } from "../services/api/type";
 import { ScreenName } from "./screen_name";
 
 export type AppParamList = {
@@ -16,6 +16,8 @@ export type AppParamList = {
   [ScreenName.searchResult]: {searchInput: SearchInput};
   [ScreenName.user]: {username: string}
   [ScreenName.currentUser] : undefined
+  [ScreenName.userCollections]: {user: User}
+  [ScreenName.userPhotos]: {user: User}
 };
 
 export type AuthParamList = {

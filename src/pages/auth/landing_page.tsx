@@ -6,13 +6,12 @@ import {
   View,
 } from 'react-native';
 import {Button, Text} from 'react-native-paper';
-import {Icons} from '../../assets/icons';
+import {Icons} from '../../assets/images/icons';
 import {Images} from '../../assets/images';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {LoginWidthUnsplash} from '../../actions/link_actions';
 import { useContext } from 'react';
 import { NavigationContext } from '@react-navigation/native';
-import { ScreenName } from '../../navigations/screen_name';
 
 export default function LoginRequest() {
   if (Platform.OS === 'android') {
@@ -23,8 +22,8 @@ export default function LoginRequest() {
 
   const navigation = useContext(NavigationContext)
   const openApp = () => {
-    navigation?.navigate(ScreenName.main)
-    console.log('Open app')
+    // navigation?.navigate(ScreenName.main)
+    // console.log('Open app')
   }
 
   return (

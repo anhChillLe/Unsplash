@@ -3,7 +3,7 @@ import {RootState} from '../../redux/store/store';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Avatar, Divider, IconButton, Menu, Text} from 'react-native-paper';
 import {PropsWithChildren, useContext, useState} from 'react';
-import {Icons} from '../../assets/icons';
+import {Icons} from '../../assets/images/icons';
 import {LoginWidthUnsplash as Login} from '../../actions/link_actions';
 import {NavigationContext} from '@react-navigation/native';
 import {ScreenName} from '../../navigations/screen_name';
@@ -15,7 +15,7 @@ export default function UserGroup() {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  const Setting = () => <IconButton onPress={closeMenu} icon="cog" size={28} />;
+  const Setting = () => <IconButton onPress={openMenu} icon="cog" size={28} />;
   const UserAvatar = () => (
     <Pressable onPress={openMenu}>
       <Avatar.Image size={32} source={{uri: user?.profile_image.medium}} />
@@ -58,7 +58,7 @@ export default function UserGroup() {
         onDismiss={closeMenu}
         anchorPosition="bottom"
         style={styles.menu}
-        anchor={<Setting />}>
+        anchor={<Setting/>}>
         <Menu.Item leadingIcon={Icons.unsplash} onPress={Login} title="Login" />
         <Divider />
         <Menu.Item leadingIcon="cog" title="Setting" />

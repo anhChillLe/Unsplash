@@ -1,0 +1,1 @@
+export type ContentFilter = 'low' | 'high'

@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import UserService from '../../../services/api/user';
 import {RootState} from '../../store/store';
-import {UserProfile} from '../../../services/api/models/userProfile';
+import unsplash from '../../../services/unsplash';
+import { UserProfile } from '../../../services/unsplash/models';
 
 export const getCurrentUser = createAsyncThunk<
   UserProfile | undefined,
@@ -10,6 +10,6 @@ export const getCurrentUser = createAsyncThunk<
 >('getCurrentUser', async (_, thunkApi) => {
   const token = thunkApi.getState().auth.token;
   if (!token) return undefined;
-  const useProfile = await UserService.getCurrentUser();
+  const useProfile = await unsplash.current_user.get();
   return useProfile;
 });

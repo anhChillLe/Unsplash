@@ -1,18 +1,22 @@
+import React from 'react';
 import {Dimensions, ScrollView, View} from 'react-native';
 import {Photo} from '../../services/api/type';
 import {
   GroupHeading,
   ImageCard,
   ListAlbums,
-  StatGroup,
+  LoadingScreen,
   UserElement,
 } from '../../components';
-import {Card, Chip, DataTable, Text} from 'react-native-paper';
-import {PhotoDetailViewModel, getPhotoViewModel} from './photoViewModel';
-import {useContext, useEffect} from 'react';
+import {Card, Chip, DataTable, Text, useTheme} from 'react-native-paper';
+import {
+  PhotoDetailViewModel,
+  getPhotoViewModel,
+} from '../../viewmodels/photo_viewmodel';
+import {ReactElement, useContext, useEffect} from 'react';
 import {NavigationContext} from '@react-navigation/native';
 import {ScreenName} from '../../navigations/screen_name';
-import {Full} from 'unsplash-js/dist/methods/photos/types';
+import {FullPhoto} from '../../services/unsplash/models/Photo';
 
 export default function PageContainer({photo}: {photo: Photo}) {
   const viewModel = getPhotoViewModel(photo);
@@ -20,28 +24,25 @@ export default function PageContainer({photo}: {photo: Photo}) {
 }
 
 function Page({
-  isLoading,
   photo,
-  stats,
-  getStat,
   getDetail,
   fullPhoto,
-}: PhotoDetailViewModel) {
+  like,
+}: PhotoDetailViewModel): ReactElement {
   const navigation = useContext(NavigationContext);
 
   useEffect(() => {
-    getStat();
     getDetail();
   }, []);
 
-  if (!stats) return;
+  const {profile_image, username, name} = photo.user;
 
   return (
     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
       <UserElement
-        user={photo.user}
-        avatarSize={48}
-        quality="large"
+        profile_image={profile_image}
+        username={username}
+        name={name}
         style={{
           padding: 8,
         }}
@@ -62,7 +63,32 @@ function Page({
         height="auto"
         quality="auto"
       />
+      {fullPhoto && <MoreInfo fullPhoto={fullPhoto} like={like} />}
+    </ScrollView>
+  );
+}
 
+function MoreInfo({
+  fullPhoto,
+  like = () => {},
+}: {
+  fullPhoto: FullPhoto;
+  like: () => void;
+}): ReactElement {
+  const {width} = Dimensions.get('window');
+  const navigation = useContext(NavigationContext);
+  const theme = useTheme();
+
+  const {
+    exif: {make, model, exposure_time, aperture, focal_length, iso},
+    likes,
+    downloads,
+    views,
+    liked_by_user,
+  } = fullPhoto;
+
+  return (
+    <View style={{paddingHorizontal: 8}}>
       <View
         style={{
           flexDirection: 'row',
@@ -71,10 +97,14 @@ function Page({
         }}>
         <Chip
           style={{backgroundColor: 'transparent'}}
-          textStyle={{fontSize: 12}}
+          textStyle={{
+            fontSize: 12,
+            color: liked_by_user ? theme.colors.primary : 'black',
+          }}
           compact={true}
-          icon="cards-heart-outline">
-          {photo.likes.shorten()} likes
+          icon={liked_by_user ? 'thumb-up' : 'thumb-up-outline'}
+          onPress={like}>
+          {likes.shorten()} likes
         </Chip>
 
         <Chip
@@ -82,7 +112,7 @@ function Page({
           textStyle={{fontSize: 12}}
           compact={true}
           icon="eye">
-          {stats.views.total.shorten()} views
+          {views.shorten()} views
         </Chip>
 
         <Chip
@@ -90,26 +120,15 @@ function Page({
           textStyle={{fontSize: 12}}
           compact={true}
           icon="download-circle">
-          {stats.downloads.total.shorten()} downloads
+          {downloads.shorten()} downloads
         </Chip>
       </View>
-      <MoreInfo fullPhoto={fullPhoto} />
-    </ScrollView>
-  );
-}
 
-function MoreInfo({fullPhoto}: {fullPhoto: Full | undefined}) {
-  if (!fullPhoto) return null;
-  const {width} = Dimensions.get('window');
-  const navigation = useContext(NavigationContext);
+      <GroupHeading containerStyle={{marginVertical: 8, marginStart: 4}}>
+        Exif
+      </GroupHeading>
 
-  const {
-    exif: {make, model, exposure_time, aperture, focal_length, iso},
-  } = fullPhoto;
-
-  return (
-    <View style={{paddingHorizontal: 8}}>
-      <Card style={{marginBottom: 16}}>
+      <Card mode="contained" style={{marginBottom: 16, overflow: 'hidden'}}>
         <DataTable style={{width: '100%'}}>
           <DataTable.Row>
             <DataTable.Title>Make</DataTable.Title>
@@ -137,6 +156,9 @@ function MoreInfo({fullPhoto}: {fullPhoto: Full | undefined}) {
           </DataTable.Row>
         </DataTable>
       </Card>
+      <GroupHeading containerStyle={{marginVertical: 8, marginStart: 4}}>
+        More collection
+      </GroupHeading>
       <ListAlbums
         data={fullPhoto.related_collections.results}
         column={1}

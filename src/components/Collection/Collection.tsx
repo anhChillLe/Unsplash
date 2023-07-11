@@ -4,7 +4,7 @@ import ImageGrid from '../List/ImageGrid';
 import { Text } from 'react-native-paper';
 
 type Props = {
-  collection: Collection | Topic;
+  collection: Collection | Topic
   style?: StyleProp<ViewStyle>
   space?: number;
   onPress?: () => void
@@ -12,6 +12,8 @@ type Props = {
 
 export default function CollectionCard({collection, style, space = 2, onPress}: Props) {
   const photos = collection.preview_photos ?? [];
+
+  if(photos.length === 0) return null
 
   return (
     <View style={style}>

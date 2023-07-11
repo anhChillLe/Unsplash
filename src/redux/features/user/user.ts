@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {UserProfile} from '../../../services/api/models/userProfile';
 import {getCurrentUser} from './action';
+import { UserProfile } from '../../../services/unsplash/models';
 
 type CurrentUser = {
   isLoading: boolean;

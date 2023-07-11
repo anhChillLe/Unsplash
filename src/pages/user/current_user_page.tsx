@@ -1,21 +1,17 @@
-import {Chip, Surface, Text} from 'react-native-paper';
+import { ScrollView } from 'react-native';
+import { Surface, Text } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 import {
   BackAppBar,
   ImageGrid,
   LoadingScreen,
   SingleTag,
+  SocialGroup,
   StatGroup,
   UserElement,
 } from '../../components';
-import {Linking, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/store/store';
-import {
-  openInstagramProfile,
-  openTwitterProfile,
-} from '../../actions/link_actions';
+import { RootState } from '../../redux/store/store';
 
 export default function CurrentUserPage() {
   const inset = useSafeAreaInsets();
@@ -56,7 +52,7 @@ export default function CurrentUserPage() {
           paddingBottom: 16,
           alignItems: 'flex-start',
         }}>
-          
+
         <UserElement
           profile_image={profile_image}
           username={username}
@@ -70,38 +66,12 @@ export default function CurrentUserPage() {
           </SingleTag>
         ) : null}
 
-        {(twitter_username || instagram_username || portfolio_url) && (
-          <ScrollView
-            horizontal
-            contentContainerStyle={{marginVertical: 12}}
-            showsHorizontalScrollIndicator={false}>
-            {twitter_username && (
-              <Chip
-                icon="twitter"
-                onPress={() => openTwitterProfile(twitter_username)}>
-                {twitter_username}
-              </Chip>
-            )}
-            {instagram_username && (
-              <Chip
-                style={{marginStart: 8}}
-                icon="instagram"
-                onPress={() => openInstagramProfile(instagram_username)}>
-                {instagram_username}
-              </Chip>
-            )}
-            {portfolio_url && (
-              <Chip
-                style={{marginStart: 8}}
-                icon="account-star"
-                onPress={() => {
-                  Linking.openURL(portfolio_url);
-                }}>
-                Portfolio
-              </Chip>
-            )}
-          </ScrollView>
-        )}
+        <SocialGroup
+          instagram_username={instagram_username}
+          twitter_username={twitter_username}
+          portfolio_url={portfolio_url}
+        />
+
         {bio && (
           <Text style={{marginTop: 8}} numberOfLines={4} ellipsizeMode="tail">
             {bio}

@@ -1,11 +1,13 @@
 import API from './instance';
 import { ListPhotoParams, UpdatePhotoParams } from '../params/photo_params';
 import { LikeResponse } from "../models/LikeResponse";
-import { FullPhoto } from '../models/Photo';
+import { FullPhoto, Photo } from '../models/Photo';
+import { Statistics } from '../models/Statistics';
+import { Track } from '../models/Track';
 
 const Photo = {
   list: async (params: ListPhotoParams) => {
-    const response = await API.get('/photos', {params});
+    const response = await API.get<Photo[]>('/photos', {params});
     return response.data;
   },
   get: async (id: string) => {
@@ -13,19 +15,19 @@ const Photo = {
     return response.data
   },
   random: async (params: ListPhotoParams) => {
-    const response = await API.get('/photos/random', {params})
+    const response = await API.get<Photo>('/photos/random', {params})
     return response.data
   },
   statistics: async (id: string) => {
-    const response = await API.get(`/photos/${id}/statistics`)
+    const response = await API.get<Statistics>(`/photos/${id}/statistics`)
     return response.data
   },
   track: async (id: string) => {
-    const response = await API.get(`/photos/${id}/download`)
+    const response = await API.get<Track>(`/photos/${id}/download`)
     return response.data
   },
   update: async (params: UpdatePhotoParams) => {
-    const response = await API.put(`/photos/${params.id}`, {params})
+    const response = await API.put<FullPhoto>(`/photos/${params.id}`, {params})
     return response.data
   },
   like: async (id: string) => {

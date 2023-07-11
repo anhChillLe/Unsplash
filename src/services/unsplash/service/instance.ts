@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import {setupCache} from 'axios-cache-interceptor';
 
 const headers = {
   Accept: 'application/json',
@@ -22,11 +23,7 @@ const API = axios.create({
     try {
       return JSON.parse(data);
     } catch (error) {
-      throw Error(
-        `[requestClient] Error parsing response JSON data - ${JSON.stringify(
-          error,
-        )}`,
-      );
+      throw Error(`Parse data error: ${error}, data: ${data}`);
     }
   },
 });
@@ -46,9 +43,7 @@ API.interceptors.request.use(
 );
 
 API.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
+  (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     console.log('response error: ', error);
     const originalRequest = error.config;
@@ -56,4 +51,8 @@ API.interceptors.response.use(
   },
 );
 
-export default API;
+const unsplash = setupCache(API, {
+  methods: ['get']
+});
+
+export default unsplash

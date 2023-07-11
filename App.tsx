@@ -7,6 +7,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Platform, StatusBar, useColorScheme} from 'react-native';
 import RootStack from './src/navigations/root_stack';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import unsplashService from './src/services/unsplash';
 
 export default function App(): ReactElement {
   const colorScheme = useColorScheme();

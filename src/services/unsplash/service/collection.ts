@@ -5,25 +5,27 @@ import {
   GetCollectionPhotosParams,
   ListCollectionParams,
   RemovePhotoToCollectionParams,
-} from '../params/collection_params'
+} from '../params/collection_params';
+import { Collection, FullCollection } from '../models/Collection';
+import { Photo } from '../models/Photo';
 
 const Collection = {
   list: async (params: ListCollectionParams) => {
-    const response = await API.get('/collections', {params});
+    const response = await API.get<Collection[]>('/collections', {params});
     return response.data;
   },
   get: async (id: string) => {
-    const response = await API.get(`/collections/${id}`);
+    const response = await API.get<FullCollection>(`/collections/${id}`);
     return response.data;
   },
   getPhotos: async (params: GetCollectionPhotosParams) => {
-    const response = await API.get(`/collections/${params.id}/photos`, {
+    const response = await API.get<Photo[]>(`/collections/${params.id}/photos`, {
       params,
     });
     return response.data;
   },
   getRelated: async (id: string) => {
-    const response = await API.get(`/collections/${id}//related`);
+    const response = await API.get<Collection[]>(`/collections/${id}//related`);
     return response.data;
   },
   create: async (params: CreateCollectionParams) => {
@@ -54,4 +56,4 @@ const Collection = {
   },
 };
 
-export default Collection
+export default Collection;

@@ -1,14 +1,16 @@
 import API from './instance';
 import { GetUserStatisticsParams, ListPhotoUserLikeParams, ListUserCollectionParams, ListUserPhotosParams } from '../params/user_params';
 import { Collection } from '../../api/type';
+import { UserProfile } from '../models';
+import { Portfolio } from '../models/Portfolio';
 
 const User = {
   getProfile: async (username: string) => {
-    const response = await API.get(`/users/${username}`);
+    const response = await API.get<UserProfile>(`/users/${username}`);
     return response.data;
   },
   getPortfolio: async (username: string) => {
-    const response = await API.get(`/users/${username}/portfolio`);
+    const response = await API.get<Portfolio>(`/users/${username}/portfolio`);
     return response.data;
   },
   listPhotos: async (params: ListUserPhotosParams) => {

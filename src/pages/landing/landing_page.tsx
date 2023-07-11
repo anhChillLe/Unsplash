@@ -13,7 +13,7 @@ import {LoginWidthUnsplash} from '../../actions/link_actions';
 import { useContext } from 'react';
 import { NavigationContext } from '@react-navigation/native';
 
-export default function LoginRequest() {
+export default function LandingPage() {
   if (Platform.OS === 'android') {
     StatusBar.setBackgroundColor('transparent');
     StatusBar.setBarStyle('dark-content');

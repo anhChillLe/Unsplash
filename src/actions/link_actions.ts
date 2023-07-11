@@ -17,6 +17,13 @@ const openTwitterProfile = (twitterUsername: string) => {
   );
 };
 
+const openPortfolio = (portfolio_url: string) => {
+  Linking.openURL(portfolio_url).catch(err =>
+    console.error('Can not open Portfolio:', err),
+  );
+
+}
+
 function LoginWidthUnsplash() {
   const baseUrl = 'https://unsplash.com/oauth/authorize';
   const clientId = `client_id=${ACCESS_KEY}`;
@@ -29,4 +36,4 @@ function LoginWidthUnsplash() {
   Linking.openURL(url);
 }
 
-export {openInstagramProfile, openTwitterProfile,LoginWidthUnsplash}
+export {openInstagramProfile, openTwitterProfile,LoginWidthUnsplash, openPortfolio}

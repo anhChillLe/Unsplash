@@ -1,6 +1,6 @@
 import { Tag, User } from "../../api/type"
 import { Photo } from "./Photo"
-import { Links } from "./base"
+import { Links, Meta } from "./base"
 
 export interface Collection {
   id: string
@@ -19,4 +19,8 @@ export interface Collection {
   user: User
   cover_photo: Photo
   preview_photos: Photo[]
+}
+
+export interface FullCollection extends Collection {
+  meta: Meta
 }

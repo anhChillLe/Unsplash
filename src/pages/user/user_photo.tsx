@@ -28,8 +28,9 @@ function UserPhotos({
   const inset = useSafeAreaInsets();
   const {width} = Dimensions.get('window');
   const navigation = useContext(NavigationContext);
-
   const contentWidth = width - 16;
+
+  const {profile_image, name, username} = user
 
   useEffect(() => {
     getPhotos();
@@ -47,7 +48,7 @@ function UserPhotos({
       <ListImageLite
         width={contentWidth}
         space={4}
-        header={<UserElement user={user} />}
+        header={<UserElement size='large' profile_image={profile_image} name={name} username={username} />}
         photos={photos}
         column={3}
         onEndReached={loadMore}

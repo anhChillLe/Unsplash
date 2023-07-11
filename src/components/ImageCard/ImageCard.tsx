@@ -9,7 +9,6 @@ import FastImage from 'react-native-fast-image';
 import {PlaceHolderMode} from '../../constants/place_holder';
 import {Quality} from '../../constants/quality';
 import {getImageUrl} from '../../ultilities/image_ulti';
-import { Colors } from '../../constants/colors';
 
 interface Props {
   photo: Photo | CustomPhoto;
@@ -53,7 +52,7 @@ export default function ImageCard({
       style={[style, {overflow: 'hidden'}]}
       mode={mode}
       theme={{roundness, colors: {
-        outline: Colors.transparent
+        outline: 'transparent'
       }}}
       onPress={() => onPress(photo)}>
       <FastImage

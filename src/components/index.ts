@@ -14,6 +14,7 @@ import TagGroup from './Tags/TagGroup';
 import SingleTag from './Tags/SingleTag';
 import StatGroup from './Stats/StatGroup';
 import CollectionCard from './Collection/Collection';
+import SocialGroup from './Social/Social';
 
 export {
   HorizontalImageList,
@@ -31,5 +32,6 @@ export {
   TagGroup,
   StatGroup,
   SingleTag,
-  CollectionCard
+  CollectionCard,
+  SocialGroup,
 };

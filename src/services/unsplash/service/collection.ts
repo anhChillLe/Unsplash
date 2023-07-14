@@ -9,7 +9,7 @@ import {
 import { Collection, FullCollection } from '../models/Collection';
 import { Photo } from '../models/Photo';
 
-const Collection = {
+const CollectionService = {
   list: async (params: ListCollectionParams) => {
     const response = await API.get<Collection[]>('/collections', {params});
     return response.data;
@@ -56,4 +56,4 @@ const Collection = {
   },
 };
 
-export default Collection;
+export default CollectionService;

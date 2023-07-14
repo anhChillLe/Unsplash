@@ -1,3 +1,5 @@
+import { NavigationContext } from '@react-navigation/native';
+import { useContext } from 'react';
 import {
   ImageBackground,
   Platform,
@@ -5,13 +7,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {Button, Text} from 'react-native-paper';
-import {Icons} from '../../assets/images/icons';
-import {Images} from '../../assets/images';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import {LoginWidthUnsplash} from '../../actions/link_actions';
-import { useContext } from 'react';
-import { NavigationContext } from '@react-navigation/native';
+import { Button, Text } from 'react-native-paper';
+import { LoginWidthUnsplash } from '../../actions/link_actions';
+import { Images } from '../../assets/images';
+import { Icons } from '../../assets/images/icons';
 
 export default function LandingPage() {
   if (Platform.OS === 'android') {
@@ -42,7 +42,6 @@ export default function LandingPage() {
             styles.heading,
             {
               fontWeight: 'bold',
-              color: 'white',
             },
           ]}>
           Chill Paper

@@ -6,7 +6,7 @@ import { UserStatistics } from '../models/Statistics';
 import { Collection } from '../models/Collection';
 import { FullUser } from '../models/User';
 
-const User = {
+const UserService = {
   getProfile: async (username: string) => {
     const response = await API.get<FullUser>(`/users/${username}`);
     return response.data;
@@ -33,4 +33,4 @@ const User = {
   },
 };
 
-export default User
+export default UserService

@@ -26,7 +26,6 @@ export default function RootStack() {
   }
 
   const hideBootSplash = () => {
-    console.log('hideBootSplash')
     RNBootSplash.hide()
   }
 

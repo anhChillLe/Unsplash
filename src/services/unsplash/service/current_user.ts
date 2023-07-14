@@ -1,7 +1,7 @@
 import { FullUser } from '../models';
 import API from './instance';
 
-const CurrentUser = {
+const CurrentUserService = {
   get: async () => {
     const response = await API.get<FullUser>('/me');
     console.log('getCurrentUser: ', response.cached);
@@ -13,4 +13,4 @@ const CurrentUser = {
   },
 };
 
-export default CurrentUser;
+export default CurrentUserService;

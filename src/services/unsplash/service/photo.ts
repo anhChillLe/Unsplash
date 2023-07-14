@@ -5,7 +5,7 @@ import { FullPhoto, Photo } from '../models/Photo';
 import { Statistics } from '../models/Statistics';
 import { Track } from '../models/Track';
 
-const Photo = {
+const PhotoService = {
   list: async (params: ListPhotoParams) => {
     const response = await API.get<Photo[]>('/photos', {params});
     return response.data;
@@ -41,4 +41,4 @@ const Photo = {
    },
 };
 
-export default Photo
+export default PhotoService

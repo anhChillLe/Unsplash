@@ -1,5 +1,5 @@
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/store/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../redux/store/store';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Avatar, Divider, IconButton, Menu, Text} from 'react-native-paper';
 import {PropsWithChildren, useContext, useState} from 'react';
@@ -7,8 +7,10 @@ import {Icons} from '../../assets/images/icons';
 import {LoginWidthUnsplash as Login} from '../../actions/link_actions';
 import {NavigationContext} from '@react-navigation/native';
 import {ScreenName} from '../../navigations/screen_name';
+import { clearToken } from '../../redux/features/auth/action';
 
 export default function UserGroup() {
+  const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((state: RootState) => state.user.profile);
   const navigation = useContext(NavigationContext);
   const [visible, setVisible] = useState(false);
@@ -25,6 +27,10 @@ export default function UserGroup() {
     navigation?.navigate(ScreenName.currentUser);
     closeMenu();
   };
+
+  const logOut = () => {
+    dispatch(clearToken())
+  }
 
   return user ? (
     <View style={styles.container}>
@@ -45,7 +51,7 @@ export default function UserGroup() {
           title="Update Profile"
         />
         <Menu.Item leadingIcon="chart-arc" title="Stats" />
-        <Menu.Item leadingIcon="logout" title="Logout" />
+        <Menu.Item leadingIcon="logout" title="Logout" onPress={logOut}/>
         <Divider />
         <Menu.Item leadingIcon="cog" title="Setting" />
       </Menu>

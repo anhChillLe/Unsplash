@@ -2,12 +2,13 @@ import {ACCESS_KEY, API_URL} from '@env';
 import * as Keychain from 'react-native-keychain';
 import axios, {
   AxiosError,
+  AxiosHeaders,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
 import {setupCache} from 'axios-cache-interceptor';
 
-const headers = {
+const headers= {
   Accept: 'application/json',
   'Content-Type': 'application/json',
   Authorization: `Client-ID ${ACCESS_KEY}`,
@@ -55,4 +56,4 @@ const unsplash = setupCache(API, {
   methods: ['get']
 });
 
-export default unsplash
+export default API

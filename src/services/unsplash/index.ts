@@ -1,21 +1,21 @@
-import Auth from './service/auth';
-import Collection from './service/collection';
-import CurrentUser from './service/current_user';
-import Photo from './service/photo';
-import Search from './service/search';
-import Stats from './service/stats';
-import Topic from './service/topic';
-import User from './service/user';
+import AuthService from './service/auth';
+import CollectionService from './service/collection';
+import CurrentUserService from './service/current_user';
+import PhotoService from './service/photo';
+import SearchService from './service/search';
+import StatsService from './service/stats';
+import TopicService from './service/topic';
+import UserService from './service/user';
 
 const unsplashService = {
-  auth: Auth,
-  current_user: CurrentUser,
-  user: User,
-  stats: Stats,
-  search: Search,
-  photo: Photo,
-  topic: Topic,
-  collection: Collection,
+  auth: AuthService,
+  current_user: CurrentUserService,
+  user: UserService,
+  stats: StatsService,
+  search: SearchService,
+  photo: PhotoService,
+  topic: TopicService,
+  collection: CollectionService,
 };
 
 export default unsplashService;

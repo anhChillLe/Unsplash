@@ -1,7 +1,7 @@
 import { StatMonth, StatTotal } from '../models/Stats';
 import API from './instance';
 
-const Stats = {
+const StatsServie = {
   total: async () => {
     const response = await API.get<StatTotal>('/stats/total');
     return response.data;
@@ -12,4 +12,4 @@ const Stats = {
   },
 };
 
-export default Stats
+export default StatsServie

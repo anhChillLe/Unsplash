@@ -3,7 +3,7 @@ import {GetTopicPhotosParams, ListTopicParams} from '../params/topic_params';
 import {FullTopic, Topic} from '../models/Topic';
 import { Photo } from '../models/Photo';
 
-const Topic = {
+const TopicService = {
   list: async (params: ListTopicParams) => {
     const response = API.get<Topic>('/topics', {params});
     return (await response).data;
@@ -18,4 +18,4 @@ const Topic = {
   },
 };
 
-export default Topic;
+export default TopicService;

@@ -10,7 +10,7 @@ import { AppDispatch } from '../../redux/store/store';
 type Props = RouteProp<AuthParamList, ScreenName.loginResult>;
 export default function RequestToken({route}: {route: Props}) {
   const code = route.params?.code;
-  console.log(code)
+  console.log('code: ', code)
 
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {

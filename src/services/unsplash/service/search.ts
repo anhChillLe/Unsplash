@@ -2,7 +2,7 @@ import API from "./instance";
 import { SearchPhotosParams } from "../params/search_params";
 import { SearchCollectionResponse, SearchPhotoResponse, SearchUserResponse } from "../models/SearchResponse";
 
-const Search = {
+const SearchService = {
   photo: async (params: SearchPhotosParams) => {
     const response = await API.get<SearchPhotoResponse>('/search/photos', {params})
     return response.data
@@ -17,4 +17,4 @@ const Search = {
   }
 }
 
-export default Search
+export default SearchService

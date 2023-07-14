@@ -1,7 +1,6 @@
-import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {OrderBy, Photo} from '../../../services/api/type';
-import {RootState} from '../../store/store';
-import unsplash from '../../../services/api/unsplash';
+import { createSlice } from '@reduxjs/toolkit';
+import { getTopicPhotos } from './action';
+import { Photo } from '../../../services/api/type';
 
 type TopicDetailState = {
   id: string;
@@ -16,30 +15,6 @@ const initialState: TopicDetailState = {
   page: 0,
   photos: [],
 };
-
-const condition = (id: string, {getState}: {getState: () => RootState}) => {
-  const {topicPhotos} = getState();
-  return !topicPhotos.isLoading;
-};
-export const getTopicPhotos = createAsyncThunk<
-  Photo[],
-  string | 'nextPage',
-  {state: RootState}
->(
-  'getTopicPhotos',
-  async (id, thunkApi) => {
-    const state = thunkApi.getState().topicPhotos;
-
-    const result = await unsplash.topics.getPhotos({
-      topicIdOrSlug: id === 'nextPage' ? state.id : id,
-      page: state.page + 1,
-      perPage: 21,
-      orderBy: OrderBy.LATEST,
-    });
-    return result.response?.results ?? [];
-  },
-  {condition},
-);
 
 const topicPhotosSlice = createSlice({
   name: 'topicPhotos',

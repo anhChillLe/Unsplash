@@ -1,23 +1,18 @@
-import { RouteProp } from '@react-navigation/native';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { LoadingScreen } from '../../components';
-import { AuthParamList } from '../../navigations/param_list';
-import { ScreenName } from '../../navigations/screen_name';
-import { requestToken } from '../../redux/features/auth/action';
-import { AppDispatch } from '../../redux/store/store';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { LoadingScreen } from "../../components";
+import { LoginResultRoute } from "../../navigations/param_list";
+import { requestToken } from "../../redux/features/auth/action";
+import { AppDispatch } from "../../redux/store/store";
 
-type Props = RouteProp<AuthParamList, ScreenName.loginResult>;
-export default function RequestToken({route}: {route: Props}) {
-  const code = route.params?.code;
-  console.log('code: ', code)
+export default function RequestToken({ route }: LoginResultRoute) {
+	const code = route.params?.code;
+	console.log("code: ", code);
 
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    dispatch(requestToken(code));
-  }, []);
+	const dispatch = useDispatch<AppDispatch>();
+	useEffect(() => {
+		dispatch(requestToken(code));
+	}, []);
 
-  return (
-    <LoadingScreen />
-  );
+	return <LoadingScreen />;
 }

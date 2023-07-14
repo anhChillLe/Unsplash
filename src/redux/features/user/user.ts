@@ -1,15 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {getCurrentUser} from './action';
-import { UserProfile } from '../../../services/unsplash/models';
+import { FullUser } from '../../../services/unsplash/models';
 
 type CurrentUser = {
   isLoading: boolean;
-  profile: UserProfile | undefined;
+  profile?: FullUser;
 };
 
 const initialState: CurrentUser = {
   isLoading: false,
-  profile: undefined,
 };
 
 const currentUserSlice = createSlice({

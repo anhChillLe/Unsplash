@@ -1,19 +1,22 @@
 import {Collection, User} from '../../api/type';
 import { Exif, Links, Location, Meta, TopicSubmissions, Urls } from './base';
 
-export interface Photo {
-  id: string;
+export interface BasicPhoto {
+  id: string,
+  urls: Urls
+}
+
+export interface Photo extends BasicPhoto{
   slug: string;
   created_at: string;
   updated_at: string;
-  promoted_at: string;
+  promoted_at:  string | null;
   width: number;
   height: number;
-  color: string;
-  blur_hash: string;
-  description: any;
-  alt_description: string;
-  urls: Urls;
+  color: string | null;
+  blur_hash: string | null;
+  description: string | null;
+  alt_description: string | null;
   links: Links;
   likes: number;
   liked_by_user: boolean;

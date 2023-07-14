@@ -18,7 +18,7 @@ export interface Collection {
   links: Links
   user: User
   cover_photo: Photo
-  preview_photos: Photo[]
+  preview_photos: Photo[] | null
 }
 
 export interface FullCollection extends Collection {

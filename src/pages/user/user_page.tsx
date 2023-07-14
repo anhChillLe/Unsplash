@@ -1,16 +1,15 @@
-import { NavigationContext, RouteProp } from "@react-navigation/native";
+import { NavigationContext } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { Button, Surface, Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Full } from "unsplash-js/dist/methods/users/types";
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
-import { AppParamList } from "../../navigations/param_list";
+import { UserRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
 import unsplash from "../../services/api/unsplash";
 
-type Props = RouteProp<AppParamList, ScreenName.user>;
-export default function UserPage({ route }: { route: Props }) {
+export default function UserPage({ route }: UserRoute) {
 	const inset = useSafeAreaInsets();
 	const colors = useTheme().colors;
 	const navigation = useContext(NavigationContext);

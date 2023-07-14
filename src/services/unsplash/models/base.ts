@@ -1,11 +1,12 @@
 export interface Links {
   self: string;
   html: string;
-  photos: string;
-  likes: string;
-  portfolio: string;
-  following: string;
-  followers: string;
+  downloads?: string;
+  photos?: string;
+  likes?: string;
+  portfolio?: string;
+  following?: string;
+  followers?: string;
 }
 
 export interface ProfileImage {
@@ -31,25 +32,25 @@ export interface Meta {
 }
 
 export interface Exif {
-  make: string
-  model: string
-  name: string
-  exposure_time: string
-  aperture: string
-  focal_length: string
-  iso: number
+  make: string | null
+  model: string | null
+  name: string | null
+  exposure_time: string | null
+  aperture: string | null
+  focal_length: string | null
+  iso: number | null
 }
 
 export interface Location {
-  name: string
-  city: any
-  country: any
-  position: Position
+  city: string | null;
+  country: string | null;
+  name: string | null;
+  position: Position;
 }
 
 export interface Position {
-  latitude: number
-  longitude: number
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export interface Urls {
@@ -58,7 +59,7 @@ export interface Urls {
   regular: string
   small: string
   thumb: string
-  small_s3: string
+  small_s3?: string
 }
 
 export interface TopicSubmissions {}

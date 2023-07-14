@@ -1,7 +1,6 @@
 import {NavigationContext} from '@react-navigation/native';
 import {useContext} from 'react';
 import {Appbar} from 'react-native-paper';
-import { Colors } from '../../constants/colors';
 
 export default function BackAppBar() {
   const navigation = useContext(NavigationContext);
@@ -16,7 +15,7 @@ export default function BackAppBar() {
         left: 0,
         right: 0,
       }}
-      style={{backgroundColor: Colors.transparent, height: 48}}>
+      style={{backgroundColor: 'transparent', height: 48}}>
       <Appbar.BackAction onPress={navigation?.goBack} />
     </Appbar>
   );

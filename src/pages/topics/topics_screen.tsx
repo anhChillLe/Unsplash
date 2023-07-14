@@ -29,6 +29,7 @@ export default function TopicScreen() {
           column={1}
           space={8}
           mode="list"
+          itemMode='group'
           header={
             <Text
               variant="displayLarge"

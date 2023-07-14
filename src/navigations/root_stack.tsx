@@ -7,7 +7,9 @@ import {ActivityIndicator, Surface} from 'react-native-paper';
 import AppStack from './app_stack';
 import { useEffect } from 'react';
 import { getToken } from '../redux/features/auth/action';
-import { AppParamList, AuthParamList } from './param_list';
+import { AuthParamList } from './param_list';
+import RNBootSplash from "react-native-bootsplash";
+import { LoadingScreen } from '../components';
 
 export default function RootStack() {
   const state = useSelector((state: RootState) => state.auth);
@@ -19,31 +21,27 @@ export default function RootStack() {
 
   if (state.isGettingToken) {
     return (
-      <Surface
-        style={{
-          flex: 1,
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" />
-      </Surface>
+      <LoadingScreen />
     );
   }
 
+  const hideBootSplash = () => {
+    RNBootSplash.hide()
+  }
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer linking={linking} onReady={hideBootSplash}>
       {state.token ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
 
 const linking: LinkingOptions<AuthParamList> = {
-  prefixes: ['unsplash://app'],
+  prefixes: ['unsplash://'],
   config: {
     screens: {
-      [ScreenName.login]: 'login_request',
-      [ScreenName.loginResult]: 'login_success',
+      [ScreenName.login]: 'app/login_request',
+      [ScreenName.loginResult]: 'app/login_success',
     },
   },
 };

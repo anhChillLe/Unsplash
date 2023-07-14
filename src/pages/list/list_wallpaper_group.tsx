@@ -1,13 +1,10 @@
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ScreenName} from '../../navigations/screen_name';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Divider, Surface, useTheme } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { OrderBy } from 'unsplash-js';
+import { BackAppBar } from '../../components';
+import { ScreenName } from '../../navigations/screen_name';
 import AllImageScreen from './list_wallpaper';
-import {Appbar, Divider, Surface, useTheme} from 'react-native-paper';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from '../../constants/colors';
-import {useContext} from 'react';
-import {NavigationContext} from '@react-navigation/native';
-import {OrderBy} from 'unsplash-js';
-import {BackAppBar} from '../../components';
 
 export type PhotosParamList = {
   [ScreenName.imagesLatest]: {order: OrderBy};
@@ -31,10 +28,10 @@ export default function TopNavigationListImage() {
         initialRouteName={ScreenName.imagesPopular}
         offscreenPageLimit={2}
         screenOptions={{
-          tabBarStyle: {backgroundColor: Colors.transparent},
+          tabBarStyle: {backgroundColor: 'transparent'},
           tabBarActiveTintColor: theme.colors.primary,
           tabBarIndicatorStyle: {backgroundColor: theme.colors.primary},
-          tabBarPressColor: Colors.transparent,
+          tabBarPressColor: 'transparent',
         }}>
         <Tab.Screen
           name={ScreenName.imagesLatest}

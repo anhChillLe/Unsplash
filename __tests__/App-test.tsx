@@ -8,3 +8,14 @@ import renderer from 'react-test-renderer';
 it('renders correctly', () => {
   renderer.create(<App />);
 });
+
+const ZingMP3 = {
+  DoSomeThing(params: {}) {
+    return fetch('abc');
+  },
+  DoSomeThing2(params: {}) {
+    return fetch('abc');
+  },
+};
+
+ZingMP3.DoSomeThing({})

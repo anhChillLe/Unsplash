@@ -1,35 +1,71 @@
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {Pressable, StyleProp, View, ViewStyle} from 'react-native';
 import {User} from '../../services/api/type';
 import {Avatar, Text} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import {ProfileImage} from '../../services/unsplash/models/base';
 
 type Props = {
-  user: User;
-  avatarSize?: number;
-  quality?: 'small' | 'medium' | 'large';
-  style?: StyleProp<ViewStyle>
+  profile_image: ProfileImage;
+  name: string;
+  username: string;
+  style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  size?: 'small' | 'large';
 };
 
 export default function UserElement({
-  user,
-  avatarSize = 24,
-  quality = 'small',
-  style
+  profile_image,
+  name,
+  username,
+  style,
+  size = 'small',
+  onPress = () => {},
 }: Props) {
+  const {large} = profile_image;
+
   return (
-    <View style={[{flexDirection: 'row', alignItems: 'center'}, style]}>
-      <Avatar.Image
-        size={avatarSize}
-        source={{uri: user.profile_image[quality]}}
-      />
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          marginStart: 8,
-        }}>
-        <Text variant='titleSmall'>{user.first_name}</Text>
-        <Text variant='bodySmall'>@{user.username}</Text>
-      </View>
-    </View>
+    <Pressable
+      onPress={onPress}
+      style={[{flexDirection: 'row', alignItems: 'center'}, style]}>
+      {size === 'small' ? (
+        <>
+          <Avatar.Image size={48} source={{uri: large}} />
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              marginStart: 8,
+            }}>
+            <Text variant="titleSmall">{name}</Text>
+            <Text variant="bodySmall" style={{opacity: 0.75}}>
+              @{username}
+            </Text>
+          </View>
+        </>
+      ) : (
+        <>
+          <FastImage
+            source={{uri: large}}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: 'gray',
+            }}
+            resizeMode="cover"
+          />
+          <View style={{marginStart: 8, flex: 1}}>
+            <Text
+              numberOfLines={1}
+              variant="headlineSmall"
+              style={{fontWeight: 'bold'}}>
+              {name}
+            </Text>
+            <Text style={{opacity: 0.75}}>@{username}</Text>
+          </View>
+        </>
+      )}
+    </Pressable>
   );
 }

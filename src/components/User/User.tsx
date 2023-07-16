@@ -1,8 +1,7 @@
 import {Pressable, StyleProp, View, ViewStyle} from 'react-native';
-import {User} from '../../services/api/type';
 import {Avatar, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {ProfileImage} from '../../services/unsplash/models/base';
+import {ProfileImage} from '../../unsplash/models/base';
 
 type Props = {
   profile_image: ProfileImage;

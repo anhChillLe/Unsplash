@@ -5,7 +5,7 @@ import { Surface } from "react-native-paper";
 import { ListImageLite, LoadingScreen } from "../../components";
 import { ScreenName } from "../../navigations/screen_name";
 import getListPhotoViewmodel, { ListPhotoViewMmodel } from "../../viewmodels/list_photo_viewmodel";
-import { OrderBy } from "../../services/unsplash/constants/OrderBy";
+import { OrderBy } from "../../unsplash/constants/OrderBy";
 
 export default function ImageListContainer({ order }: { order: OrderBy }) {
 	const viewmodel = getListPhotoViewmodel(order);

@@ -6,8 +6,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
 import { UserRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
-import unsplash from "../../services/unsplash";
-import { FullUser } from "../../services/unsplash/models";
+import unsplash from "../../unsplash";
+import { FullUser } from "../../unsplash/models";
 
 export default function UserPage({ route }: UserRoute) {
 	const inset = useSafeAreaInsets();

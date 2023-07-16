@@ -1,21 +1,21 @@
-import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect } from "react";
-import { Dimensions, View } from "react-native";
-import { Avatar, Chip, Surface, Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BackAppBar, ListImageLite, LoadingScreen } from "../../components";
-import { CollectionPhotosRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import { SearchInput } from "../../redux/features/search/actions";
-import { Tag } from "../../services/api/type";
-import { FullCollection } from "../../services/unsplash/models";
-import "../../ultilities/date_distance";
-import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel";
+import { NavigationContext } from "@react-navigation/native"
+import { useContext, useEffect } from "react"
+import { Dimensions, View } from "react-native"
+import { Avatar, Chip, Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar, ListImageLite, LoadingScreen } from "../../components"
+import { CollectionPhotosRoute } from "../../navigations/param_list"
+import { ScreenName } from "../../navigations/screen_name"
+import { FullCollection } from "../../unsplash/models"
+import "../../ultilities/date_distance"
+import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel"
+import { SearchPhotosParams } from "../../unsplash/params/search_params"
+import { Tag } from "../../unsplash/models/base"
 
 export default function CollectionPhotosContainer({ route }: CollectionPhotosRoute) {
-	const viewModel = getCollectionViewmodel(route.params.collection.id);
+	const viewModel = getCollectionViewmodel(route.params.collection.id)
 
-	return <CollectionPhotos {...viewModel} />;
+	return <CollectionPhotos {...viewModel} />
 }
 
 function CollectionPhotos({
@@ -26,16 +26,16 @@ function CollectionPhotos({
 	getCollection,
 	getPhotos,
 }: CollectionViewmodel) {
-	const width = Dimensions.get("window").width;
-	const { top, bottom } = useSafeAreaInsets();
-	const navigation = useContext(NavigationContext);
+	const width = Dimensions.get("window").width
+	const { top, bottom } = useSafeAreaInsets()
+	const navigation = useContext(NavigationContext)
 
 	useEffect(() => {
-		getPhotos();
-		getCollection();
-	}, []);
+		getPhotos()
+		getCollection()
+	}, [])
 
-	if (!detail) return <LoadingScreen />;
+	if (!detail) return <LoadingScreen />
 
 	return (
 		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
@@ -54,11 +54,11 @@ function CollectionPhotos({
 				}}
 			/>
 		</Surface>
-	);
+	)
 }
 
 const ListHeader = ({ collection }: { collection: FullCollection }) => {
-	const navigation = useContext(NavigationContext);
+	const navigation = useContext(NavigationContext)
 
 	return (
 		<Surface
@@ -101,12 +101,12 @@ const ListHeader = ({ collection }: { collection: FullCollection }) => {
 						key={tag.title}
 						style={{ margin: 4 }}
 						onPress={() => {
-							const input: SearchInput = {
+							const input: SearchPhotosParams = {
 								query: tag.title,
-							};
+							}
 							navigation?.navigate(ScreenName.searchResult, {
 								searchInput: input,
-							});
+							})
 						}}
 					>
 						{tag.title}
@@ -114,5 +114,5 @@ const ListHeader = ({ collection }: { collection: FullCollection }) => {
 				))}
 			</View>
 		</Surface>
-	);
-};
+	)
+}

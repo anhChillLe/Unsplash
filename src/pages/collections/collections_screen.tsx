@@ -52,7 +52,7 @@ export default function CollectionScreen() {
             paddingBottom: bottom + 16,
             paddingHorizontal: 16,
           }}
-          isLoading={state.isLoadingCollections}
+          isLoading={state.isLoading}
           width={safeAreaWidth}
           showLoadingFooter={true}
         />

@@ -5,7 +5,7 @@ import { Card, Chip, DataTable, Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { GroupHeading, ImageCard, ListAlbums, UserElement } from "../../components";
 import { ScreenName } from "../../navigations/screen_name";
-import { FullPhoto } from "../../services/unsplash/models/Photo";
+import { FullPhoto } from "../../unsplash/models/Photo";
 import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel";
 
 export default function PageContainer({ photo }: { photo: any }) {

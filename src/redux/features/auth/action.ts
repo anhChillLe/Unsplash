@@ -1,8 +1,8 @@
 import { ACCESS_KEY, SECRET_KEY } from "@env";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import * as Keychain from "react-native-keychain";
-import unsplashService from "../../../services/unsplash";
-import { TokenExchangeParams } from "../../../services/unsplash/params/request_token_params";
+import unsplashService from "../../../unsplash";
+import { TokenExchangeParams } from "../../../unsplash/params/request_token_params";
 import { RootState } from "../../store/store";
 
 const getToken = createAsyncThunk<string | undefined, void, { state: RootState }>("getToken", async (_, thunkApi) => {

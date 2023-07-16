@@ -1,41 +1,41 @@
-import { useRef, useState } from "react";
-import { FullCollection, Photo } from "../services/unsplash/models";
-import unsplashService from "../services/unsplash";
+import { useRef, useState } from "react"
+import { FullCollection, Photo } from "../unsplash/models"
+import unsplashService from "../unsplash"
 
 export interface CollectionViewmodel {
-	isLoadingDetail: boolean;
-	isLoadingPhotos: boolean;
-	detail?: FullCollection;
-	photos: Photo[];
-	getCollection: () => void;
-	getPhotos: () => void;
+	isLoadingDetail: boolean
+	isLoadingPhotos: boolean
+	detail?: FullCollection
+	photos: Photo[]
+	getCollection: () => void
+	getPhotos: () => void
 }
 
 export default function getCollectionViewmodel(id: string): CollectionViewmodel {
-	const [isLoadingDetail, setLoadingDetail] = useState(false);
-	const [isLoadingPhotos, setLoadingPhotos] = useState(false);
-	const [detail, setDetail] = useState<FullCollection | undefined>();
-	const [photos, setPhotos] = useState<Photo[]>([]);
-	const page = useRef(0);
+	const [isLoadingDetail, setLoadingDetail] = useState(false)
+	const [isLoadingPhotos, setLoadingPhotos] = useState(false)
+	const [detail, setDetail] = useState<FullCollection | undefined>()
+	const [photos, setPhotos] = useState<Photo[]>([])
+	const page = useRef(0)
 
 	const getCollection = () => {
-		if(isLoadingDetail) return
-		setLoadingDetail(true);
+		if (isLoadingDetail) return
+		setLoadingDetail(true)
 		unsplashService.collection
 			.get(id)
 			.then((data) => {
-				setDetail(data);
-				setLoadingDetail(false);
+				setDetail(data)
+				setLoadingDetail(false)
 			})
 			.catch((error) => {
-				console.log("getCollection: ", error);
-				setLoadingDetail(false);
-			});
-	};
+				console.log("getCollection: ", error)
+				setLoadingDetail(false)
+			})
+	}
 
 	const getPhotos = () => {
-		if(isLoadingPhotos) return 
-		setLoadingPhotos(true);
+		if (isLoadingPhotos) return
+		setLoadingPhotos(true)
 		unsplashService.collection
 			.getPhotos({
 				id,
@@ -43,14 +43,14 @@ export default function getCollectionViewmodel(id: string): CollectionViewmodel 
 				per_page: 21,
 			})
 			.then((data) => {
-				setPhotos([...photos, ...data]);
-				setLoadingPhotos(false);
-				page.current += 1;
+				setPhotos([...photos, ...data])
+				setLoadingPhotos(false)
+				page.current++
 			})
 			.catch((error) => {
-				console.log("getCollectionPhotos: ", error);
-			});
-	};
+				console.log("getCollectionPhotos: ", error)
+			})
+	}
 
 	return {
 		isLoadingDetail,
@@ -59,5 +59,5 @@ export default function getCollectionViewmodel(id: string): CollectionViewmodel 
 		detail,
 		getCollection,
 		getPhotos,
-	};
+	}
 }

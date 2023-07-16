@@ -1,10 +1,10 @@
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {Collection, Topic} from '../../services/api/type';
 import ImageGrid from '../List/ImageGrid';
 import { Text } from 'react-native-paper';
+import { BaseGroup } from '../../unsplash/models/base';
 
 type Props = {
-  collection: Collection | Topic
+  collection: BaseGroup
   style?: StyleProp<ViewStyle>
   space?: number;
   onPress?: () => void

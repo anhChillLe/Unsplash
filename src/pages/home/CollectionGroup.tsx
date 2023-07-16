@@ -22,7 +22,7 @@ export default function CollectionGroup({width}: {width: number}) {
         space={8}
         maxItems={4}
         itemRatio={2}
-        isLoading={collectionsState.isLoadingCollections}
+        isLoading={collectionsState.isLoading}
         mode="compact"
         width={width}
         onItemPress={item => {

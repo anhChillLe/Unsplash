@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackAppBar, ListImageLite, LoadingScreen } from "../../components";
 import { TopicPhotosRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
-import { FullTopic, User } from "../../services/unsplash/models";
+import { FullTopic, User } from "../../unsplash/models";
 import getTopicViewmodel, { TopicViewmodel } from "../../viewmodels/topic_viewmodel";
 
 export default function TopicPhotosContainer({ route }: TopicPhotosRoute) {

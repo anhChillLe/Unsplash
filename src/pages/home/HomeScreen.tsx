@@ -25,7 +25,6 @@ export default function HomeScreen() {
   const appPadding = getAppPadding();
   const safeAreaWidth =
     width - appPadding.paddingLeft - appPadding.paddingRight;
-  const openSearch = () => navigation?.navigate(ScreenName.search);
 
   useEffect(() => {
     dispatch(getPhotosPopular());
@@ -42,7 +41,7 @@ export default function HomeScreen() {
         <UserGroup />
         <ViewOnlySearchBar
           placeHolder="Search for image"
-          onPress={openSearch}
+          onPress={() => navigation?.navigate(ScreenName.search)}
         />
         <PhotoGroup />
         <TopicGroup width={safeAreaWidth} />

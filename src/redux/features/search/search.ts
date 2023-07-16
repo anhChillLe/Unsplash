@@ -1,7 +1,5 @@
-import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import unsplash from '../../../services/api/unsplash';
-import {RootState} from '../../store/store';
-import {Photo, SearchFilterParams} from '../../../services/api/type';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Photo } from '../../../services/api/type';
 import { loadMoreSearchResult, searchImage } from './actions';
 
 export type SearchState = {

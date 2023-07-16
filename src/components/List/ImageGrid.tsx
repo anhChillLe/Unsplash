@@ -36,7 +36,7 @@ export default function ImageGrid({
 
   if (photos.length === 2) {
     return (
-      <View style={{flexDirection: 'column', flex: 1, marginVertical: -space}}>
+      <View style={{flexDirection: 'row', flex: 1, marginVertical: -space}}>
         <FastImage
           source={{uri: photos[0].urls.regular}}
           style={{flex: 1, margin: space, borderRadius: 4}}

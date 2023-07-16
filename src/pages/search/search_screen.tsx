@@ -5,21 +5,21 @@ import { Chip, Searchbar, Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorId, ContentFilter, Orientation, SearchOrderBy } from "unsplash-js";
-import { SearchRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
 import { SearchInput } from "../../redux/features/search/actions";
 import { removeHistory } from "../../redux/features/search/search";
 import { AppDispatch, RootState } from "../../redux/store/store";
 import { SearchFilterParams } from "../../services/api/type";
+import { BackAppBar } from "../../components";
 
-export default function SearchScreen({ route }: SearchRoute) {
+export default function SearchScreen() {
 	const { top, bottom } = useSafeAreaInsets();
 	const navigation = useContext(NavigationContext);
 	const [searchValue, setSearchValue] = useState<string>("");
 	const filter = useRef<SearchFilterParams>({});
 	const searchRef = useRef<TextInput>(null);
 
-	const onSearchSubmit = (query: string) => {
+	const handleSearchSubmit = (query: string) => {
 		const input: SearchInput = {
 			query,
 			...filter.current,
@@ -33,11 +33,10 @@ export default function SearchScreen({ route }: SearchRoute) {
 			style={{
 				flex: 1,
 				height: "100%",
-				paddingHorizontal: 16,
 				paddingTop: 16 + top,
 			}}
 		>
-			<View style={{ flexDirection: "row", alignItems: "center" }}>
+			<View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16 }}>
 				<Searchbar
 					mode="bar"
 					placeholder="Search for image"
@@ -46,31 +45,30 @@ export default function SearchScreen({ route }: SearchRoute) {
 					onLayout={() => searchRef.current?.focus()}
 					autoCapitalize="none"
 					onChangeText={setSearchValue}
-					onSubmitEditing={() => onSearchSubmit(searchValue)}
+					onSubmitEditing={() => handleSearchSubmit(searchValue)}
 					style={{ flex: 1 }}
 				/>
 			</View>
 
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16 }}>
+			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16, paddingHorizontal: 16 }}>
 				Histories
 			</Text>
+			<Histories onItemPress={handleSearchSubmit} />
 
-			<Histories onItemPress={onSearchSubmit} />
-
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 32 }}>
+			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 32, marginStart: 16 }}>
 				Filter
 			</Text>
 
 			<FilterCard
 				title="Order by"
 				data={["latest", "relevant", "editorial"]}
-				style={{ marginTop: 8 }}
+				style={{ marginTop: 8, marginStart: 16 }}
 				onSelected={(value) => (filter.current.orderBy = value as SearchOrderBy)}
 			/>
 			<FilterCard
 				title="Content filter"
 				data={["low", "high"]}
-				style={{ marginTop: 8 }}
+				style={{ marginTop: 8, marginStart: 16 }}
 				onSelected={(value) => (filter.current.contentFilter = value as ContentFilter)}
 			/>
 			<FilterCard
@@ -88,13 +86,13 @@ export default function SearchScreen({ route }: SearchRoute) {
 					"teal",
 					"blue",
 				]}
-				style={{ marginTop: 8 }}
+				style={{ marginTop: 8, marginStart: 16 }}
 				onSelected={(value) => (filter.current.color = value as ColorId)}
 			/>
 			<FilterCard
 				title="Orientation"
 				data={["landscape", "portrait", "squarish"]}
-				style={{ marginTop: 8 }}
+				style={{ marginTop: 8, marginStart: 16 }}
 				onSelected={(value) => (filter.current.orientation = value as Orientation)}
 			/>
 		</Surface>
@@ -147,13 +145,8 @@ function FilterCard({
 
 function Histories({ onItemPress }: { onItemPress: (query: string) => void }) {
 	const state = useSelector((state: RootState) => state.search);
-	const navigation = useContext(NavigationContext);
 	const dispatch = useDispatch<AppDispatch>();
-
-	const removeItem = (value: string) => {
-		dispatch(removeHistory({ value }));
-	};
-
+	const removeItem = (value: string) => dispatch(removeHistory({ value }))
 	let histories = [...state.histories].reverse();
 	const nonDuplicateHistories = Array.from(new Set(histories));
 
@@ -164,6 +157,7 @@ function Histories({ onItemPress }: { onItemPress: (query: string) => void }) {
 				flexWrap: "wrap",
 				marginHorizontal: -4,
 				marginTop: 8,
+				paddingHorizontal: 16,
 			}}
 		>
 			{nonDuplicateHistories.map((query, index) => (

@@ -1,38 +1,41 @@
-import '../../ultilities/date_distance'
 import { NavigationContext } from "@react-navigation/native";
 import { useContext, useEffect } from "react";
 import { Dimensions, View } from "react-native";
 import { Avatar, Chip, Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { BackAppBar, ListImageLite } from "../../components";
+import { BackAppBar, ListImageLite, LoadingScreen } from "../../components";
 import { CollectionPhotosRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
-import { clear, getCollectionDetail, getCollectionPhotos } from "../../redux/features/collection/photos";
 import { SearchInput } from "../../redux/features/search/actions";
-import { AppDispatch, RootState } from "../../redux/store/store";
 import { Tag } from "../../services/api/type";
+import { FullCollection } from "../../services/unsplash/models";
+import "../../ultilities/date_distance";
+import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel";
 
-export default function CollectionPhoto({ route }: CollectionPhotosRoute) {
+export default function CollectionPhotosContainer({ route }: CollectionPhotosRoute) {
+	const viewModel = getCollectionViewmodel(route.params.collection.id);
+
+	return <CollectionPhotos {...viewModel} />;
+}
+
+function CollectionPhotos({
+	isLoadingDetail,
+	isLoadingPhotos,
+	photos,
+	detail,
+	getCollection,
+	getPhotos,
+}: CollectionViewmodel) {
 	const width = Dimensions.get("window").width;
 	const { top, bottom } = useSafeAreaInsets();
 	const navigation = useContext(NavigationContext);
-	const collection = route.params?.collection;
-	const photos = useSelector((state: RootState) => state.collectionPhotos.photos);
 
-	const dispatch = useDispatch<AppDispatch>();
 	useEffect(() => {
-		dispatch(getCollectionPhotos(collection.id));
-		dispatch(getCollectionDetail(collection.id));
-
-		return () => {
-			dispatch(clear());
-		};
+		getPhotos();
+		getCollection();
 	}, []);
 
-	const loadMore = () => {
-		dispatch(getCollectionPhotos(collection.id));
-	};
+	if (!detail) return <LoadingScreen />;
 
 	return (
 		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
@@ -41,16 +44,11 @@ export default function CollectionPhoto({ route }: CollectionPhotosRoute) {
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader />}
-				onItemPress={(photo, index) =>
-					navigation?.navigate(ScreenName.detailPager, {
-						position: index,
-						type: "collection",
-					})
-				}
+				header={<ListHeader collection={detail} />}
+				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
 				column={3}
 				itemThreshold={6}
-				onEndReached={loadMore}
+				onEndReached={getPhotos}
 				contentContainerStyle={{
 					paddingHorizontal: 8,
 				}}
@@ -59,12 +57,8 @@ export default function CollectionPhoto({ route }: CollectionPhotosRoute) {
 	);
 }
 
-const ListHeader = () => {
-	const state = useSelector((state: RootState) => state.collectionPhotos);
+const ListHeader = ({ collection }: { collection: FullCollection }) => {
 	const navigation = useContext(NavigationContext);
-	const collection = state.detail;
-
-	if (collection === null) return null;
 
 	return (
 		<Surface

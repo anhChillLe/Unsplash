@@ -1,7 +1,6 @@
 import {useState} from 'react';
-import {Photo} from '../services/api/type';
 import unsplashService from '../services/unsplash';
-import {FullPhoto} from '../services/unsplash/models/Photo';
+import {FullPhoto, Photo} from '../services/unsplash/models/Photo';
 
 export type PhotoDetailViewModel = {
   isLoading: boolean;
@@ -31,13 +30,18 @@ export function getPhotoViewModel(photo: Photo) {
 
   const like = () => {
     if (!fullPhoto) return;
+
     const liked_by_user = fullPhoto.liked_by_user;
+
     setLike(!liked_by_user);
 
     if (!liked_by_user) {
       unsplashService.photo.like(photo.id).then(data => {
         if (data.photo.liked_by_user) return;
         setLike(false);
+      }).catch(error => {
+        console.log('Like: ', error);
+        
       });
     } else {
       unsplashService.photo.unLike(photo.id).then(data => {

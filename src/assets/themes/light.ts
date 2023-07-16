@@ -32,7 +32,7 @@ export const lightTheme: MD3Theme = {
     outlineVariant: '#bfc8cc',
     scrim: '#000000',
     surface: '#f8f9fb',
-    onSurface: '#191c1d',
+    onSurface: '#1f1f1f',
     surfaceVariant: '#dbe4e8',
     onSurfaceVariant: '#40484b',
     elevation: {

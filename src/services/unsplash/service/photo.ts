@@ -26,13 +26,14 @@ const PhotoService = {
     const response = await API.get<Track>(`/photos/${id}/download`)
     return response.data
   },
-  update: async (params: UpdatePhotoParams) => {
-    const response = await API.put<FullPhoto>(`/photos/${params.id}`, {params})
+  update: async (input: UpdatePhotoParams) => { 
+    const {id, ...params} = input
+    const response = await API.put<FullPhoto>(`/photos/${id}`, {params})
     return response.data
   },
   like: async (id: string) => {
    const response = await API.post<LikeResponse>(`/photos/${id}/like`)
-   console.log(response)
+   console.log('Like response: ', response)
    return response.data
   },
   unLike: async (id: string) => {

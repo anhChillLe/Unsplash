@@ -4,7 +4,6 @@ import API from './instance';
 const CurrentUserService = {
   get: async () => {
     const response = await API.get<FullUser>('/me');
-    console.log('getCurrentUser: ', response.cached);
     return response.data;
   },
   update: async (params: UpdateUserProfieParams) => {

@@ -4,9 +4,9 @@ import changeNavigationBarColor from "react-native-navigation-bar-color";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider as ReduxProvider } from "react-redux";
-import { darkTheme, lightTheme } from "./src/assets/themes";
-import RootStack from "./src/navigations/root_stack";
-import { store } from "./src/redux/store/store";
+import { darkTheme, lightTheme } from "./assets/themes";
+import RootStack from "./navigations/root_stack";
+import { store } from "./redux/store/store";
 
 export default function App(): ReactElement {
 	const colorScheme = useColorScheme();

@@ -1,11 +1,11 @@
-import { Tag, User } from "../../api/type"
 import { Photo } from "./Photo"
-import { Links, Meta } from "./base"
+import { User } from "./User"
+import { Links, Meta, Tag } from "./base"
 
 export interface Collection {
   id: string
   title: string
-  description: any
+  description: string | null
   published_at: string
   last_collected_at: string
   updated_at: string

@@ -35,7 +35,9 @@ function LoginWidthUnsplash() {
 		"write_collections",
 	];
 
-	const url = `${baseUrl}?${clientId}&${redirect}&${responseType}&${allScope.join("+")}`;
+	const scope = `scope=${allScope.join("+")}`
+
+	const url = `${baseUrl}?${clientId}&${redirect}&${responseType}&${scope}`;
 
 	Linking.openURL(url);
 }

@@ -4,7 +4,7 @@ import CollectionScreen from "../pages/collections/collections_screen";
 import DetailViewPager from "../pages/detail/detail_pager";
 import DetailScreen from "../pages/detail/detail_screen";
 import HomeScreen from "../pages/home/HomeScreen";
-import TopNavigationListImage from "../pages/list/list_wallpaper_group";
+import TopNavigationListImage from "../pages/list/list_photo_group";
 import SearchResultScreen from "../pages/search/search_result";
 import SearchScreen from "../pages/search/search_screen";
 import TopicDetail from "../pages/topics/topic_photos";

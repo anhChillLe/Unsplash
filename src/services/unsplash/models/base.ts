@@ -27,6 +27,11 @@ export interface Tags {
   aggregated: any[];
 }
 
+export interface Tag {
+	type: string;
+	title: string;
+};
+
 export interface Meta {
   index: boolean;
 }

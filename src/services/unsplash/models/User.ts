@@ -1,8 +1,12 @@
 import { Photo } from "./Photo"
 import { Links, Meta, ProfileImage, Social } from "./base"
 
-export interface User {
+export interface BasicUser {
   id: string
+  profile_image: ProfileImage
+}
+
+export interface User extends BasicUser{
   updated_at: string
   username: string
   name: string
@@ -13,7 +17,6 @@ export interface User {
   bio?: string
   location?: string
   links: Links
-  profile_image: ProfileImage
   instagram_username?: string
   total_collections: number
   total_likes: number

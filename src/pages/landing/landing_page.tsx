@@ -23,7 +23,6 @@ export default function LandingPage() {
   const navigation = useContext(NavigationContext)
   const openApp = () => {
     // navigation?.navigate(ScreenName.main)
-    // console.log('Open app')
   }
 
   return (

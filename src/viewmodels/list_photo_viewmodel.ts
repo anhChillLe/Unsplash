@@ -27,7 +27,6 @@ export default function getListPhotoViewmodel(order: OrderBy): ListPhotoViewMmod
 				setPhotos([...photos, ...data])
 				page.current += 1
 				setLoading(false)
-				console.log(data)
 			})
 			.catch((error) => {
 				console.log(`getPhotos ${order}: `, error)

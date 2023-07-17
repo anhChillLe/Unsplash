@@ -33,7 +33,6 @@ const PhotoService = {
   },
   like: async (id: string) => {
    const response = await API.post<LikeResponse>(`/photos/${id}/like`)
-   console.log('Like response: ', response)
    return response.data
   },
   unLike: async (id: string) => {

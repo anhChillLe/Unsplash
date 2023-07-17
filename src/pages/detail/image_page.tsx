@@ -139,7 +139,12 @@ function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: 
 				width={width - 16}
 				mode="compact"
 				itemMode="group"
-				onItemPress={(collection) => navigation?.navigate(ScreenName.collectionPhotos, { collection })}
+				onItemPress={(collection) => navigation?.navigate({
+					name: ScreenName.collectionPhotos,
+					key: collection.id,
+					params: { collection },
+					merge: false,
+				})}
 			/>
 		</View>
 	);

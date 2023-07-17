@@ -13,7 +13,6 @@ export default function LoadingScreen() {
         paddingTop: inset.top,
 			}}
 		>
-			<BackAppBar />
 			<ActivityIndicator style={{flex: 1}} size="large" />
 		</Surface>
 	);

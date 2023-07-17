@@ -1,4 +1,4 @@
-import { LinkingOptions, NavigationContainer } from "@react-navigation/native"
+import { LinkingOptions, NavigationContainer, useNavigation } from "@react-navigation/native"
 import { useEffect } from "react"
 import RNBootSplash from "react-native-bootsplash"
 import { useDispatch, useSelector } from "react-redux"

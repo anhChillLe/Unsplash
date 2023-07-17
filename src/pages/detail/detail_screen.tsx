@@ -8,11 +8,10 @@ import PageContainer from "./image_page";
 
 export default function DetailScreen({ route }: DetailRoute) {
 	const photo = route.params.photo;
-	const navigation = useContext(NavigationContext);
 	const { top } = useSafeAreaInsets();
 
 	return (
-		<Surface style={{ flex: 1, height: "100%", paddingTop: top }}>
+		<Surface key={photo.id} style={{ flex: 1, height: "100%", paddingTop: top }}>
 			<BackAppBar />
 			<PageContainer photo={photo} />
 		</Surface>

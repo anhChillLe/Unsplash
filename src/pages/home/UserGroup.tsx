@@ -18,6 +18,7 @@ export default function UserGroup() {
   const closeMenu = () => setVisible(false);
 
   const Setting = () => <IconButton onPress={openMenu} icon="cog" size={28} />;
+  
   const UserAvatar = () => (
     <Pressable onPress={openMenu}>
       <Avatar.Image size={32} source={{uri: user?.profile_image.medium}} />

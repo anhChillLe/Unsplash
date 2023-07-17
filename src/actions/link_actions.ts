@@ -1,6 +1,6 @@
 import { ACCESS_KEY } from "@env";
 import { Linking } from "react-native";
-import { Scope } from "../services/unsplash/constants/AuthScope";
+import { Scope } from "../unsplash/constants/AuthScope";
 
 const openInstagramProfile = (instagramUsername: string) => {
 	const instagramURL = `https://www.instagram.com/${instagramUsername}/`;
@@ -35,7 +35,9 @@ function LoginWidthUnsplash() {
 		"write_collections",
 	];
 
-	const url = `${baseUrl}?${clientId}&${redirect}&${responseType}&${allScope.join("+")}`;
+	const scope = `scope=${allScope.join("+")}`
+
+	const url = `${baseUrl}?${clientId}&${redirect}&${responseType}&${scope}`;
 
 	Linking.openURL(url);
 }

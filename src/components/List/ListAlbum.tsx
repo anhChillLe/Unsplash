@@ -1,20 +1,19 @@
 import { FlatList, StyleProp, View, ViewStyle } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
-import { Collection, Topic } from "../../services/api/type";
 import ImageCard from "../ImageCard/ImageCard";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CollectionCard from "../Collection/Collection";
+import { BaseGroup } from "../../unsplash/models/base";
 
-type Album = Topic | Collection;
 
 type Props = {
-	data: Topic[] | Collection[];
+	data: BaseGroup[]
 	column: number;
 	space: number;
 	width: number;
 	showLoadingFooter?: boolean;
 	header?: React.ReactElement;
-	onItemPress?: (item: Album) => void;
+	onItemPress?: (item: BaseGroup) => void;
 	isLoading?: boolean;
 	mode?: "compact" | "list";
 	itemMode?: "single" | "group";
@@ -80,7 +79,7 @@ function ListAlbums({
 		);
 	}
 
-	const Group = ({ item, index }: { item: Album; index: number }) => {
+	const Group = ({ item, index }: { item: BaseGroup; index: number }) => {
 		const marginEnd = getItemMarginEnd(index);
 		const marginBottom = getItemMarginBottom(index);
 		return (
@@ -93,7 +92,7 @@ function ListAlbums({
 		);
 	};
 
-	function Single({ item, index }: { item: Album; index: number }) {
+	function Single({ item, index }: { item: BaseGroup; index: number }) {
 		const marginEnd = getItemMarginEnd(index);
 		const marginBottom = getItemMarginBottom(index);
 
@@ -144,7 +143,7 @@ function ListAlbums({
 					}
 					contentContainerStyle={contentContainerStyle}
 					showsVerticalScrollIndicator={false}
-					keyExtractor={(item: Topic | Collection, index: number) => item.id}
+					keyExtractor={(item: BaseGroup, index: number) => item.id}
 				/>
 			);
 	}

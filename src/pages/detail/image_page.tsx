@@ -2,28 +2,34 @@ import { NavigationContext } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { Card, Chip, DataTable, Text, useTheme } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { GroupHeading, ImageCard, ListAlbums, UserElement } from "../../components";
 import { ScreenName } from "../../navigations/screen_name";
-import { Photo } from "../../services/api/type";
-import { FullPhoto } from "../../services/unsplash/models/Photo";
+import { FullPhoto } from "../../unsplash/models/Photo";
 import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel";
 
-export default function PageContainer({ photo }: { photo: Photo }) {
+export default function PageContainer({ photo }: { photo: any }) {
 	const viewModel = getPhotoViewModel(photo);
 	return <Page {...viewModel} />;
 }
 
 function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): ReactElement {
 	const navigation = useContext(NavigationContext);
+	const inset = useSafeAreaInsets();
 
-	useEffect(() => {
-		getDetail();
-	}, []);
+	useEffect(getDetail, []);
 
-	const { profile_image, username, name } = photo.user;
+	const {
+		user: { profile_image, username, name },
+		description,
+	} = photo;
 
 	return (
-		<ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+		<ScrollView
+			style={{ flex: 1 }}
+			contentContainerStyle={{ paddingBottom: inset.bottom }}
+			showsVerticalScrollIndicator={false}
+		>
 			<UserElement
 				profile_image={profile_image}
 				username={username}
@@ -31,9 +37,10 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 				style={{
 					padding: 8,
 				}}
-				onPress={() => navigation?.navigate(ScreenName.user, { username: photo.user.username })}
+				onPress={() => navigation?.navigate(ScreenName.user, { username })}
 			/>
-			{photo.description ? <Text style={{ padding: 8 }}>{photo.description}</Text> : null}
+
+			{description && <Text style={{ padding: 8 }}>{photo.description}</Text>}
 
 			<ImageCard
 				roundness={0}
@@ -75,7 +82,7 @@ function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: 
 					style={{ backgroundColor: "transparent" }}
 					textStyle={{
 						fontSize: 12,
-						color: liked_by_user ? theme.colors.primary : "black",
+						color: liked_by_user ? theme.colors.primary : theme.colors.onSurface,
 					}}
 					compact={true}
 					icon={liked_by_user ? "thumb-up" : "thumb-up-outline"}
@@ -103,24 +110,24 @@ function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: 
 			<Card mode="contained" style={{ marginBottom: 16, overflow: "hidden" }}>
 				<DataTable style={{ width: "100%" }}>
 					<DataTable.Row>
-						<DataTable.Title>Make</DataTable.Title>
-						<DataTable.Cell>{make ? make : "unknown"}</DataTable.Cell>
 						<DataTable.Title>Model</DataTable.Title>
-						<DataTable.Cell>{model ? make : "unknown"}</DataTable.Cell>
+						<DataTable.Cell>{model ?? "unknown"}</DataTable.Cell>
+						<DataTable.Title>Make</DataTable.Title>
+						<DataTable.Cell>{make ?? "unknown"}</DataTable.Cell>
 					</DataTable.Row>
 
 					<DataTable.Row>
 						<DataTable.Title>Exposure</DataTable.Title>
-						<DataTable.Cell>{exposure_time ? exposure_time : "unknown"}</DataTable.Cell>
+						<DataTable.Cell>{exposure_time ?? "unknown"}</DataTable.Cell>
 						<DataTable.Title>Aperture</DataTable.Title>
-						<DataTable.Cell>{aperture ? aperture : "unknown"}</DataTable.Cell>
+						<DataTable.Cell>{aperture ?? "unknown"}</DataTable.Cell>
 					</DataTable.Row>
 
 					<DataTable.Row>
 						<DataTable.Title>Focal</DataTable.Title>
-						<DataTable.Cell>{focal_length ? focal_length : "unknown"}</DataTable.Cell>
+						<DataTable.Cell>{focal_length ?? "unknown"}</DataTable.Cell>
 						<DataTable.Title>Iso</DataTable.Title>
-						<DataTable.Cell>{iso ? iso : "unknown"}</DataTable.Cell>
+						<DataTable.Cell>{iso ?? "unknown"}</DataTable.Cell>
 					</DataTable.Row>
 				</DataTable>
 			</Card>
@@ -132,7 +139,12 @@ function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: 
 				width={width - 16}
 				mode="compact"
 				itemMode="group"
-				onItemPress={(item) => navigation?.navigate(ScreenName.collectionPhotos, { collection: item })}
+				onItemPress={(collection) => navigation?.navigate({
+					name: ScreenName.collectionPhotos,
+					key: collection.id,
+					params: { collection },
+					merge: false,
+				})}
 			/>
 		</View>
 	);

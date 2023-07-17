@@ -3,23 +3,21 @@ import React, { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { Button, Surface, Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Full } from "unsplash-js/dist/methods/users/types";
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
 import { UserRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
-import unsplash from "../../services/api/unsplash";
+import unsplash from "../../unsplash";
+import { FullUser } from "../../unsplash/models";
 
 export default function UserPage({ route }: UserRoute) {
 	const inset = useSafeAreaInsets();
-	const colors = useTheme().colors;
 	const navigation = useContext(NavigationContext);
 	const username = route.params.username;
 
-	const [profile, setProfile] = useState<Full | undefined>();
+	const [profile, setProfile] = useState<FullUser | undefined>();
 
 	async function getUser() {
-		const apiResponse = await unsplash.users.get({ username: username });
-		const data = apiResponse.response;
+		const data = await unsplash.user.getProfile(username);
 		setProfile(data);
 	}
 

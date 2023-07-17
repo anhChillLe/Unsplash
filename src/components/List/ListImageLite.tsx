@@ -1,11 +1,10 @@
+import React from "react";
 import { FlatList, Pressable, StyleProp, View, ViewStyle } from "react-native";
 import { PlaceHolderMode } from "../../constants/place_holder";
-import { Photo } from "../../services/api/type";
-import { Photo as CustomPhoto } from "../../services/unsplash/models";
 import FastImage from "react-native-fast-image";
 import { getImageUrl } from "../../ultilities/image_ulti";
 import { ActivityIndicator } from "react-native-paper";
-import React from "react";
+import { Photo } from "../../unsplash/models";
 
 type Props = {
 	width: number;
@@ -34,38 +33,21 @@ export default function ListImageLite({
 }: Props) {
 	const itemWidth = (width - column * space) / column;
 	const itemHeight = (itemWidth * 4) / 3;
-
-	function Item({ item, index }: { item: Photo | CustomPhoto; index: number }) {
-		const uri = getImageUrl(item.urls.raw, itemWidth, itemHeight);
-
-		return (
-			<Pressable onPress={() => onItemPress(item as Photo, index)}>
-				<FastImage
-					source={{ uri }}
-					style={{
-						backgroundColor: item.color ?? "gray",
-						borderRadius: 4,
-						margin: space / 2,
-						width: itemWidth,
-						height: itemHeight,
-					}}
-				/>
-			</Pressable>
-		);
-	}
-
-	const compareItem = (
-		prevProps: Readonly<{ item: Photo | CustomPhoto }>,
-		nextProps: Readonly<{ item: Photo | CustomPhoto }>
-	) => prevProps.item.urls.raw === nextProps.item.urls.raw;
-	const RenderItem = React.memo(Item, compareItem);
 	const length = photos.length;
 	const threshold = length === 0 ? 0 : itemThreshold / length;
+
+	const ImageItem = React.memo(Item, compareItem);
+	
+	function renderItem({item, index}:{item: Photo, index: number}) {
+		return (
+			<ImageItem {...{ item, index, itemWidth, itemHeight, space }} onPress={() => onItemPress(item, index)} />
+		);
+	}
 
 	return (
 		<FlatList
 			data={photos}
-			renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
+			renderItem={renderItem}
 			numColumns={column}
 			keyExtractor={(item) => item.id}
 			style={style}
@@ -77,4 +59,44 @@ export default function ListImageLite({
 			showsVerticalScrollIndicator={false}
 		/>
 	);
+}
+
+function Item({
+	item,
+	index,
+	itemWidth,
+	itemHeight,
+	space,
+	onPress,
+}: {
+	item: Photo;
+	index: number;
+	itemWidth: number;
+	itemHeight: number;
+	space: number;
+	onPress?: () => void;
+}) {
+	const uri = getImageUrl(item.urls.raw, itemWidth, itemHeight);
+
+	return (
+		<Pressable onPress={onPress}>
+			<FastImage
+				source={{ uri }}
+				style={{
+					backgroundColor: item.color ?? "gray",
+					borderRadius: 4,
+					margin: space / 2,
+					width: itemWidth,
+					height: itemHeight,
+				}}
+			/>
+		</Pressable>
+	);
+}
+
+function compareItem(
+	prevProps: Readonly<{ item: Photo }>,
+	nextProps: Readonly<{ item: Photo }>
+) {
+	return prevProps.item.urls.raw === nextProps.item.urls.raw;
 }

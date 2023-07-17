@@ -1,59 +1,45 @@
-import '../../ultilities/date_distance'
+import "../../ultilities/date_distance";
 import { NavigationContext } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Avatar, Chip, Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { BackAppBar, ListImageLite } from "../../components";
+import { BackAppBar, ListImageLite, LoadingScreen } from "../../components";
 import { TopicPhotosRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
-import { clear } from "../../redux/features/topic/detail";
-import { AppDispatch, RootState } from "../../redux/store/store";
-import { Photo, Topic, User } from "../../services/api/type";
-import { getTopicPhotos } from "../../redux/features/topic/action";
+import { FullTopic, User } from "../../unsplash/models";
+import getTopicViewmodel, { TopicViewmodel } from "../../viewmodels/topic_viewmodel";
 
-export default function TopicDetail({ route }: TopicPhotosRoute) {
+export default function TopicPhotosContainer({ route }: TopicPhotosRoute) {
+	const viewmodel = getTopicViewmodel(route.params.topic.id);
+
+	return <TopicDetail {...viewmodel} />;
+}
+
+function TopicDetail({ isLoadingDetail, isLoadingPhotos, photos, detail, getTopic, getPhotos }: TopicViewmodel) {
 	const width = Dimensions.get("window").width;
 	const { top } = useSafeAreaInsets();
-	const topic = route.params?.topic;
 	const navigation = useContext(NavigationContext);
 
-	const state = useSelector((state: RootState) => state.topicPhotos);
-	const dispatch = useDispatch<AppDispatch>();
-
-	React.useEffect(() => {
-		dispatch(getTopicPhotos(topic.id));
-
-		return () => {
-			dispatch(clear());
-		};
+	useEffect(() => {
+		getTopic();
+		getPhotos();
 	}, []);
 
-	const onItemPress = (photo: Photo, index: number) => {
-		navigation?.navigate(ScreenName.detailPager, {
-			position: index,
-			type: "topic",
-		});
-	};
-
-	const loadMore = () => {
-		dispatch(getTopicPhotos(topic.id));
-	};
-
+	if (!detail) return <LoadingScreen />;
 	return (
 		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
 			<BackAppBar />
 			<ListImageLite
 				width={width - 16}
 				space={4}
-				photos={state.photos}
-				header={<ListHeader topic={topic} />}
-				onItemPress={onItemPress}
+				photos={photos}
+				header={<ListHeader topic={detail} />}
+				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
 				column={3}
 				itemThreshold={6}
-				onEndReached={loadMore}
+				onEndReached={getPhotos}
 				contentContainerStyle={{
 					paddingHorizontal: 8,
 				}}
@@ -62,37 +48,35 @@ export default function TopicDetail({ route }: TopicPhotosRoute) {
 	);
 }
 
-const ListHeader = ({ topic }: { topic: Topic }) => {
-	if (topic === null) return null;
+const ListHeader = ({ topic }: { topic: FullTopic }) => {
 	const navigation = useContext(NavigationContext);
+	const { title, owners, description, total_photos } = topic;
 
 	return (
 		<Surface mode="flat" style={{ paddingVertical: 4 }}>
 			<Text variant="headlineLarge" numberOfLines={1} style={{ fontWeight: "bold" }}>
-				{topic.title}
+				{title}
 			</Text>
 
 			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-				{topic.owners.map((user: User) => {
-					return (
-						<Chip
-							key={user.id}
-							avatar={<Avatar.Image size={24} source={{ uri: user.profile_image.medium }} />}
-							onPress={() => navigation?.navigate(ScreenName.user, { username: user.username })}
-						>
-							{user.name}
-						</Chip>
-					);
-				})}
+				{owners.map((user: User) => (
+					<Chip
+						key={user.id}
+						avatar={<Avatar.Image size={24} source={{ uri: user.profile_image.medium }} />}
+						onPress={() => navigation?.navigate(ScreenName.user, { username: user.username })}
+					>
+						{user.name}
+					</Chip>
+				))}
 			</ScrollView>
 
-			{topic.description ? (
+			{description ? (
 				<Text variant="bodyMedium" style={{ marginVertical: 4 }}>
-					{topic.description.trim()}
+					{description.trim()}
 				</Text>
 			) : null}
 			<Text style={{ fontSize: 12, opacity: 0.6 }}>
-				{topic.total_photos} photos · {topic.published_at.formatAsDate()}
+				{total_photos} photos · {topic.published_at.formatAsDate()}
 			</Text>
 		</Surface>
 	);

@@ -24,19 +24,28 @@ export interface Social {
 	paypal_email: string | null
 }
 
-export interface Tags {
-	custom: any[]
-	aggregated: any[]
+export interface UserTags {
+	custom: Tag[]
+	aggregated: Tag[]
 }
 
-export interface Tag {
-	type: string
-	title: string
-}
+export type Tag =
+	| {
+			type: "search"
+			title: string
+	  }
+	| {
+			type: "landing_page"
+			title: string
+			source: Source
+	  }
 
 export interface Meta {
+	title: string | null,
+	description: string | null,
 	index: boolean
 }
+
 
 export interface Exif {
 	make: string | null
@@ -75,7 +84,38 @@ export interface BaseGroup {
 	title: string
 	cover_photo: Photo | null
 	preview_photos: Photo[] | null
-  total_photos: number
+	total_photos: number
+}
+
+export interface Source {
+	ancestry: Ancestry
+	title: string
+	subtitle: string
+	description: string
+	meta_title: string
+	meta_description: string
+	cover_photo: Photo
+}
+
+export interface Ancestry {
+	type: Type
+	category: Category
+	subcategory: Subcategory
+}
+
+export interface Type {
+	slug: string
+	pretty_slug: string
+}
+
+export interface Category {
+	slug: string
+	pretty_slug: string
+}
+
+export interface Subcategory {
+	slug: string
+	pretty_slug: string
 }
 
 export interface TopicSubmissions {}

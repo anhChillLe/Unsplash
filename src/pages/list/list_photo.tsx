@@ -2,7 +2,7 @@ import { NavigationContext } from "@react-navigation/native";
 import { useContext, useEffect } from "react";
 import { Dimensions } from "react-native";
 import { Surface } from "react-native-paper";
-import { ListImageLite, LoadingScreen } from "../../components";
+import { ListPhoto, LoadingScreen } from "../../components";
 import { ScreenName } from "../../navigations/screen_name";
 import getListPhotoViewmodel, { ListPhotoViewMmodel } from "../../viewmodels/list_photo_viewmodel";
 import { OrderBy } from "../../unsplash/constants/OrderBy";
@@ -16,9 +16,7 @@ function ListImage({ photos, getPhotos }: ListPhotoViewMmodel) {
 	const navigation = useContext(NavigationContext);
 	const width = Dimensions.get("window").width;
 
-	useEffect(() => {
-		getPhotos();
-	}, []);
+	useEffect(getPhotos, []);
 
 	if (photos.length === 0) return <LoadingScreen />;
 	return (
@@ -29,12 +27,13 @@ function ListImage({ photos, getPhotos }: ListPhotoViewMmodel) {
 				paddingHorizontal: 4,
 			}}
 		>
-			<ListImageLite
+			<ListPhoto
 				width={width - 8}
 				space={4}
 				photos={photos}
 				column={3}
 				style={{ flex: 1 }}
+				itemThreshold={9}
 				onEndReached={getPhotos}
 				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
 			/>

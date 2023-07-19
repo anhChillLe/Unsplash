@@ -15,12 +15,10 @@ import UserPhotoPage from "../pages/user/user_photo"
 import { options } from "./options"
 import { AppParamList } from "./param_list"
 import { ScreenName } from "./screen_name"
-import { useNavigation } from "@react-navigation/native"
 
 const Stack = createStackNavigator<AppParamList>()
 
 export default function AppStack() {
-
 	return (
 		<Stack.Navigator initialRouteName={ScreenName.home} screenOptions={options}>
 			<Stack.Screen name={ScreenName.home} component={HomeScreen} />

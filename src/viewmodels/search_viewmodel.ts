@@ -6,6 +6,7 @@ import { SearchPhotosParams } from "../unsplash/params/search_params"
 export interface SearchViewmodel {
 	isLoading: boolean
 	photos: Photo[]
+	query: string
 	total: number
 	getPhotos: () => void
 }
@@ -39,6 +40,7 @@ export default function getSearchViewModel(searchInput: SearchPhotosParams): Sea
 	}
 
 	return {
+		query: searchInput.query,
 		isLoading,
 		photos,
 		total,

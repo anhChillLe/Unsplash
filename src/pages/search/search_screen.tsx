@@ -1,29 +1,34 @@
 import { NavigationContext } from "@react-navigation/native"
-import React, { useContext, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { ScrollView, StyleProp, TextInput, View, ViewStyle } from "react-native"
 import { Chip, Searchbar, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import History from "../../actions/shared_preferences"
 import { ScreenName } from "../../navigations/screen_name"
-import { Fillter, SearchPhotosParams } from "../../unsplash/params/search_params"
-import { SearchOrderBy } from "../../unsplash/constants/OrderBy"
-import { ContentFilter } from "../../unsplash/constants/ContentFilter"
-import { Orientation } from "../../unsplash/constants/Orientation"
 import { ColorId } from "../../unsplash/constants/Color"
+import { ContentFilter } from "../../unsplash/constants/ContentFilter"
+import { SearchOrderBy } from "../../unsplash/constants/OrderBy"
+import { Orientation } from "../../unsplash/constants/Orientation"
+import { Fillter } from "../../unsplash/params/search_params"
 
 export default function SearchScreen() {
-	const { top, bottom } = useSafeAreaInsets()
+	const { top } = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
 	const [searchValue, setSearchValue] = useState<string>("")
 	const filter = useRef<Fillter>({})
 	const searchRef = useRef<TextInput>(null)
+	const [flag, setFlag] = useState(false)
 
-	const handleSearchSubmit = (query: string) => {
-		const input: SearchPhotosParams = {
-			query,
-			...filter.current,
-		}
-		navigation?.navigate(ScreenName.searchResult, { searchInput: input })
+	const handleSearchSubmit = async (query: string) => {
+		navigation?.navigate(ScreenName.searchResult, {
+			searchInput: {
+				query,
+				...filter.current,
+			},
+		})
+		await History.save(query)
 		setSearchValue("")
+		setFlag(!flag)
 	}
 
 	return (
@@ -48,10 +53,10 @@ export default function SearchScreen() {
 				/>
 			</View>
 
-			{/* <Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16, paddingHorizontal: 16 }}>
+			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16, paddingHorizontal: 16 }}>
 				Histories
 			</Text>
-			<Histories onItemPress={handleSearchSubmit} /> */}
+			<Histories onItemPress={handleSearchSubmit} flag={flag}/>
 
 			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 32, marginStart: 16 }}>
 				Filter
@@ -105,7 +110,7 @@ function FilterCard({
 }: {
 	data: string[]
 	title: string
-	onSelected?: (value: string | undefined) => void
+	onSelected?: (value?: string) => void
 	style?: StyleProp<ViewStyle>
 }) {
 	const [currentValue, setValue] = useState<string | undefined>(undefined)
@@ -141,34 +146,44 @@ function FilterCard({
 	)
 }
 
-// function Histories({ onItemPress }: { onItemPress: (query: string) => void }) {
-// 	const state = useSelector((state: RootState) => state.search);
-// 	const dispatch = useDispatch<AppDispatch>();
-// 	const removeItem = (value: string) => dispatch(removeHistory({ value }))
-// 	let histories = [...state.histories].reverse();
-// 	const nonDuplicateHistories = Array.from(new Set(histories));
+function Histories({ onItemPress, flag }: { flag: boolean,onItemPress: (query: string) => void }) {
+	const [histories, setHistories] = useState<string[]>([])
+	const nonDuplicateHistories = Array.from(new Set(histories))
 
-// 	return (
-// 		<View
-// 			style={{
-// 				flexDirection: "row",
-// 				flexWrap: "wrap",
-// 				marginHorizontal: -4,
-// 				marginTop: 8,
-// 				paddingHorizontal: 16,
-// 			}}
-// 		>
-// 			{nonDuplicateHistories.map((query, index) => (
-// 				<Chip
-// 					key={index}
-// 					style={{ margin: 4 }}
-// 					mode="outlined"
-// 					onClose={() => removeItem(query)}
-// 					onPress={() => onItemPress(query)}
-// 				>
-// 					{query}
-// 				</Chip>
-// 			))}
-// 		</View>
-// 	);
-// }
+	function getHistories() {
+		History.get().then((data) => {
+			setHistories(data)
+		})
+	}
+
+	function removeHistory(query: string){
+		History.remove(query)
+		setHistories(histories.filter(history => history != query))
+	}
+
+	useEffect(getHistories, [flag])
+
+	return (
+		<View
+			style={{
+				flexDirection: "row",
+				flexWrap: "wrap",
+				marginHorizontal: -4,
+				marginTop: 8,
+				paddingHorizontal: 16,
+			}}
+		>
+			{nonDuplicateHistories.map((query, index) => (
+				<Chip
+					key={index}
+					style={{ margin: 4 }}
+					mode="outlined"
+					onClose={() => removeHistory(query)}
+					onPress={() => onItemPress(query)}
+				>
+					{query}
+				</Chip>
+			))}
+		</View>
+	)
+}

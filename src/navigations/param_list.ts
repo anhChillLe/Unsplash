@@ -11,7 +11,7 @@ export type AppParamList = {
 	[ScreenName.collections]: undefined
 	[ScreenName.allImage]: undefined
 	[ScreenName.collectionPhotos]: { collection: Collection }
-	[ScreenName.topicPhotos]: { topic: Topic }
+	[ScreenName.topicPhotos]: { id_or_slug: string }
 	[ScreenName.detailPager]: { position: number; type: ListType }
 	[ScreenName.search]: { query?: string }
 	[ScreenName.searchResult]: { searchInput: SearchPhotosParams }

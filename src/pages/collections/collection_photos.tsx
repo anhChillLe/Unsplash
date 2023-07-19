@@ -1,14 +1,14 @@
-import "../../ultilities/date_distance"
 import { NavigationContext } from "@react-navigation/native"
 import { useContext, useEffect } from "react"
 import { Dimensions, View } from "react-native"
 import { Avatar, Chip, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { BackAppBar, ListImageLite, LoadingScreen } from "../../components"
+import { BackAppBar, ListPhoto, LoadingScreen } from "../../components"
 import { CollectionPhotosRoute } from "../../navigations/param_list"
 import { ScreenName } from "../../navigations/screen_name"
 import { FullCollection } from "../../unsplash/models"
 import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel"
+import { Tag } from "../../unsplash/models/base"
 
 export default function CollectionPhotosContainer({ route }: CollectionPhotosRoute) {
 	const viewModel = getCollectionViewmodel(route.params.collection.id)
@@ -37,7 +37,7 @@ function CollectionPhotos({
 	return (
 		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
 			<BackAppBar />
-			<ListImageLite
+			<ListPhoto
 				width={width - 16}
 				space={4}
 				photos={photos}
@@ -54,7 +54,7 @@ function CollectionPhotos({
 				}
 				//
 				column={3}
-				itemThreshold={6}
+				itemThreshold={9}
 				onEndReached={getPhotos}
 				contentContainerStyle={{
 					paddingHorizontal: 8,
@@ -74,6 +74,22 @@ const ListHeader = ({ collection }: { collection: FullCollection }) => {
 		tags,
 		total_photos,
 	} = collection
+
+	const handleTagPress = (tag: Tag) => {
+		if (tag.type === "search") {
+			navigation?.navigate(ScreenName.searchResult, {
+				searchInput: { query: tag.title },
+			})
+		} else {
+			navigation?.navigate({
+				key: tag.source.ancestry.category.slug,
+				name: ScreenName.topicPhotos,
+				params: {
+					id_or_slug: tag.source.ancestry.category.slug,
+				},
+			})
+		}
+	}
 
 	return (
 		<Surface mode="flat" style={{ paddingVertical: 4 }}>
@@ -107,15 +123,7 @@ const ListHeader = ({ collection }: { collection: FullCollection }) => {
 				}}
 			>
 				{tags.map((tag) => (
-					<Chip
-						key={tag.title}
-						style={{ margin: 4 }}
-						onPress={() =>
-							navigation?.navigate(ScreenName.searchResult, {
-								searchInput: { query: tag.title },
-							})
-						}
-					>
+					<Chip key={tag.title} style={{ margin: 4 }} onPress={() => handleTagPress(tag)}>
 						{tag.title}
 					</Chip>
 				))}

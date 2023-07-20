@@ -8,6 +8,7 @@ import { BackAppBar, ListPhoto, LoadingScreen } from "../../components"
 import { TopicPhotosRoute } from "../../navigations/param_list"
 import { ScreenName } from "../../navigations/screen_name"
 import { FullTopic, User } from "../../unsplash/models"
+import "../../ultilities/date_distance"
 import getTopicViewmodel, { TopicViewmodel } from "../../viewmodels/topic_viewmodel"
 
 export default function TopicPhotosContainer({ route }: TopicPhotosRoute) {

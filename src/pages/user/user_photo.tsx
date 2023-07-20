@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { Dimensions, View } from "react-native";
 import { Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BackAppBar, ListImageLite, UserElement } from "../../components";
+import { BackAppBar, ListPhoto, UserElement } from "../../components";
 import { UserPhotosRoute } from "../../navigations/param_list";
 import { ScreenName } from "../../navigations/screen_name";
 import getUserPhotosViewModel, { UserPhotosViewModel } from "../../viewmodels/user_photos_viewmode";
@@ -46,7 +46,7 @@ function UserPhotos({ isLoading, user, photos, getPhotos, loadMore }: UserPhotos
 			}}
 		>
 			<BackAppBar />
-			<ListImageLite
+			<ListPhoto
 				width={contentWidth}
 				space={4}
 				header={<Header />}

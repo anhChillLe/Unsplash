@@ -106,9 +106,9 @@ export default function UserPage({ route }: UserRoute) {
 					mode="contained-tonal"
 					style={{ width: "100%", paddingVertical: 50, marginTop: 16 }}
 					labelStyle={{ fontSize: 32, padding: 12 }}
-					// onPress={() =>
-					//   navigation?.navigate(ScreenName.userCollections, {user: profile})
-					// }
+					onPress={() =>
+					  navigation?.navigate(ScreenName.userCollections, {user: profile})
+					}
 				>
 					{total_collections} collections
 				</Button>

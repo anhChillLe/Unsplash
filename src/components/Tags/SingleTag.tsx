@@ -6,9 +6,10 @@ import { IconSource } from 'react-native-paper/lib/typescript/src/components/Ico
 type Props = PropsWithChildren<{
   mode?: 'flat' | 'outlined';
   icon?: IconSource
+  onPress?: () => void
 }>;
 
-export default function SingleTag({children, mode = 'outlined', icon}: Props) {
+export default function SingleTag({children, mode = 'outlined', icon, onPress = () => {}}: Props) {
   return (
     <View
       style={{
@@ -17,7 +18,7 @@ export default function SingleTag({children, mode = 'outlined', icon}: Props) {
         justifyContent: 'flex-start',
         marginTop: 12,
       }}>
-      <Chip mode={mode} icon={icon}>
+      <Chip mode={mode} icon={icon} onPress={onPress}>
         {children}
       </Chip>
     </View>

@@ -68,7 +68,9 @@ export default function UserPage({ route }: UserRoute) {
 				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
 				{location ? (
-					<SingleTag mode="outlined" icon="map-marker-outline">
+					<SingleTag mode="outlined" icon="map-marker-outline" onPress={() => {
+						navigation?.navigate(ScreenName.searchResult, {searchInput: {query: location}})
+					}}>
 						{location}
 					</SingleTag>
 				) : null}

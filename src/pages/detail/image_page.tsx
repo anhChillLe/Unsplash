@@ -1,32 +1,43 @@
-import { NavigationContext } from "@react-navigation/native";
-import React, { ReactElement, useContext, useEffect } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
-import { Card, Chip, DataTable, Text, useTheme } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { GroupHeading, ImageCard, ListAlbums, UserElement } from "../../components";
-import { ScreenName } from "../../navigations/screen_name";
-import { FullPhoto } from "../../unsplash/models/Photo";
-import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel";
+import { NavigationContext } from "@react-navigation/native"
+import React, { ReactElement, useContext, useEffect } from "react"
+import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
+import { Button, Chip, Text, useTheme } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { shareLink } from "../../actions/share_action"
+import { GroupHeading, ImageCard, ListAlbums, TagGroup, TextIcon, UserElement, VerticalDivider } from "../../components"
+import Stat from "../../components/Stats/Stat"
+import { ScreenName } from "../../navigations/screen_name"
+import "../../ultilities/date_distance"
+import { FullPhoto, Photo } from "../../unsplash/models/Photo"
+import { BaseGroup, Tag } from "../../unsplash/models/base"
+import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
+import { downloadImage } from "../../actions/download"
 
-export default function PageContainer({ photo }: { photo: any }) {
-	const viewModel = getPhotoViewModel(photo);
-	return <Page {...viewModel} />;
+export default function PageContainer({ photo }: { photo: Photo }) {
+	const viewModel = getPhotoViewModel(photo)
+	return <Page {...viewModel} />
 }
 
 function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): ReactElement {
-	const navigation = useContext(NavigationContext);
-	const inset = useSafeAreaInsets();
+	const navigation = useContext(NavigationContext)
+	const inset = useSafeAreaInsets()
+	const theme = useTheme()
 
-	useEffect(getDetail, []);
+	useEffect(getDetail, [])
+
+	const handleShare = () => shareLink(photo)
+	const handleDownload = () => downloadImage(photo)
+	const handleUserPress = () => navigation?.navigate(ScreenName.user, { username })
 
 	const {
 		user: { profile_image, username, name },
-		description,
-	} = photo;
+		likes,
+		liked_by_user,
+	} = fullPhoto ?? photo
 
 	return (
 		<ScrollView
-			style={{ flex: 1 }}
+			style={styles.container}
 			contentContainerStyle={{ paddingBottom: inset.bottom }}
 			showsVerticalScrollIndicator={false}
 		>
@@ -34,13 +45,40 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 				profile_image={profile_image}
 				username={username}
 				name={name}
-				style={{
-					padding: 8,
-				}}
-				onPress={() => navigation?.navigate(ScreenName.user, { username })}
+				style={styles.user}
+				onPress={handleUserPress}
 			/>
 
-			{description && <Text style={{ padding: 8 }}>{photo.description}</Text>}
+			<View style={styles.topBottomGroup}>
+				<Button
+					mode="outlined"
+					icon={liked_by_user ? "heart" : "heart-outline"}
+					compact
+					textColor={liked_by_user ? theme.colors.primary : theme.colors.onSurface}
+					onPress={like}
+				>
+					{likes}
+				</Button>
+				<Button
+					mode="outlined"
+					compact
+					icon="plus"
+					style={{ marginStart: 8 }}
+					textColor={theme.colors.onSurface}
+				>
+					Add
+				</Button>
+				<View style={{ flex: 1 }} />
+				<Button
+					mode="outlined"
+					icon="arrow-down"
+					contentStyle={{ flexDirection: "row-reverse" }}
+					textColor={theme.colors.onSurface}
+					onPress={handleDownload}
+				>
+					Download
+				</Button>
+			</View>
 
 			<ImageCard
 				roundness={0}
@@ -51,87 +89,106 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 				height="auto"
 				quality="auto"
 			/>
-			{fullPhoto && <MoreInfo fullPhoto={fullPhoto} like={like} />}
+
+			<View style={styles.bottomButtonGroup}>
+				<Chip mode="outlined" icon="share" compact style={{ marginEnd: 8 }} onPress={handleShare}>
+					Share
+				</Chip>
+				<Chip mode="outlined" icon="chart-arc" compact>
+					Stats
+				</Chip>
+			</View>
+
+			{fullPhoto && <MoreInfo {...fullPhoto} />}
 		</ScrollView>
-	);
+	)
 }
 
-function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: () => void }): ReactElement {
-	const { width } = Dimensions.get("window");
-	const navigation = useContext(NavigationContext);
-	const theme = useTheme();
+function MoreInfo(fullPhoto: FullPhoto): ReactElement {
+	const { width } = Dimensions.get("window")
+	const navigation = useContext(NavigationContext)
 
 	const {
 		exif: { make, model, exposure_time, aperture, focal_length, iso },
 		likes,
 		downloads,
 		views,
-		liked_by_user,
-	} = fullPhoto;
+		location,
+		created_at,
+		description,
+		tags,
+	} = fullPhoto
+
+	const handleTagPress = (tag: Tag) => {
+		if (tag.type === "search") {
+			navigation?.navigate(ScreenName.searchResult, {
+				searchInput: { query: tag.title },
+			})
+		}
+	}
+	const handleCollectionPress = (collection: BaseGroup) => {
+		navigation?.navigate({
+			name: ScreenName.collectionPhotos,
+			key: collection.id,
+			params: { collection },
+			merge: false,
+		})
+	}
 
 	return (
-		<View style={{ paddingHorizontal: 8 }}>
-			<View
-				style={{
-					flexDirection: "row",
-					justifyContent: "space-around",
-					marginVertical: 8,
-				}}
-			>
-				<Chip
-					style={{ backgroundColor: "transparent" }}
-					textStyle={{
-						fontSize: 12,
-						color: liked_by_user ? theme.colors.primary : theme.colors.onSurface,
-					}}
-					compact={true}
-					icon={liked_by_user ? "thumb-up" : "thumb-up-outline"}
-					onPress={like}
-				>
-					{likes.shorten()} likes
-				</Chip>
+		<View style={styles.detailContainer}>
+			{description && <Text style={styles.description}>{description}</Text>}
 
-				<Chip style={{ backgroundColor: "transparent" }} textStyle={{ fontSize: 12 }} compact={true} icon="eye">
-					{views.shorten()} views
-				</Chip>
-
-				<Chip
-					style={{ backgroundColor: "transparent" }}
-					textStyle={{ fontSize: 12 }}
-					compact={true}
-					icon="download-circle"
-				>
-					{downloads.shorten()} downloads
-				</Chip>
+			<View style={styles.statsContainer}>
+				<Stat title="Views" count={views} />
+				<VerticalDivider style={styles.divider} />
+				<Stat title="Downloads" count={downloads} />
+				<VerticalDivider style={styles.divider} />
+				<Stat title="Likes" count={likes} />
 			</View>
 
-			<GroupHeading containerStyle={{ marginVertical: 8, marginStart: 4 }}>Exif</GroupHeading>
+			<View style={styles.exifContainer}>
+				{location.name && (
+					<TextIcon style={styles.exifItem} icon="map-marker-outline">
+						{location.name}
+					</TextIcon>
+				)}
+				{make && model && (
+					<TextIcon style={styles.exifItem} icon="camera">
+						{make}, {model}
+					</TextIcon>
+				)}
+				{created_at && (
+					<TextIcon style={styles.exifItem} icon="calendar">
+						{created_at.formatAsDate()}
+					</TextIcon>
+				)}
+				{exposure_time && (
+					<TextIcon style={styles.exifItem} icon="image-filter-tilt-shift">
+						Exposure: {exposure_time}
+					</TextIcon>
+				)}
+				{aperture && (
+					<TextIcon style={styles.exifItem} icon="camera-iris">
+						Aperture: {aperture}
+					</TextIcon>
+				)}
+				{focal_length && (
+					<TextIcon style={styles.exifItem} icon="image-filter-center-focus">
+						Focal: {focal_length}
+					</TextIcon>
+				)}
+				{iso && (
+					<TextIcon style={styles.exifItem} icon="apple-ios">
+						ISO: {iso}
+					</TextIcon>
+				)}
+			</View>
 
-			<Card mode="contained" style={{ marginBottom: 16, overflow: "hidden" }}>
-				<DataTable style={{ width: "100%" }}>
-					<DataTable.Row>
-						<DataTable.Title>Model</DataTable.Title>
-						<DataTable.Cell>{model ?? "unknown"}</DataTable.Cell>
-						<DataTable.Title>Make</DataTable.Title>
-						<DataTable.Cell>{make ?? "unknown"}</DataTable.Cell>
-					</DataTable.Row>
+			<TagGroup tags={tags} onItemPress={handleTagPress} />
 
-					<DataTable.Row>
-						<DataTable.Title>Exposure</DataTable.Title>
-						<DataTable.Cell>{exposure_time ?? "unknown"}</DataTable.Cell>
-						<DataTable.Title>Aperture</DataTable.Title>
-						<DataTable.Cell>{aperture ?? "unknown"}</DataTable.Cell>
-					</DataTable.Row>
+			<GroupHeading containerStyle={styles.header}>Related collections</GroupHeading>
 
-					<DataTable.Row>
-						<DataTable.Title>Focal</DataTable.Title>
-						<DataTable.Cell>{focal_length ?? "unknown"}</DataTable.Cell>
-						<DataTable.Title>Iso</DataTable.Title>
-						<DataTable.Cell>{iso ?? "unknown"}</DataTable.Cell>
-					</DataTable.Row>
-				</DataTable>
-			</Card>
-			<GroupHeading containerStyle={{ marginVertical: 8, marginStart: 4 }}>More collection</GroupHeading>
 			<ListAlbums
 				data={fullPhoto.related_collections.results}
 				column={1}
@@ -139,13 +196,53 @@ function MoreInfo({ fullPhoto, like = () => {} }: { fullPhoto: FullPhoto; like: 
 				width={width - 16}
 				mode="compact"
 				itemMode="group"
-				onItemPress={(collection) => navigation?.navigate({
-					name: ScreenName.collectionPhotos,
-					key: collection.id,
-					params: { collection },
-					merge: false,
-				})}
+				onItemPress={handleCollectionPress}
 			/>
 		</View>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	detailContainer: {
+		paddingHorizontal: 8,
+		marginTop: 16,
+	},
+	bottomButtonGroup: {
+		flexDirection: "row",
+		alignItems: "flex-end",
+		justifyContent: "flex-end",
+		marginTop: 8,
+		marginEnd: 8,
+	},
+	topBottomGroup: {
+		flexDirection: "row",
+		marginBottom: 8,
+		paddingHorizontal: 8,
+	},
+	description: {
+		marginBottom: 16,
+	},
+	statsContainer: {
+		flexDirection: "row",
+		marginBottom: 16,
+	},
+	exifContainer: {
+		marginBottom: 8,
+	},
+	exifItem: {
+		marginBottom: 8,
+	},
+	header: {
+		marginVertical: 8,
+		marginStart: 4,
+	},
+	divider: {
+		marginHorizontal: 16,
+	},
+	user: {
+		padding: 8,
+	},
+})

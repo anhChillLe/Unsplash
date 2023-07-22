@@ -32,7 +32,7 @@ export const lightTheme: MD3Theme = {
     outlineVariant: '#bfc8cc',
     scrim: '#000000',
     surface: '#f8f9fb',
-    onSurface: '#1f1f1f',
+    onSurface: '#444444',
     surfaceVariant: '#dbe4e8',
     onSurfaceVariant: '#40484b',
     elevation: {
@@ -44,4 +44,11 @@ export const lightTheme: MD3Theme = {
       level5: '#ffffff',
     },
   },
+  fonts: {
+    ...MD3LightTheme.fonts,
+    default: {
+      ...MD3LightTheme.fonts.default,
+      fontWeight: '500'
+    }
+  }
 };

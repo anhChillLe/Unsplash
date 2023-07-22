@@ -7,7 +7,7 @@ const getPopularPhotos = createAsyncThunk<Photo[], void, { state: RootState }>("
 	const data = await unsplashService.photo.list({
 		page: 1,
 		per_page: 5,
-		order_by: "popular",
+		order_by: "latest",
 	})
 
 	return data

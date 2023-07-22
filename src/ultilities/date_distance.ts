@@ -8,5 +8,5 @@ declare global {
 
 String.prototype.formatAsDate = function (this: string ){
   const date = new Date(this)
-  return date.toLocaleDateString()
+  return date.toDateString()
 }

@@ -3,7 +3,7 @@ import { Photo } from "./Photo"
 export interface Links {
 	self: string
 	html: string
-	downloads?: string
+	download?: string
 	photos?: string
 	likes?: string
 	portfolio?: string

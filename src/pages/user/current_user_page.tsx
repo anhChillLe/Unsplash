@@ -4,9 +4,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
 import { RootState } from "../../redux/store/store";
+import { useContext } from "react";
+import { NavigationContext } from "@react-navigation/native";
+import { ScreenName } from "../../navigations/screen_name";
 
 export default function CurrentUserPage() {
 	const inset = useSafeAreaInsets();
+	const navigation = useContext(NavigationContext)
 	const profile = useSelector((state: RootState) => state.user.profile);
 	if (!profile) return <LoadingScreen />;
 
@@ -49,7 +53,9 @@ export default function CurrentUserPage() {
 				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
 				{location ? (
-					<SingleTag mode="outlined" icon="map-marker-outline">
+					<SingleTag mode="outlined" icon="map-marker-outline" onPress={() => {
+						navigation?.navigate(ScreenName.searchResult, {searchInput: {query: location}})
+					}}>
 						{location}
 					</SingleTag>
 				) : null}

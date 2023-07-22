@@ -1,6 +1,6 @@
 import { Collection } from "./Collection"
 import { User } from "./User"
-import { Exif, Links, Location, Meta, TopicSubmissions, Urls } from "./base"
+import { Exif, Links, Location, Meta, Tag, TopicSubmissions, Urls } from "./base"
 
 export interface BasicPhoto {
 	id: string
@@ -30,6 +30,7 @@ export interface Photo extends BasicPhoto {
 export interface FullPhoto extends Photo {
 	exif: Exif
 	location: Location
+	tags: Tag[]
 	meta: Meta
 	public_domain: boolean
 	views: number

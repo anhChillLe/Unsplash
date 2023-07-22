@@ -52,7 +52,7 @@ const ListHeader = ({ topic }: { topic: FullTopic }) => {
 	const { title, owners, description, total_photos } = topic
 
 	return (
-		<Surface mode="flat" style={{ paddingTop: 4 }}>
+		<Surface mode="flat" style={{ paddingTop: 4, paddingBottom: 4 }}>
 			<Text variant="headlineLarge" numberOfLines={1} style={{ fontWeight: "bold" }}>
 				{title}
 			</Text>

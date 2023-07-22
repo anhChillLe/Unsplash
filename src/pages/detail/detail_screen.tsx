@@ -1,5 +1,3 @@
-import { NavigationContext } from "@react-navigation/native";
-import { useContext } from "react";
 import { Surface } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackAppBar } from "../../components";

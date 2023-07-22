@@ -29,7 +29,6 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 				flex: 1,
 				height: "100%",
 				paddingTop: top,
-				paddingBottom: bottom,
 			}}
 		>
 			<BackAppBar />
@@ -43,7 +42,7 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 				onEndReached={getPhotos}
 				itemThreshold={8}
 				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
-				contentContainerStyle={{ paddingHorizontal: 4 }}
+				contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: bottom }}
 			/>
 		</Surface>
 	)

@@ -1,127 +1,97 @@
-import { Pressable, StyleProp, View, ViewStyle } from "react-native"
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import FastImage from "react-native-fast-image"
 import { Text, useTheme } from "react-native-paper"
-import { VeryBasic } from "unsplash-js/dist/methods/photos/types"
-import { Photo } from "../../unsplash/models"
+import { Photo } from "../../service/unsplash/models"
+import { ReactElement } from "react"
 
 type Props = {
 	photos: Photo[]
-	total?: number
-	style?: StyleProp<ViewStyle>
+	containerStyle?: StyleProp<ViewStyle>
 	space?: number
+	maxItem?: number
 	onPress?: () => void
+	mainAxis?: "row" | "column"
+}
+type RenderProps = {
+	photos: Photo[]
+	space: number
+	onPress?: () => void
+	mainAxis?: "row" | "column"
+	containerStyle?: StyleProp<ViewStyle>
 }
 
-export default function ImageGrid({ photos, total, style, space = 0, onPress }: Props) {
-	const colors = useTheme().colors
-
-	if (photos.length === 1) {
-		return (
-			<FastImage
-				source={{ uri: photos[0].urls.regular }}
-				style={{ height: "100%", flex: 1, margin: space, borderRadius: 4 }}
-			/>
-		)
-	}
-
-	if (photos.length === 2) {
-		return (
-			<View style={{ flexDirection: "row", flex: 1, marginVertical: -space }}>
-				<FastImage
-					source={{ uri: photos[0].urls.regular }}
-					style={{ flex: 1, margin: space, borderRadius: 4 }}
-				/>
-				<Pressable style={{ flex: 1, margin: space }} onPress={onPress}>
-					<FastImage source={{ uri: photos[1].urls.regular }} style={{ flex: 1, borderRadius: 4 }} />
-					{onPress && (
-						<View
-							style={{
-								position: "absolute",
-								top: 0,
-								bottom: 0,
-								right: 0,
-								left: 0,
-								alignItems: "center",
-								justifyContent: "center",
-								opacity: 0.75,
-								backgroundColor: colors.secondary,
-								borderRadius: 4,
-							}}
-						>
-							<Text variant="headlineSmall" style={{ fontWeight: "bold", color: colors.onSecondary }}>
-								{total ? `+${total - 3}` : "All photos"}
-							</Text>
-						</View>
-					)}
-				</Pressable>
-			</View>
-		)
-	}
-
+export default function ImageGrid({
+	photos,
+	containerStyle,
+	space = 0,
+	maxItem = 3,
+	mainAxis = "row",
+	onPress,
+}: Props) {
+	if (photos.length > maxItem) photos = photos.slice(0, maxItem)
 	return (
-		<View style={[{ flexDirection: "row", margin: -space, alignItems: "center" }, style]}>
-			<FastImage
-				source={{ uri: photos[0].urls.regular }}
-				style={{ height: "100%", flex: 1, margin: space, borderRadius: 4, backgroundColor: "gray" }}
-			/>
-			<View style={{ flexDirection: "column", flex: 1, marginVertical: -space }}>
-				<FastImage
-					source={{ uri: photos[1].urls.regular }}
-					style={{ flex: 1, margin: space, borderRadius: 4, backgroundColor: "gray" }}
-				/>
-				<Pressable style={{ flex: 1, margin: space }} onPress={onPress}>
-					<FastImage
-						source={{ uri: photos[2].urls.regular }}
-						style={{ flex: 1, borderRadius: 4, backgroundColor: "gray" }}
-					/>
-
-					{onPress && (
-						<View
-							style={{
-								position: "absolute",
-								top: 0,
-								bottom: 0,
-								right: 0,
-								left: 0,
-								alignItems: "center",
-								justifyContent: "center",
-								opacity: 0.6,
-								backgroundColor: colors.secondary,
-								borderRadius: 4,
-							}}
-						>
-							<Text variant="headlineSmall" style={{ fontWeight: "bold", color: colors.onSecondary }}>
-								{total ? `+${total - 3}` : "All photos"}
-							</Text>
-						</View>
-					)}
-				</Pressable>
-			</View>
-		</View>
-	)
-}
-
-function RenderGrid({ photos, space }: { photos: Photo[]; space: number }) {
-	const [photo, ...data] = photos
-  if(photos.length === 0) return null
-	return (
-		<View style={{ flexDirection: photos.length % 2 === 0 ? "row" : "column", flex: 1 }}>
-			<FastImage
-				source={{ uri: photo.urls.regular }}
-				style={{ height: "100%", flex: 1, margin: space, borderRadius: 4, backgroundColor: "gray" }}
-			/>
-			<RenderGrid photos={data} space={space} />
-		</View>
-	)
-}
-
-function GridImage2({ photos, style, space = 0, onPress }: Props) {
-	photos = photos.slice(0, 4)
-
-	return (
-		<Pressable style={[{ flexDirection: "row", margin: -space, alignItems: "center" }, style]} onPress={onPress}>
-			<RenderGrid photos={photos} space={space} />
+		<Pressable style={[containerStyle]}>
+			<RenderGrid {...{ photos, space, onPress, mainAxis }} containerStyle={{ margin: -space }} />
 		</Pressable>
 	)
 }
 
+function RenderGrid({ photos, space, onPress, mainAxis, containerStyle }: RenderProps): ReactElement {
+	if (photos.length === 0) return <View />
+	const [photo, ...data] = photos
+
+	if (data.length === 0) {
+		return (
+			<Pressable style={{ flex: 1, margin: space }} onPress={onPress}>
+				<FastImage source={{ uri: photo.urls.regular }} style={[styles.item]} />
+				{onPress && <AllPhoto />}
+			</Pressable>
+		)
+	}
+
+	const isMainAxis = photos.length % 2 !== 0
+	const isRow = mainAxis === "row"
+	const axis = isMainAxis ? (isRow ? "row" : "column") : isRow ? "column" : "row"
+
+	return (
+		<View style={[containerStyle, { flexDirection: axis, flex: 1 }]}>
+			<FastImage source={{ uri: photo.urls.regular }} style={[styles.item, { margin: space }]} />
+			<RenderGrid {...{ photos: data, space, onPress, mainAxis }} />
+		</View>
+	)
+}
+
+function AllPhoto() {
+	const theme = useTheme()
+	const backgroundColor = theme.colors.secondary
+	const color = theme.colors.onSecondary
+	return (
+		<View style={[styles.itemOverlay, { backgroundColor }]}>
+			<Text variant="headlineSmall" style={[styles.itemOverlayLabel, { color }]}>
+				All photos
+			</Text>
+		</View>
+	)
+}
+
+const styles = StyleSheet.create({
+	item: {
+		flex: 1,
+		borderRadius: 4,
+		backgroundColor: "gray",
+	},
+	itemOverlay: {
+		position: "absolute",
+		top: 0,
+		bottom: 0,
+		right: 0,
+		left: 0,
+		alignItems: "center",
+		justifyContent: "center",
+		opacity: 0.6,
+		borderRadius: 4,
+	},
+	itemOverlayLabel: {
+		fontWeight: "bold",
+	},
+})

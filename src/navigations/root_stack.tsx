@@ -8,7 +8,7 @@ import { AppDispatch, RootState } from "../redux/store/store"
 import AppStack from "./app_stack"
 import AuthStack from "./auth_stack"
 import { AuthParamList } from "./param_list"
-import { ScreenName } from "./screen_name"
+import { Screens } from "./screen_name"
 
 export default function RootStack() {
 	const state = useSelector((state: RootState) => state.auth)
@@ -31,8 +31,8 @@ const linking: LinkingOptions<AuthParamList> = {
 	prefixes: ["unsplash://"],
 	config: {
 		screens: {
-			[ScreenName.login]: "app/login_request",
-			[ScreenName.loginResult]: "app/login_success",
+			[Screens.login]: "app/login_request",
+			[Screens.loginResult]: "app/login_success",
 		},
 	},
 }

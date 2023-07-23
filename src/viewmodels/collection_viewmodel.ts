@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import { FullCollection, Photo } from "../unsplash/models"
-import unsplashService from "../unsplash"
+import { FullCollection, Photo } from "../service/unsplash/models"
+import unsplash from "../service/unsplash"
 
 export interface CollectionViewmodel {
 	isLoadingDetail: boolean
@@ -21,7 +21,7 @@ export default function getCollectionViewmodel(id: string): CollectionViewmodel 
 	const getCollection = () => {
 		if (isLoadingDetail) return
 		setLoadingDetail(true)
-		unsplashService.collection
+		unsplash.collection
 			.get(id)
 			.then((data) => {
 				setDetail(data)
@@ -36,7 +36,7 @@ export default function getCollectionViewmodel(id: string): CollectionViewmodel 
 	const getPhotos = () => {
 		if (isLoadingPhotos) return
 		setLoadingPhotos(true)
-		unsplashService.collection
+		unsplash.collection
 			.getPhotos({
 				id,
 				page: page.current + 1,

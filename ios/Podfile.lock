@@ -340,7 +340,8 @@ PODS:
   - React-jsinspector (0.71.11)
   - React-logger (0.71.11):
     - glog
-  - react-native-blob-util (0.18.3):
+  - react-native-blob-util (0.18.4):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-blurhash (1.1.10):
     - React-Core
@@ -689,7 +690,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 18b5b33c5f2687a784a61bc8176611b73524ae77
   React-jsinspector: b6ed4cb3ffa27a041cd440300503dc512b761450
   React-logger: 186dd536128ae5924bc38ed70932c00aa740cd5b
-  react-native-blob-util: 2d36383bb52c15c5451be81cb7ddf22bc34a12a6
+  react-native-blob-util: 9d189661513d633317c65022ab69792b20ff3c9f
   react-native-blurhash: add4df9a937b4e021a24bc67a0714f13e0bd40b7
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2

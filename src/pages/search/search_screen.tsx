@@ -1,15 +1,17 @@
 import { NavigationContext } from "@react-navigation/native"
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { ScrollView, StyleProp, TextInput, View, ViewStyle } from "react-native"
+import { ScrollView, StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native"
 import { Chip, Searchbar, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import History from "../../actions/shared_preferences"
-import { ScreenName } from "../../navigations/screen_name"
-import { ColorId } from "../../unsplash/constants/Color"
-import { ContentFilter } from "../../unsplash/constants/ContentFilter"
-import { SearchOrderBy } from "../../unsplash/constants/OrderBy"
-import { Orientation } from "../../unsplash/constants/Orientation"
-import { Fillter } from "../../unsplash/params/search_params"
+import History from "../../service/storage/shared_preferences"
+import { Screens } from "../../navigations/screen_name"
+import { ColorId } from "../../service/unsplash/constants/Color"
+import { ContentFilter } from "../../service/unsplash/constants/ContentFilter"
+import { SearchOrderBy } from "../../service/unsplash/constants/OrderBy"
+import { Orientation } from "../../service/unsplash/constants/Orientation"
+import { Fillter } from "../../service/unsplash/params/search_params"
+import { FilterCard } from "../../components"
+import { colorValues, contentFilters, orderBys, orientations } from "../../service/unsplash/data"
 
 export default function SearchScreen() {
 	const { top } = useSafeAreaInsets()
@@ -20,7 +22,7 @@ export default function SearchScreen() {
 	const [flag, setFlag] = useState(false)
 
 	const handleSearchSubmit = async (query: string) => {
-		navigation?.navigate(ScreenName.searchResult, {
+		navigation?.navigate(Screens.searchResult, {
 			searchInput: {
 				query,
 				...filter.current,
@@ -32,14 +34,8 @@ export default function SearchScreen() {
 	}
 
 	return (
-		<Surface
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: 16 + top,
-			}}
-		>
-			<View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 16 }}>
+		<Surface style={[styles.container, { paddingTop: 16 + top }]}>
+			<View style={styles.searchContainer}>
 				<Searchbar
 					mode="bar"
 					placeholder="Search for image"
@@ -49,104 +45,49 @@ export default function SearchScreen() {
 					autoCapitalize="none"
 					onChangeText={setSearchValue}
 					onSubmitEditing={() => handleSearchSubmit(searchValue)}
-					style={{ flex: 1 }}
+					style={styles.search}
 				/>
 			</View>
 
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16, paddingHorizontal: 16 }}>
+			<Text variant="headlineLarge" style={styles.cardHeader}>
 				Histories
 			</Text>
-			<Histories onItemPress={handleSearchSubmit} flag={flag}/>
 
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 32, marginStart: 16 }}>
+			<Histories onItemPress={handleSearchSubmit} flag={flag} />
+
+			<Text variant="headlineLarge" style={styles.cardHeader}>
 				Filter
 			</Text>
 
 			<FilterCard
 				title="Order by"
-				data={["latest", "relevant", "editorial"]}
-				style={{ marginTop: 8, marginStart: 16 }}
+				data={orderBys}
+				style={styles.filterCard}
 				onSelected={(value) => (filter.current.order_by = value as SearchOrderBy)}
 			/>
 			<FilterCard
 				title="Content filter"
-				data={["low", "high"]}
-				style={{ marginTop: 8, marginStart: 16 }}
+				data={contentFilters}
+				style={styles.filterCard}
 				onSelected={(value) => (filter.current.content_filter = value as ContentFilter)}
 			/>
 			<FilterCard
 				title="Color"
-				data={[
-					"black_and_white",
-					"black",
-					"white",
-					"yellow",
-					"orange",
-					"red",
-					"purple",
-					"magenta",
-					"green",
-					"teal",
-					"blue",
-				]}
-				style={{ marginTop: 8, marginStart: 16 }}
+				data={colorValues}
+				style={styles.filterCard}
 				onSelected={(value) => (filter.current.color = value as ColorId)}
 			/>
 			<FilterCard
 				title="Orientation"
-				data={["landscape", "portrait", "squarish"]}
-				style={{ marginTop: 8, marginStart: 16 }}
+				data={orientations}
+				style={styles.filterCard}
 				onSelected={(value) => (filter.current.orientation = value as Orientation)}
 			/>
 		</Surface>
 	)
 }
 
-function FilterCard({
-	data,
-	title,
-	onSelected,
-	style,
-}: {
-	data: string[]
-	title: string
-	onSelected?: (value?: string) => void
-	style?: StyleProp<ViewStyle>
-}) {
-	const [currentValue, setValue] = useState<string | undefined>(undefined)
-
-	const onValueChange = (newValue: string | undefined) => {
-		const nextValue = newValue === currentValue ? undefined : newValue
-		setValue(nextValue)
-		onSelected && onSelected(nextValue)
-	}
-
-	return (
-		<View style={style}>
-			<Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-				{title}
-			</Text>
-			<ScrollView
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={{ marginHorizontal: -4 }}
-			>
-				{data.map((value) => (
-					<Chip
-						key={value + (value === currentValue)}
-						onPress={() => onValueChange(value)}
-						selected={value === currentValue}
-						style={{ margin: 4 }}
-					>
-						{value}
-					</Chip>
-				))}
-			</ScrollView>
-		</View>
-	)
-}
-
-function Histories({ onItemPress, flag }: { flag: boolean,onItemPress: (query: string) => void }) {
+function Histories({ onItemPress, flag }: { flag: boolean; onItemPress: (query: string) => void }) {
 	const [histories, setHistories] = useState<string[]>([])
 	const nonDuplicateHistories = Array.from(new Set(histories))
 
@@ -156,27 +97,19 @@ function Histories({ onItemPress, flag }: { flag: boolean,onItemPress: (query: s
 		})
 	}
 
-	function removeHistory(query: string){
+	function removeHistory(query: string) {
 		History.remove(query)
-		setHistories(histories.filter(history => history != query))
+		setHistories(histories.filter((history) => history != query))
 	}
 
 	useEffect(getHistories, [flag])
 
 	return (
-		<View
-			style={{
-				flexDirection: "row",
-				flexWrap: "wrap",
-				marginHorizontal: -4,
-				marginTop: 8,
-				paddingHorizontal: 16,
-			}}
-		>
+		<View style={styles.historiesContainer}>
 			{nonDuplicateHistories.map((query, index) => (
 				<Chip
 					key={index}
-					style={{ margin: 4 }}
+					style={styles.history}
 					mode="outlined"
 					onClose={() => removeHistory(query)}
 					onPress={() => onItemPress(query)}
@@ -187,3 +120,37 @@ function Histories({ onItemPress, flag }: { flag: boolean,onItemPress: (query: s
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	searchContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingHorizontal: 16,
+	},
+	search: {
+		flex: 1,
+	},
+	cardHeader: {
+		fontWeight: "bold",
+		marginTop: 16,
+		paddingHorizontal: 16,
+	},
+	filterCard: {
+		marginTop: 8,
+		marginStart: 16,
+	},
+	historiesContainer: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		marginHorizontal: -4,
+		marginTop: 8,
+		paddingHorizontal: 16,
+	},
+	history: {
+		margin: 4,
+	},
+})

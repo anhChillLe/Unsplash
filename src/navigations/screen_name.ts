@@ -1,4 +1,4 @@
-export enum ScreenName {
+export enum Screens {
   home = 'HomeScreen',
   detail = 'DetailScreen',
   detailPager = 'detailPager',

@@ -1,12 +1,13 @@
 import { NavigationContext } from "@react-navigation/native"
 import { useContext, useEffect } from "react"
-import { Dimensions, View } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListPhoto } from "../../components"
 import { SearchResultRoute } from "../../navigations/param_list"
-import { ScreenName } from "../../navigations/screen_name"
+import { Screens } from "../../navigations/screen_name"
 import getSearchViewModel, { SearchViewmodel } from "../../viewmodels/search_viewmodel"
+import { Photo } from "../../service/unsplash/models"
 
 export default function SearchResultContainer({ route }: SearchResultRoute) {
 	const input = route.params.searchInput
@@ -19,18 +20,12 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 	const { width } = Dimensions.get("window")
 	const { top, bottom } = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
+	const handleItemPress = (photo: Photo, index: number) => navigation?.navigate(Screens.detail, { photo })
 
 	useEffect(getPhotos, [])
 
 	return (
-		<Surface
-			mode="flat"
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: top,
-			}}
-		>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
 
 			<ListPhoto
@@ -41,8 +36,8 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 				column={2}
 				onEndReached={getPhotos}
 				itemThreshold={8}
-				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
-				contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: bottom }}
+				onItemPress={handleItemPress}
+				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom }]}
 			/>
 		</Surface>
 	)
@@ -50,11 +45,28 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 
 function SearchHeader({ total, query }: { total: number; query: string }) {
 	return (
-		<View style={{ paddingStart: 8, paddingBottom: 8 }}>
+		<View style={styles.headerContainer}>
 			<Text variant="headlineLarge">
-				Found <Text style={{ fontWeight: "bold" }}>{total}</Text> images for{" "}
-				<Text style={{ fontWeight: "bold" }}>{query}</Text>
+				Found <Text style={styles.highlightText}>{total}</Text> images for{" "}
+				<Text style={styles.highlightText}>{query}</Text>
 			</Text>
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	listContainer: {
+		paddingHorizontal: 4,
+	},
+	headerContainer: {
+		paddingStart: 8,
+		paddingBottom: 8,
+	},
+	highlightText: {
+		fontWeight: "bold",
+	},
+})

@@ -1,4 +1,4 @@
-import { View } from "react-native"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Stat from "./Stat"
 import VerticalDivider from "../Devider/VetticalDivider"
 
@@ -7,20 +7,15 @@ type Props = {
 	total_photos: number
 	followers_count: number
 	downloads: number
+	containerStyle?: StyleProp<ViewStyle>
 }
 
 export default function StatGroup(props: Props) {
-	const { total_likes, total_photos, followers_count, downloads } = props
+	const { total_likes, total_photos, followers_count, downloads, containerStyle } = props
 
 	return (
 		<View
-			style={{
-				flexDirection: "row",
-				justifyContent: "space-between",
-				alignItems: "center",
-				width: "100%",
-				paddingVertical: 12,
-			}}
+			style={[styles.container, containerStyle]}
 		>
 			<Stat title="Likes" count={total_likes} />
 			<VerticalDivider />
@@ -32,3 +27,11 @@ export default function StatGroup(props: Props) {
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	}
+})

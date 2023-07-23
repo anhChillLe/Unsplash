@@ -7,7 +7,7 @@ import StatsService from "./service/stats"
 import TopicService from "./service/topic"
 import UserService from "./service/user"
 
-const unsplashService = {
+const unsplash = {
 	auth: AuthService,
 	current_user: CurrentUserService,
 	user: UserService,
@@ -18,4 +18,4 @@ const unsplashService = {
 	collection: CollectionService,
 }
 
-export default unsplashService
+export default unsplash

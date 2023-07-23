@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import unsplashService from "../../../unsplash"
-import { Topic } from "../../../unsplash/models"
+import unsplash from "../../../service/unsplash"
+import { Topic } from "../../../service/unsplash/models"
 
 interface TopicsState {
 	isLoading: boolean
@@ -13,7 +13,7 @@ const initialState: TopicsState = {
 }
 
 export const fetchTopics = createAsyncThunk("fetchTopics", async () => {
-	const data = await unsplashService.topic.list({
+	const data = await unsplash.topic.list({
 		order_by: "latest",
 	})
 	return data

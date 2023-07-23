@@ -14,26 +14,26 @@ import UserPage from "../pages/user/user_page"
 import UserPhotoPage from "../pages/user/user_photo"
 import { options } from "./options"
 import { AppParamList } from "./param_list"
-import { ScreenName } from "./screen_name"
+import { Screens } from "./screen_name"
 
 const Stack = createStackNavigator<AppParamList>()
 
 export default function AppStack() {
 	return (
-		<Stack.Navigator initialRouteName={ScreenName.home} screenOptions={options}>
-			<Stack.Screen name={ScreenName.home} component={HomeScreen} />
-			<Stack.Screen name={ScreenName.detail} component={DetailScreen} />
-			<Stack.Screen name={ScreenName.topics} component={TopicScreen} />
-			<Stack.Screen name={ScreenName.collections} component={CollectionScreen} />
-			<Stack.Screen name={ScreenName.allImage} component={TopNavigationListImage} />
-			<Stack.Screen name={ScreenName.collectionPhotos} component={CollectionPhoto} />
-			<Stack.Screen name={ScreenName.topicPhotos} component={TopicDetail} />
-			<Stack.Screen name={ScreenName.search} component={SearchScreen} />
-			<Stack.Screen name={ScreenName.searchResult} component={SearchResultScreen} />
-			<Stack.Screen name={ScreenName.user} component={UserPage} />
-			<Stack.Screen name={ScreenName.currentUser} component={CurrentUserPage} />
-			<Stack.Screen name={ScreenName.userCollections} component={UserCollectionPage} />
-			<Stack.Screen name={ScreenName.userPhotos} component={UserPhotoPage} />
+		<Stack.Navigator initialRouteName={Screens.home} screenOptions={options}>
+			<Stack.Screen name={Screens.home} component={HomeScreen} />
+			<Stack.Screen name={Screens.detail} component={DetailScreen} />
+			<Stack.Screen name={Screens.topics} component={TopicScreen} />
+			<Stack.Screen name={Screens.collections} component={CollectionScreen} />
+			<Stack.Screen name={Screens.allImage} component={TopNavigationListImage} />
+			<Stack.Screen name={Screens.collectionPhotos} component={CollectionPhoto} />
+			<Stack.Screen name={Screens.topicPhotos} component={TopicDetail} />
+			<Stack.Screen name={Screens.search} component={SearchScreen} />
+			<Stack.Screen name={Screens.searchResult} component={SearchResultScreen} />
+			<Stack.Screen name={Screens.user} component={UserPage} />
+			<Stack.Screen name={Screens.currentUser} component={CurrentUserPage} />
+			<Stack.Screen name={Screens.userCollections} component={UserCollectionPage} />
+			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
 		</Stack.Navigator>
 	)
 }

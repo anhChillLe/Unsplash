@@ -2,7 +2,8 @@ import { ScrollView, Share, View } from "react-native"
 import { StyleProp, ViewStyle } from "react-native"
 import { ImageCard } from ".."
 import SkeletonPlaceholder from "react-native-skeleton-placeholder"
-import { Photo } from "../../unsplash/models/Photo"
+import { Photo } from "../../service/unsplash/models/Photo"
+import { ReactElement } from "react"
 
 export interface Props {
 	data: Photo[]
@@ -22,10 +23,10 @@ export default function HorizontalImageList({
 	space,
 	isLoading = false,
 	maxItem = 10,
-	onItemPress = (photo: Photo) => {},
+	onItemPress = () => {},
 	cardStyle,
 	containerStyle,
-}: Props) {
+}: Props): ReactElement {
 	if (data.length >= maxItem) {
 		data = data.slice(0, maxItem)
 	}
@@ -38,7 +39,7 @@ export default function HorizontalImageList({
 				data.map((item, index) => (
 					<ImageCard
 						key={index.toString()}
-						style={[index + 1 < data.length ? { marginRight: space } : null, cardStyle]}
+						style={[index + 1 < data.length && { marginRight: space }, cardStyle]}
 						photo={item}
 						width={itemWidth}
 						height={itemHeight}
@@ -52,7 +53,7 @@ export default function HorizontalImageList({
 	)
 }
 
-function ListSkeleton({ width, height, space }: { width: number; height: number; space: number }) {
+function ListSkeleton({ width, height, space }: { width: number; height: number; space: number }): ReactElement {
 	return (
 		<SkeletonPlaceholder borderRadius={8}>
 			<SkeletonPlaceholder.Item style={{ flexDirection: "row" }}>

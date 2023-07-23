@@ -1,25 +1,22 @@
-import { ScrollView } from "react-native";
-import { Surface, Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
-import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
-import { RootState } from "../../redux/store/store";
-import { useContext } from "react";
-import { NavigationContext } from "@react-navigation/native";
-import { ScreenName } from "../../navigations/screen_name";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native"
+import { Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSelector } from "react-redux"
+import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
+import { RootState } from "../../redux/store/store"
+import { useContext } from "react"
+import { NavigationContext } from "@react-navigation/native"
+import { Screens } from "../../navigations/screen_name"
 
 export default function CurrentUserPage() {
-	const inset = useSafeAreaInsets();
+	const inset = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
-	const profile = useSelector((state: RootState) => state.user.profile);
-	if (!profile) return <LoadingScreen />;
+	const profile = useSelector((state: RootState) => state.user.profile)
+	if (!profile) return <LoadingScreen />
 
 	const {
 		profile_image,
 		username,
-		portfolio_url,
-		twitter_username,
-		instagram_username,
 		name,
 		bio,
 		total_photos,
@@ -28,49 +25,40 @@ export default function CurrentUserPage() {
 		followers_count,
 		location,
 		photos,
-	} = profile;
+		social,
+	} = profile
+
+	const handleLocationPress = () => navigation?.navigate(Screens.searchResult, { searchInput: { query: location } })
+	const handlePhotosPress = () => navigation?.navigate(Screens.userPhotos, { user: profile })
+	const handleCollectionPress = () => navigation?.navigate(Screens.userCollections, { user: profile })
 
 	return (
-		<Surface
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: inset.top,
-				paddingBottom: inset.bottom,
-			}}
-		>
+		<SafeAreaView style={styles.container}>
 			<BackAppBar />
 			<ScrollView
-				style={{
-					flex: 1,
-				}}
-				contentContainerStyle={{
-					paddingHorizontal: 16,
-					paddingBottom: 16,
-					alignItems: "flex-start",
-				}}
+				style={styles.container}
+				contentContainerStyle={styles.contentContainer}
 			>
 				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
-				{location ? (
-					<SingleTag mode="outlined" icon="map-marker-outline" onPress={() => {
-						navigation?.navigate(ScreenName.searchResult, {searchInput: {query: location}})
-					}}>
+				{location && (
+					<SingleTag
+						mode="outlined"
+						icon="map-marker-outline"
+						onPress={handleLocationPress}
+					>
 						{location}
 					</SingleTag>
-				) : null}
+				)}
 
-				<SocialGroup
-					instagram_username={instagram_username}
-					twitter_username={twitter_username}
-					portfolio_url={portfolio_url}
-				/>
+				<SocialGroup social={social} />
 
 				{bio && (
-					<Text style={{ marginTop: 8 }} numberOfLines={4} ellipsizeMode="tail">
+					<Text style={styles.bio} numberOfLines={4} ellipsizeMode="tail">
 						{bio}
 					</Text>
 				)}
+
 				<StatGroup
 					{...{
 						total_likes,
@@ -81,9 +69,50 @@ export default function CurrentUserPage() {
 				/>
 
 				{photos.length > 0 && (
-					<ImageGrid photos={photos} style={{ height: 200, width: "100%", marginTop: 4 }} space={4} />
+					<ImageGrid
+						photos={photos}
+						containerStyle={styles.grid}
+						space={2}
+						mainAxis="column"
+						onPress={handlePhotosPress}
+					/>
 				)}
 			</ScrollView>
-		</Surface>
-	);
+		</SafeAreaView>
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	contentContainer: {
+		paddingHorizontal: 16,
+		paddingBottom: 16,
+		alignItems: "flex-start",
+	},
+	grid: {
+		height: 240,
+		width: "100%",
+		marginTop: 4,
+	},
+	button: {
+		width: "100%",
+		paddingVertical: 50,
+		marginTop: 16,
+	},
+	buttonLabel: {
+		fontSize: 32,
+		padding: 12,
+	},
+	stats: {
+		width: "100%",
+		paddingVertical: 12,
+	},
+	social: {
+		marginVertical: 12,
+	},
+	bio: {
+		marginTop: 8,
+	},
+})

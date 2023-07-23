@@ -1,37 +1,34 @@
-import { NavigationContext } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
-import { ScrollView } from "react-native";
-import { Button, Surface, Text, useTheme } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
-import { UserRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import unsplash from "../../unsplash";
-import { FullUser } from "../../unsplash/models";
+import { NavigationContext } from "@react-navigation/native"
+import React, { useContext, useEffect, useState } from "react"
+import { ScrollView, StyleSheet } from "react-native"
+import { Button, Surface, Text, useTheme } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
+import { UserRoute } from "../../navigations/param_list"
+import { Screens } from "../../navigations/screen_name"
+import unsplash from "../../service/unsplash"
+import { FullUser } from "../../service/unsplash/models"
 
 export default function UserPage({ route }: UserRoute) {
-	const inset = useSafeAreaInsets();
-	const navigation = useContext(NavigationContext);
-	const username = route.params.username;
+	const inset = useSafeAreaInsets()
+	const navigation = useContext(NavigationContext)
+	const username = route.params.username
 
-	const [profile, setProfile] = useState<FullUser | undefined>();
+	const [profile, setProfile] = useState<FullUser | undefined>()
 
 	async function getUser() {
-		const data = await unsplash.user.getProfile(username);
-		setProfile(data);
+		const data = await unsplash.user.getProfile(username)
+		setProfile(data)
 	}
 
 	useEffect(() => {
-		getUser();
-	}, []);
+		getUser()
+	}, [])
 
-	if (!profile) return <LoadingScreen />;
+	if (!profile) return <LoadingScreen />
 
 	const {
 		profile_image,
-		portfolio_url,
-		twitter_username,
-		instagram_username,
 		name,
 		bio,
 		total_collections,
@@ -41,80 +38,102 @@ export default function UserPage({ route }: UserRoute) {
 		followers_count,
 		location,
 		photos,
+		social,
 		// tags: {custom},
-	} = profile;
+	} = profile
+
+	const handleLocationPress = () => navigation?.navigate(Screens.searchResult, { searchInput: { query: location } })
+	const handlePhotosPress = () => navigation?.navigate(Screens.userPhotos, { user: profile })
+	const handleCollectionPress = () => navigation?.navigate(Screens.userCollections, { user: profile })
 
 	return (
 		<Surface
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: inset.top,
-				paddingBottom: inset.bottom,
-			}}
+			style={[
+				styles.container,
+				{
+					paddingTop: inset.top,
+					paddingBottom: inset.bottom,
+				},
+			]}
 		>
 			<BackAppBar />
+
 			<ScrollView
-				style={{
-					flex: 1,
-				}}
+				style={{ flex: 1 }}
 				showsVerticalScrollIndicator={false}
-				contentContainerStyle={{
-					paddingHorizontal: 16,
-					paddingBottom: 16,
-					alignItems: "flex-start",
-				}}
+				contentContainerStyle={styles.contentContainer}
 			>
 				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
-				{location ? (
-					<SingleTag mode="outlined" icon="map-marker-outline" onPress={() => {
-						navigation?.navigate(ScreenName.searchResult, {searchInput: {query: location}})
-					}}>
+				{location && (
+					<SingleTag mode="outlined" icon="map-marker-outline" onPress={handleLocationPress}>
 						{location}
 					</SingleTag>
-				) : null}
+				)}
 
-				<SocialGroup
-					instagram_username={instagram_username}
-					twitter_username={twitter_username}
-					portfolio_url={portfolio_url}
-				/>
+				<SocialGroup social={social} containerStyle={styles.social} />
 
 				{bio && (
 					<Text numberOfLines={4} ellipsizeMode="tail">
 						{bio}
 					</Text>
 				)}
+
 				<StatGroup
-					{...{
-						total_likes,
-						total_photos,
-						followers_count,
-						downloads,
-					}}
+					{...{ total_likes, total_photos, followers_count, downloads }}
+					containerStyle={styles.stats}
 				/>
 
-				{photos.length > 0 && (
-					<ImageGrid
-						photos={photos}
-						style={{ height: 200, marginTop: 4 }}
-						space={4}
-						onPress={() => navigation?.navigate(ScreenName.userPhotos, { user: profile })}
-					/>
-				)}
+				<ImageGrid
+					photos={photos}
+					containerStyle={styles.grid}
+					space={2}
+					mainAxis="column"
+					onPress={handlePhotosPress}
+				/>
 
 				<Button
 					mode="contained-tonal"
-					style={{ width: "100%", paddingVertical: 50, marginTop: 16 }}
-					labelStyle={{ fontSize: 32, padding: 12 }}
-					onPress={() =>
-					  navigation?.navigate(ScreenName.userCollections, {user: profile})
-					}
+					style={styles.button}
+					labelStyle={styles.buttonLabel}
+					onPress={handleCollectionPress}
 				>
 					{total_collections} collections
 				</Button>
 			</ScrollView>
 		</Surface>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	contentContainer: {
+		paddingHorizontal: 16,
+		paddingBottom: 16,
+		alignItems: "flex-start",
+	},
+	grid: {
+		height: 240,
+		width: "100%",
+		marginTop: 4,
+	},
+	button: {
+		width: "100%",
+		paddingVertical: 50,
+		marginTop: 16,
+	},
+	buttonLabel: {
+		fontSize: 32,
+		padding: 12,
+	},
+	stats: {
+		width: "100%",
+		paddingVertical: 12,
+	},
+	social: {
+		marginVertical: 12,
+	},
+})

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import unsplashService from "../../../unsplash"
-import { Collection } from "../../../unsplash/models"
+import unsplash from "../../../service/unsplash"
+import { Collection } from "../../../service/unsplash/models"
 import { RootState } from "../../store/store"
 
 interface CollectionsState {
@@ -20,7 +20,7 @@ export const fetchCollections = createAsyncThunk<Collection[], void, { state: Ro
 	"fetchCollections",
 	async (_, thunkApi) => {
 		const { collection } = thunkApi.getState()
-		const data = await unsplashService.collection.list({
+		const data = await unsplash.collection.list({
 			page: collection.page + 1,
 			per_page: 10,
 		})

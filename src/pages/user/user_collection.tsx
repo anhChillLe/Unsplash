@@ -5,7 +5,7 @@ import { Surface } from "react-native-paper";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackAppBar, ListAlbums, UserElement } from "../../components";
 import { AppParamList, UserCollectionsRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
+import { Screens } from "../../navigations/screen_name";
 import { UserCollectionViewModel, getUserCollectionViewmodel } from "../../viewmodels/user_collection_viewmodel";
 
 export default function UserCollectionPage({ route }: UserCollectionsRoute) {
@@ -43,7 +43,7 @@ function UserCollection({ isLoading, user, collections, listCollection, loadMore
 					style={{ flex: 1 }}
 					header={<UserElement {...user} style={{ marginBottom: 16 }} />}
 					onEndReached={loadMore}
-					onItemPress={(collection) => navigation?.navigate(ScreenName.collectionPhotos, { collection })}
+					onItemPress={(collection) => navigation?.navigate(Screens.collectionPhotos, { collection })}
 					contentContainerStyle={{
 						paddingBottom: bottom + 16,
 						paddingHorizontal: 16,

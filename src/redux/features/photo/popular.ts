@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import getPopularPhotos from "./action";
-import { Photo } from "../../../unsplash/models";
+import { Photo } from "../../../service/unsplash/models";
 
 export interface PhotoState {
   isLoading: boolean;

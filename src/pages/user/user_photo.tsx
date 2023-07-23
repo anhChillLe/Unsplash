@@ -5,7 +5,7 @@ import { Surface, Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackAppBar, ListPhoto, UserElement } from "../../components";
 import { UserPhotosRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
+import { Screens } from "../../navigations/screen_name";
 import getUserPhotosViewModel, { UserPhotosViewModel } from "../../viewmodels/user_photos_viewmode";
 
 export default function UserPhotoPage({ route }: UserPhotosRoute) {
@@ -53,7 +53,7 @@ function UserPhotos({ isLoading, user, photos, getPhotos, loadMore }: UserPhotos
 				photos={photos}
 				column={3}
 				onEndReached={loadMore}
-				onItemPress={(photo) => navigation?.navigate(ScreenName.detail, { photo })}
+				onItemPress={(photo) => navigation?.navigate(Screens.detail, { photo })}
 				contentContainerStyle={{
 					paddingHorizontal: 8,
 				}}

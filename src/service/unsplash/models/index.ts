@@ -1,4 +1,4 @@
-import { Links, ProfileImage, Social, Tags, Meta, Exif, Location, Position, Urls } from "./base"
+import { Links, ProfileImage, Social, Tag, Meta, Exif, Location, Position, Urls } from "./base"
 import { Collection, FullCollection } from "./Collection"
 import { Photo, FullPhoto, RelatedCollections } from "./Photo"
 import { Topic, FullTopic } from "./Topic"
@@ -10,8 +10,9 @@ import { UserStatistics, Statistics } from "./Statistics"
 import { StatTotal, StatMonth } from "./Stats"
 import { Track } from "./Track"
 import { User, FullUser } from "./User"
+import { BaseGroup } from "./base"
 
-export type { Links, ProfileImage, Social, Tags, Meta, Exif, Location, Position, Urls }
+export type { Links, ProfileImage, Social, Tag, Meta, Exif, Location, Position, Urls, BaseGroup }
 
 export type {
 	Collection,

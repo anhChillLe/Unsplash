@@ -1,14 +1,13 @@
 import { NavigationContext } from "@react-navigation/native"
 import { useContext, useEffect } from "react"
-import { Dimensions, View } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 import { Avatar, Chip, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { BackAppBar, ListPhoto, LoadingScreen } from "../../components"
+import { BackAppBar, ListPhoto, LoadingScreen, SingleTag, TagGroup } from "../../components"
 import { CollectionPhotosRoute } from "../../navigations/param_list"
-import { ScreenName } from "../../navigations/screen_name"
-import { FullCollection } from "../../unsplash/models"
+import { Screens } from "../../navigations/screen_name"
+import { FullCollection, Photo, Tag } from "../../service/unsplash/models"
 import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel"
-import { Tag } from "../../unsplash/models/base"
 
 export default function CollectionPhotosContainer({ route }: CollectionPhotosRoute) {
 	const viewModel = getCollectionViewmodel(route.params.collection.id)
@@ -34,37 +33,33 @@ function CollectionPhotos({
 
 	if (!detail) return <LoadingScreen />
 
+	const handleItemPress = (photo: Photo, index: number) =>
+		navigation?.navigate({
+			name: Screens.detail,
+			key: photo.id,
+			params: { photo },
+			merge: true,
+		})
+
 	return (
-		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
 			<ListPhoto
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader collection={detail} />}
-				onItemPress={(photo, index) =>
-					navigation?.navigate({
-						name: ScreenName.detail,
-						key: photo.id,
-						params: {
-							photo,
-						},
-						merge: true,
-					})
-				}
-				//
+				header={<ListHeader {...detail} />}
+				onItemPress={handleItemPress}
 				column={3}
 				itemThreshold={9}
 				onEndReached={getPhotos}
-				contentContainerStyle={{
-					paddingHorizontal: 8,
-				}}
+				contentContainerStyle={styles.listContainer}
 			/>
 		</Surface>
 	)
 }
 
-const ListHeader = ({ collection }: { collection: FullCollection }) => {
+const ListHeader = (collection: FullCollection) => {
 	const navigation = useContext(NavigationContext)
 
 	const {
@@ -76,58 +71,61 @@ const ListHeader = ({ collection }: { collection: FullCollection }) => {
 	} = collection
 
 	const handleTagPress = (tag: Tag) => {
-		if (tag.type === "search") {
-			navigation?.navigate(ScreenName.searchResult, {
-				searchInput: { query: tag.title },
-			})
-		} else {
-			navigation?.navigate({
-				key: tag.source.ancestry.category.slug,
-				name: ScreenName.topicPhotos,
-				params: {
-					id_or_slug: tag.source.ancestry.category.slug,
-				},
-			})
-		}
+		if (tag.type !== "search") return
+		navigation?.navigate(Screens.searchResult, { searchInput: { query: tag.title } })
 	}
 
 	return (
-		<Surface mode="flat" style={{ paddingVertical: 4 }}>
-			<Text variant="headlineLarge" numberOfLines={1} style={{ fontWeight: "bold" }}>
+		<Surface mode="flat" style={styles.headerContainer}>
+			<Text variant="headlineLarge" numberOfLines={1} style={styles.title}>
 				{collection.title}
 			</Text>
 
-			<View style={{ flexDirection: "row" }}>
-				<Chip
-					avatar={<Avatar.Image size={24} source={{ uri: profile_image.medium }} />}
-					onPress={() => navigation?.navigate(ScreenName.user, { username })}
-				>
-					{name}
-				</Chip>
-			</View>
+			<SingleTag
+				avatar={<Avatar.Image size={24} source={{ uri: profile_image.medium }} />}
+				onPress={() => navigation?.navigate(Screens.user, { username })}
+			>
+				{name}
+			</SingleTag>
 
-			{collection.description && (
-				<Text variant="bodyMedium" style={{ marginVertical: 4 }}>
+			{description && (
+				<Text variant="bodyMedium" style={styles.description}>
 					{description}
 				</Text>
 			)}
-			<Text style={{ fontSize: 12, opacity: 0.6, marginVertical: 2 }}>
+
+			<Text style={styles.date}>
 				{total_photos} photos · {published_at.formatAsDate()}
 			</Text>
-			<View
-				style={{
-					flexDirection: "row",
-					flexWrap: "wrap",
-					marginTop: 8,
-					marginHorizontal: -4,
-				}}
-			>
-				{tags.map((tag) => (
-					<Chip key={tag.title} style={{ margin: 4 }} onPress={() => handleTagPress(tag)}>
-						{tag.title}
-					</Chip>
-				))}
-			</View>
+
+			<TagGroup tags={tags} onItemPress={handleTagPress} containerStyle={styles.tags} />
 		</Surface>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	listContainer: {
+		paddingHorizontal: 8,
+	},
+	headerContainer: {
+		paddingVertical: 4,
+	},
+	title: {
+		fontWeight: "bold",
+	},
+	description: {
+		marginVertical: 4,
+	},
+	date: {
+		fontSize: 12,
+		opacity: 0.6,
+		marginVertical: 2,
+	},
+	tags: {
+		marginBottom: 4,
+	},
+})

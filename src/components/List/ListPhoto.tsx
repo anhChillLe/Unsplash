@@ -4,7 +4,7 @@ import { PlaceHolderMode } from "../../constants/place_holder"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getImageUrl } from "../../ultilities/image_ulti"
 import { ActivityIndicator } from "react-native-paper"
-import { Photo } from "../../unsplash/models"
+import { Photo } from "../../service/unsplash/models"
 
 type Props = {
 	width: number

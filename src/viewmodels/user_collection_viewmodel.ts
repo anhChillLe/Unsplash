@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import unsplashService from "../service/unsplash"
+import unsplash from "../service/unsplash"
 import { Collection, User } from "../service/unsplash/models"
 
 export interface UserCollectionViewModel {
@@ -19,7 +19,7 @@ export function getUserCollectionViewmodel(user: User) {
 		if (isLoading) return
 
 		setLoading(true)
-		unsplashService.user
+		unsplash.user
 			.listCollection({
 				username: user.username,
 				page: page.current + 1,

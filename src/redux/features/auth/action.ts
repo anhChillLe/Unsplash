@@ -1,7 +1,7 @@
 import { ACCESS_KEY, SECRET_KEY } from "@env";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import * as Keychain from "react-native-keychain";
-import unsplashService from "../../../service/unsplash";
+import unsplash from "../../../service/unsplash";
 import { TokenExchangeParams } from "../../../service/unsplash/params/request_token_params";
 import { RootState } from "../../store/store";
 
@@ -37,7 +37,7 @@ const requestToken = createAsyncThunk<string | undefined, string, { state: RootS
 		};
 
 		try {
-			const data = await unsplashService.auth.requestToken(params);
+			const data = await unsplash.auth.requestToken(params);
 			Keychain.setGenericPassword("unsplash", data.access_token);
 			return data.access_token;
 		} catch (error) {

@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react"
 import { Platform, StatusBar, useColorScheme } from "react-native"
-import changeNavigationBarColor from "react-native-navigation-bar-color"
 import { Provider as PaperProvider } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Provider as ReduxProvider } from "react-redux"
@@ -15,7 +14,6 @@ export default function App(): ReactElement {
 
 	if (Platform.OS === "android") {
 		StatusBar.setBackgroundColor(theme.colors.elevation.level1)
-		changeNavigationBarColor(theme.colors.elevation.level1)
 	}
 	StatusBar.setBarStyle(isDarkMode ? "light-content" : "dark-content")
 

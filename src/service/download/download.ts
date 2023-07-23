@@ -19,22 +19,29 @@ export default abstract class DownloadService {
 		photo.links.download && Linking.openURL(photo.links.download + "&force=true")
 	}
 
+	/* 
+		Changing config need reinstall to working
+	*/
 	private static async download(url: string) {
 		const filename = new Date().getTime() + ".jpg"
 		const path = fs.dirs.LegacyPictureDir + "/ChillPaper/" + filename
-		const res = await config({ ...this.downloadConfig, path }).fetch("GET", url)
-		return res
-	}
 
-	private static downloadConfig: ReactNativeBlobUtilConfig = {
-		addAndroidDownloads: {
-			notification: true,
-			mediaScannable: true,
-			useDownloadManager: true,
-			title: "ChillPaper",
-			description: "Downloading image",
-		},
-		fileCache: true,
+		const downloadConfig : ReactNativeBlobUtilConfig = {
+			addAndroidDownloads: {
+				notification: true,
+				mediaScannable: true,
+				useDownloadManager: true,
+				title: "ChillPaper",
+				description: "Downloading image",
+				path,
+			},
+			fileCache: true,
+			path,
+		}
+
+		const res = await config(downloadConfig).fetch("GET", url)
+		console.log("Download successfull at: ", res.path())
+		return res
 	}
 }
 

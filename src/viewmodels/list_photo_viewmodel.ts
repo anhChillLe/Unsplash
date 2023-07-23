@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import unsplashService from "../service/unsplash"
+import unsplash from "../service/unsplash"
 import { OrderBy } from "../service/unsplash/constants/OrderBy"
 import { Photo } from "../service/unsplash/models"
 
@@ -17,7 +17,7 @@ export default function getListPhotoViewmodel(order: OrderBy): ListPhotoViewMmod
 	const getPhotos = () => {
 		if (isLoading) return
 		setLoading(true)
-		unsplashService.photo
+		unsplash.photo
 			.list({
 				page: page.current + 1,
 				per_page: 21,

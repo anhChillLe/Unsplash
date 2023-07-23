@@ -1,7 +1,6 @@
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import FastImage from "react-native-fast-image"
 import { Text, useTheme } from "react-native-paper"
-import { VeryBasic } from "unsplash-js/dist/methods/photos/types"
 import { Photo } from "../../service/unsplash/models"
 import { ReactElement } from "react"
 
@@ -43,7 +42,7 @@ function RenderGrid({ photos, space, onPress, mainAxis, containerStyle }: Render
 
 	if (data.length === 0) {
 		return (
-			<Pressable style={{ flex: 1, margin: space }}>
+			<Pressable style={{ flex: 1, margin: space }} onPress={onPress}>
 				<FastImage source={{ uri: photo.urls.regular }} style={[styles.item]} />
 				{onPress && <AllPhoto />}
 			</Pressable>
@@ -63,10 +62,12 @@ function RenderGrid({ photos, space, onPress, mainAxis, containerStyle }: Render
 }
 
 function AllPhoto() {
-	const colors = useTheme().colors
+	const theme = useTheme()
+	const backgroundColor = theme.colors.secondary
+	const color = theme.colors.onSecondary
 	return (
-		<View style={[styles.itemOverlay, { backgroundColor: colors.secondary }]}>
-			<Text variant="headlineSmall" style={{ fontWeight: "bold", color: colors.onSecondary }}>
+		<View style={[styles.itemOverlay, { backgroundColor }]}>
+			<Text variant="headlineSmall" style={[styles.itemOverlayLabel, { color }]}>
 				All photos
 			</Text>
 		</View>
@@ -89,5 +90,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		opacity: 0.6,
 		borderRadius: 4,
+	},
+	itemOverlayLabel: {
+		fontWeight: "bold",
 	},
 })

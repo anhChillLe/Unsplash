@@ -1,19 +1,12 @@
 import { NavigationContext } from "@react-navigation/native"
 import { useContext } from "react"
-import { ImageBackground, Platform, StatusBar, StyleSheet, View } from "react-native"
-import changeNavigationBarColor from "react-native-navigation-bar-color"
+import { ImageBackground, StyleSheet, View } from "react-native"
 import { Button, Text } from "react-native-paper"
 import { LoginWidthUnsplash } from "../../actions/link_actions"
 import { Images } from "../../assets/images"
 import { Icons } from "../../assets/images/icons"
 
 export default function LandingPage() {
-	if (Platform.OS === "android") {
-		StatusBar.setBackgroundColor("transparent")
-		StatusBar.setBarStyle("dark-content")
-		changeNavigationBarColor("transparent")
-	}
-
 	const navigation = useContext(NavigationContext)
 	const openApp = () => {
 		// navigation?.navigate(ScreenName.main)

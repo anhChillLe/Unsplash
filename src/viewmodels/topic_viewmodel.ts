@@ -1,5 +1,5 @@
 import { useRef, useState } from "react"
-import unsplashService from "../service/unsplash"
+import unsplash from "../service/unsplash"
 import { FullTopic, Photo } from "../service/unsplash/models"
 
 export interface TopicViewmodel {
@@ -21,7 +21,7 @@ export default function getTopicViewmodel(id_or_slug: string): TopicViewmodel {
 	const getTopic = () => {
 		if (isLoadingDetail) return
 		setLoadingDetail(true)
-		unsplashService.topic
+		unsplash.topic
 			.get(id_or_slug)
 			.then((data) => {
 				setDetail(data)
@@ -36,7 +36,7 @@ export default function getTopicViewmodel(id_or_slug: string): TopicViewmodel {
 	const getPhotos = () => {
 		if (isLoadingPhotos) return
 		setLoadingPhotos(true)
-		unsplashService.topic
+		unsplash.topic
 			.getPhotos({
 				id_or_slug,
 				page: page.current + 1,

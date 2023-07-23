@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import { Photo } from "../service/unsplash/models"
-import unsplashService from "../service/unsplash"
+import unsplash from "../service/unsplash"
 import { SearchPhotosParams } from "../service/unsplash/params/search_params"
 
 export interface SearchViewmodel {
@@ -21,7 +21,7 @@ export default function getSearchViewModel(searchInput: SearchPhotosParams): Sea
 		if (isLoading) return
 
 		setLoading(true)
-		unsplashService.search
+		unsplash.search
 			.photo({
 				...searchInput,
 				page: page.current + 1,

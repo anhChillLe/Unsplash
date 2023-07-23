@@ -1,5 +1,5 @@
 import { useState } from "react"
-import unsplashService from "../service/unsplash"
+import unsplash from "../service/unsplash"
 import { FullPhoto, Photo } from "../service/unsplash/models/Photo"
 
 export interface PhotoDetailViewModel {
@@ -16,7 +16,7 @@ export function getPhotoViewModel(photo: Photo) {
 
 	const getDetail = () => {
 		setLoading(true)
-		unsplashService.photo
+		unsplash.photo
 			.get(photo.id)
 			.then((data) => {
 				setFullPhoto(data)
@@ -36,7 +36,7 @@ export function getPhotoViewModel(photo: Photo) {
 		setLike(!liked_by_user)
 
 		if (!liked_by_user) {
-			unsplashService.photo
+			unsplash.photo
 				.like(photo.id)
 				.then((data) => {
 					if (data.photo.liked_by_user) return
@@ -46,7 +46,7 @@ export function getPhotoViewModel(photo: Photo) {
 					console.log("Like: ", error)
 				})
 		} else {
-			unsplashService.photo.unLike(photo.id).then((data) => {
+			unsplash.photo.unLike(photo.id).then((data) => {
 				if (!data.photo.liked_by_user) return
 				setLike(true)
 			})

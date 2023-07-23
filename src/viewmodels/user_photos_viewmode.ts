@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
-import unsplashService from "../unsplash"
-import { Photo } from "../unsplash/models/Photo"
-import { User } from "../unsplash/models/User"
+import unsplashService from "../service/unsplash"
+import { Photo } from "../service/unsplash/models/Photo"
+import { User } from "../service/unsplash/models/User"
 
 export interface UserPhotosViewModel {
 	isLoading: boolean

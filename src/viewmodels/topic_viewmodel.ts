@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import unsplashService from "../unsplash"
-import { FullTopic, Photo } from "../unsplash/models"
+import unsplashService from "../service/unsplash"
+import { FullTopic, Photo } from "../service/unsplash/models"
 
 export interface TopicViewmodel {
 	isLoadingDetail: boolean

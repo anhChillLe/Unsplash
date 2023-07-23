@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import unsplashService from "../../../unsplash"
-import { Collection } from "../../../unsplash/models"
+import unsplashService from "../../../service/unsplash"
+import { Collection } from "../../../service/unsplash/models"
 import { RootState } from "../../store/store"
 
 interface CollectionsState {

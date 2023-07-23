@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
-import unsplashService from "../unsplash"
-import { OrderBy } from "../unsplash/constants/OrderBy"
-import { Photo } from "../unsplash/models"
+import unsplashService from "../service/unsplash"
+import { OrderBy } from "../service/unsplash/constants/OrderBy"
+import { Photo } from "../service/unsplash/models"
 
 export interface ListPhotoViewMmodel {
 	isLoading: boolean

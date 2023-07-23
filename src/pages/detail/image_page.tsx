@@ -3,15 +3,15 @@ import React, { ReactElement, useContext, useEffect } from "react"
 import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
 import { Button, Chip, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { shareLink } from "../../actions/share_action"
 import { GroupHeading, ImageCard, ListAlbums, TagGroup, TextIcon, UserElement, VerticalDivider } from "../../components"
 import Stat from "../../components/Stats/Stat"
-import { ScreenName } from "../../navigations/screen_name"
+import { Screens } from "../../navigations/screen_name"
 import "../../ultilities/date_distance"
-import { FullPhoto, Photo } from "../../unsplash/models/Photo"
-import { BaseGroup, Tag } from "../../unsplash/models/base"
+import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
+import { BaseGroup, Tag } from "../../service/unsplash/models"
 import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
-import { downloadImage } from "../../actions/download"
+import DownloadService from "../../service/download/download"
+import ShareService from "../../service/sharing/share_action"
 
 export default function PageContainer({ photo }: { photo: Photo }) {
 	const viewModel = getPhotoViewModel(photo)
@@ -25,9 +25,9 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 
 	useEffect(getDetail, [])
 
-	const handleShare = () => shareLink(photo)
-	const handleDownload = () => downloadImage(photo)
-	const handleUserPress = () => navigation?.navigate(ScreenName.user, { username })
+	const handleShare = () => ShareService.sharePhotoLink(photo)
+	const handleDownload = () => DownloadService.downloadPhoto(photo)
+	const handleUserPress = () => navigation?.navigate(Screens.user, { username })
 
 	const {
 		user: { profile_image, username, name },
@@ -59,20 +59,14 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 				>
 					{likes}
 				</Button>
-				<Button
-					mode="outlined"
-					compact
-					icon="plus"
-					style={{ marginStart: 8 }}
-					textColor={theme.colors.onSurface}
-				>
+				<Button mode="outlined" compact icon="plus" style={styles.buttonAdd} textColor={theme.colors.onSurface}>
 					Add
 				</Button>
-				<View style={{ flex: 1 }} />
+				<View style={styles.fill} />
 				<Button
 					mode="outlined"
 					icon="arrow-down"
-					contentStyle={{ flexDirection: "row-reverse" }}
+					contentStyle={styles.buttonDownload}
 					textColor={theme.colors.onSurface}
 					onPress={handleDownload}
 				>
@@ -91,7 +85,7 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 			/>
 
 			<View style={styles.bottomButtonGroup}>
-				<Chip mode="outlined" icon="share" compact style={{ marginEnd: 8 }} onPress={handleShare}>
+				<Chip mode="outlined" icon="share" compact style={styles.buttonShare} onPress={handleShare}>
 					Share
 				</Chip>
 				<Chip mode="outlined" icon="chart-arc" compact>
@@ -110,6 +104,7 @@ function MoreInfo(fullPhoto: FullPhoto): ReactElement {
 
 	const {
 		exif: { make, model, exposure_time, aperture, focal_length, iso },
+		related_collections: { results },
 		likes,
 		downloads,
 		views,
@@ -121,14 +116,14 @@ function MoreInfo(fullPhoto: FullPhoto): ReactElement {
 
 	const handleTagPress = (tag: Tag) => {
 		if (tag.type === "search") {
-			navigation?.navigate(ScreenName.searchResult, {
+			navigation?.navigate(Screens.searchResult, {
 				searchInput: { query: tag.title },
 			})
 		}
 	}
 	const handleCollectionPress = (collection: BaseGroup) => {
 		navigation?.navigate({
-			name: ScreenName.collectionPhotos,
+			name: Screens.collectionPhotos,
 			key: collection.id,
 			params: { collection },
 			merge: false,
@@ -185,12 +180,12 @@ function MoreInfo(fullPhoto: FullPhoto): ReactElement {
 				)}
 			</View>
 
-			<TagGroup tags={tags} onItemPress={handleTagPress} />
+			<TagGroup tags={tags} onItemPress={handleTagPress} containerStyle={styles.tags} />
 
 			<GroupHeading containerStyle={styles.header}>Related collections</GroupHeading>
 
 			<ListAlbums
-				data={fullPhoto.related_collections.results}
+				data={results}
 				column={1}
 				space={8}
 				width={width - 16}
@@ -244,5 +239,20 @@ const styles = StyleSheet.create({
 	},
 	user: {
 		padding: 8,
+	},
+	tags: {
+		marginBottom: 4,
+	},
+	buttonAdd: {
+		marginStart: 8,
+	},
+	buttonShare: {
+		marginEnd: 8,
+	},
+	buttonDownload: {
+		flexDirection: "row-reverse",
+	},
+	fill: {
+		flex: 1,
 	},
 })

@@ -6,7 +6,7 @@ import {PropsWithChildren, useContext, useState} from 'react';
 import {Icons} from '../../assets/images/icons';
 import {LoginWidthUnsplash as Login} from '../../actions/link_actions';
 import {NavigationContext} from '@react-navigation/native';
-import {ScreenName} from '../../navigations/screen_name';
+import {Screens} from '../../navigations/screen_name';
 import { clearToken } from '../../redux/features/auth/action';
 
 export default function UserGroup() {
@@ -25,13 +25,11 @@ export default function UserGroup() {
     </Pressable>
   );
   const openUserProfile = () => {
-    navigation?.navigate(ScreenName.currentUser);
+    navigation?.navigate(Screens.currentUser);
     closeMenu();
   };
 
-  const logOut = () => {
-    dispatch(clearToken())
-  }
+  const logOut = () => dispatch(clearToken())
 
   return user ? (
     <View style={styles.container}>

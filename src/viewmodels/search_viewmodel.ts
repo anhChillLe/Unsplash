@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
-import { Photo } from "../unsplash/models"
-import unsplashService from "../unsplash"
-import { SearchPhotosParams } from "../unsplash/params/search_params"
+import { Photo } from "../service/unsplash/models"
+import unsplashService from "../service/unsplash"
+import { SearchPhotosParams } from "../service/unsplash/params/search_params"
 
 export interface SearchViewmodel {
 	isLoading: boolean

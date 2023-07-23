@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import unsplashService from "../../../unsplash"
-import { Photo } from "../../../unsplash/models"
+import unsplashService from "../../../service/unsplash"
+import { Photo } from "../../../service/unsplash/models"
 import { RootState } from "../../store/store"
 
 const getPopularPhotos = createAsyncThunk<Photo[], void, { state: RootState }>("getPopularPhotos", async () => {

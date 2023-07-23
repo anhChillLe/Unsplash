@@ -1,8 +1,8 @@
-import { useState } from "react"
-import { Dimensions, StyleProp, View, ViewStyle } from "react-native"
+import { ReactElement, useState } from "react"
+import { Dimensions, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { Card, useTheme } from "react-native-paper"
 import SkeletonPlaceholder from "react-native-skeleton-placeholder"
-import { Photo } from "../../unsplash/models/Photo"
+import { Photo } from "../../service/unsplash/models/Photo"
 import { Blurhash } from "react-native-blurhash"
 import FastImage from "react-native-fast-image"
 import { PlaceHolderMode } from "../../constants/place_holder"
@@ -31,7 +31,7 @@ export default function ImageCard({
 	mode = "outlined",
 	placeHolderMode = "none",
 	quality = "auto",
-}: Props) {
+}: Props): ReactElement {
 	const [isLoading, setLoading] = useState(true)
 	const startLoading = () => setLoading(true)
 	const endLoading = () => setLoading(false)
@@ -45,7 +45,7 @@ export default function ImageCard({
 
 	return (
 		<Card
-			style={[style, { overflow: "hidden" }]}
+			style={[styles.container, style]}
 			mode={mode}
 			theme={{
 				roundness,
@@ -82,3 +82,9 @@ export default function ImageCard({
 		</Card>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		overflow: "hidden",
+	},
+})

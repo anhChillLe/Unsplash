@@ -16,6 +16,7 @@ import StatGroup from "./Stats/StatGroup"
 import CollectionCard from "./Collection/Collection"
 import SocialGroup from "./Social/Social"
 import TextIcon from "./Info/TextIcon"
+import FilterCard from "./Filter/FilterCard"
 
 export {
 	HorizontalImageList,
@@ -35,5 +36,6 @@ export {
 	SingleTag,
 	CollectionCard,
 	SocialGroup,
-	TextIcon
+	TextIcon,
+	FilterCard,
 }

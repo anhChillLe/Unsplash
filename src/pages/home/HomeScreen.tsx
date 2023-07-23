@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { AppDispatch } from "../../redux/store/store"
 import React, { useContext, useEffect } from "react"
 import { NavigationContext } from "@react-navigation/native"
-import { ScreenName } from "../../navigations/screen_name"
+import { Screens } from "../../navigations/screen_name"
 import { fetchTopics } from "../../redux/features/topic/topics"
 import { fetchCollections } from "../../redux/features/collection/collections"
 import { getCurrentUser } from "../../redux/features/user/action"
@@ -38,7 +38,7 @@ export default function HomeScreen() {
 				<UserGroup />
 				<ViewOnlySearchBar
 					placeHolder="Search for image"
-					onPress={() => navigation?.navigate(ScreenName.search)}
+					onPress={() => navigation?.navigate(Screens.search)}
 				/>
 				<PhotoGroup />
 				<TopicGroup width={safeAreaWidth} />

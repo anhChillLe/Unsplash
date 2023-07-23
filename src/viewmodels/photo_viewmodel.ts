@@ -1,6 +1,6 @@
 import { useState } from "react"
-import unsplashService from "../unsplash"
-import { FullPhoto, Photo } from "../unsplash/models/Photo"
+import unsplashService from "../service/unsplash"
+import { FullPhoto, Photo } from "../service/unsplash/models/Photo"
 
 export interface PhotoDetailViewModel {
 	isLoading: boolean

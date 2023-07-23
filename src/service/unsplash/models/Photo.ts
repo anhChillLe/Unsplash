@@ -4,6 +4,8 @@ import { Exif, Links, Location, Meta, Tag, TopicSubmissions, Urls } from "./base
 
 export interface BasicPhoto {
 	id: string
+	width: number
+	height: number
 	urls: Urls
 }
 

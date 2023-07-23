@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import unsplashService from "../unsplash"
-import { Collection, User } from "../unsplash/models"
+import unsplashService from "../service/unsplash"
+import { Collection, User } from "../service/unsplash/models"
 
 export interface UserCollectionViewModel {
 	isLoading: boolean

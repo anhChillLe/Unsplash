@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
-import { FullCollection, Photo } from "../unsplash/models"
-import unsplashService from "../unsplash"
+import { FullCollection, Photo } from "../service/unsplash/models"
+import unsplashService from "../service/unsplash"
 
 export interface CollectionViewmodel {
 	isLoadingDetail: boolean

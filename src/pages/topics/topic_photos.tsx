@@ -1,13 +1,13 @@
 import { NavigationContext } from "@react-navigation/native"
 import React, { useContext, useEffect } from "react"
-import { Dimensions } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { Avatar, Chip, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListPhoto, LoadingScreen } from "../../components"
 import { TopicPhotosRoute } from "../../navigations/param_list"
-import { ScreenName } from "../../navigations/screen_name"
-import { FullTopic, User } from "../../unsplash/models"
+import { Screens } from "../../navigations/screen_name"
+import { FullTopic, User } from "../../service/unsplash/models"
 import "../../ultilities/date_distance"
 import getTopicViewmodel, { TopicViewmodel } from "../../viewmodels/topic_viewmodel"
 
@@ -17,7 +17,7 @@ export default function TopicPhotosContainer({ route }: TopicPhotosRoute) {
 }
 
 function TopicDetail({ photos, detail, getTopic, getPhotos }: TopicViewmodel) {
-	const width = Dimensions.get('window').width
+	const width = Dimensions.get("window").width
 	const { top } = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
 
@@ -28,41 +28,39 @@ function TopicDetail({ photos, detail, getTopic, getPhotos }: TopicViewmodel) {
 
 	if (!detail) return <LoadingScreen />
 	return (
-		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
 			<ListPhoto
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader topic={detail} />}
-				onItemPress={(photo, index) => navigation?.navigate(ScreenName.detail, { photo })}
+				header={<ListHeader {...detail} />}
+				onItemPress={(photo, index) => navigation?.navigate(Screens.detail, { photo })}
 				column={3}
 				itemThreshold={9}
 				onEndReached={getPhotos}
-				contentContainerStyle={{
-					paddingHorizontal: 8,
-				}}
+				contentContainerStyle={styles.listContainer}
 			/>
 		</Surface>
 	)
 }
 
-const ListHeader = ({ topic }: { topic: FullTopic }) => {
+const ListHeader = (topic: FullTopic) => {
 	const navigation = useContext(NavigationContext)
 	const { title, owners, description, total_photos } = topic
 
 	return (
-		<Surface mode="flat" style={{ paddingTop: 4, paddingBottom: 4 }}>
-			<Text variant="headlineLarge" numberOfLines={1} style={{ fontWeight: "bold" }}>
+		<Surface mode="flat" style={styles.headerContainer}>
+			<Text variant="headlineLarge" numberOfLines={1} style={styles.heading}>
 				{title}
 			</Text>
 
-			<ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 4 }}>
+			<ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.owners}>
 				{owners.map((user: User) => (
 					<Chip
 						key={user.id}
 						avatar={<Avatar.Image size={24} source={{ uri: user.profile_image.medium }} />}
-						onPress={() => navigation?.navigate(ScreenName.user, { username: user.username })}
+						onPress={() => navigation?.navigate(Screens.user, { username: user.username })}
 					>
 						{user.name}
 					</Chip>
@@ -70,14 +68,42 @@ const ListHeader = ({ topic }: { topic: FullTopic }) => {
 			</ScrollView>
 
 			{description && (
-				<Text variant="bodyMedium" style={{ marginTop: 4 }}>
+				<Text variant="bodyMedium" style={styles.description}>
 					{description.trim()}
 				</Text>
 			)}
 
-			<Text style={{ fontSize: 12, opacity: 0.6, marginTop: 4 }}>
+			<Text style={styles.subscription}>
 				{total_photos} photos · {topic.published_at.formatAsDate()}
 			</Text>
 		</Surface>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	headerContainer: {
+		paddingTop: 4,
+		paddingBottom: 4,
+	},
+	listContainer: {
+		paddingHorizontal: 8
+	},
+	heading: {
+		fontWeight: "bold",
+	},
+	owners: {
+		marginTop: 4,
+	},
+	description: {
+		marginTop: 4,
+	},
+	subscription: {
+		fontSize: 12,
+		opacity: 0.6,
+		marginTop: 4,
+	},
+})

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import unsplashService from "../../../unsplash"
-import { Topic } from "../../../unsplash/models"
+import unsplashService from "../../../service/unsplash"
+import { Topic } from "../../../service/unsplash/models"
 
 interface TopicsState {
 	isLoading: boolean

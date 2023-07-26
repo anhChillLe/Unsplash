@@ -1,5 +1,11 @@
 import * as Permission from 'react-native-permissions'
 
+/* Fix No Permission Handler Detected on IOS
+  npx react-native setup-ios-permissions && npx pod-install 
+  or yarn setup-permission
+  => clear DeliveredData (if needed) => run app
+*/
+
 async function requestToragePermissionAndroid() {
   const permission = Permission.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
   const isAvailable = await Permission.check(permission)

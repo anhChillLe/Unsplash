@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "connect":"adb connect 192.168.200.13",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
@@ -10,10 +11,12 @@
     "test": "jest",
     "release": "cd android && ./gradlew assembleRelease && cd app/build/outputs/apk/release && adb install app-release.apk",
     "build-release": "cd android && ./gradlew assembleRelease",
-    "install-release": "cd android/app/build/outputs/apk/release && adb install app-release.apk"
+    "install-release": "cd android/app/build/outputs/apk/release && adb install app-release.apk",
+    "setup-permission": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.0",
+    "@react-native-camera-roll/camera-roll": "^5.7.2",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/material-top-tabs": "^6.6.3",
     "@react-navigation/native": "^6.1.6",

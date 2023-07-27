@@ -5,6 +5,11 @@ export interface UserStatistics {
 	views: Statistic
 }
 
+interface Statistic {
+	total: number
+	historical: Historical
+}
+
 export interface Statistics {
 	id: string
 	slug: string
@@ -14,16 +19,11 @@ export interface Statistics {
 }
 
 interface Historical {
-	change: number
-	average: number | null
-	resolution: string
+	change?: number
+	average?: number
+	resolution: 'days'
 	quantity: number
 	values: Value[]
-}
-
-interface Statistic {
-	total: number
-	historical: Historical
 }
 
 interface Value {

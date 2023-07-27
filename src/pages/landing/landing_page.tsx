@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 	},
 	buttonLogin: {
-		paddingVertical: 8,
+		marginTop: 8,
 	},
 	buttonLabel: {
 		fontSize: 16,

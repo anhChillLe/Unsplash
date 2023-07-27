@@ -1,17 +1,19 @@
 import { NavigationContext } from "@react-navigation/native"
 import React, { ReactElement, useContext, useEffect } from "react"
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
+import { Dimensions, Platform, ScrollView, StyleSheet, View } from "react-native"
 import { Button, Chip, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { GroupHeading, ImageCard, ListAlbums, TagGroup, TextIcon, UserElement, VerticalDivider } from "../../components"
 import Stat from "../../components/Stats/Stat"
+import WallpaperManager from "../../modules/wallpaper/wallpaper"
 import { Screens } from "../../navigations/screen_name"
-import "../../ultilities/date_distance"
-import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
-import { BaseGroup, Tag } from "../../service/unsplash/models"
-import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
 import DownloadService from "../../service/download/download"
 import ShareService from "../../service/sharing/share_action"
+import { BaseGroup, Tag } from "../../service/unsplash/models"
+import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
+import "../../ultilities/date_distance"
+import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
+import { getImageUrl } from "../../ultilities/image_ulti"
 
 export default function PageContainer({ photo }: { photo: Photo }) {
 	const viewModel = getPhotoViewModel(photo)
@@ -26,8 +28,14 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 	useEffect(getDetail, [])
 
 	const handleShare = () => ShareService.sharePhotoLink(photo)
-	const handleDownload = () => DownloadService.downloadPhoto(photo)
+	const handleDownload = () =>
+		DownloadService.savePhoto(photo, (res) => {
+			const path = res.path()
+			WallpaperManager.setWallpaper(path)
+		})
 	const handleUserPress = () => navigation?.navigate(Screens.user, { username })
+	const handleWallpaperPress = () =>
+		WallpaperManager.setWallpaperFromStream(getImageUrl(photo.urls.raw, photo.width, photo.height))
 
 	const {
 		user: { profile_image, username, name },
@@ -55,9 +63,14 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 					icon={liked_by_user ? "heart" : "heart-outline"}
 					compact
 					textColor={liked_by_user ? theme.colors.primary : theme.colors.onSurface}
+					theme={{
+						colors: {
+							outline: liked_by_user ? theme.colors.primary : theme.colors.outline,
+						},
+					}}
 					onPress={like}
 				>
-					{likes}
+					{likes.shorten()}
 				</Button>
 				<Button mode="outlined" compact icon="plus" style={styles.buttonAdd} textColor={theme.colors.onSurface}>
 					Add
@@ -85,6 +98,20 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 			/>
 
 			<View style={styles.bottomButtonGroup}>
+				{Platform.OS === "android" && (
+					<>
+						<Chip
+							mode="outlined"
+							icon="wallpaper"
+							compact
+							style={styles.buttonShare}
+							onPress={handleWallpaperPress}
+						>
+							Set as wallpaper
+						</Chip>
+						<View style={{ flex: 1 }} />
+					</>
+				)}
 				<Chip mode="outlined" icon="share" compact style={styles.buttonShare} onPress={handleShare}>
 					Share
 				</Chip>
@@ -92,7 +119,6 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 					Stats
 				</Chip>
 			</View>
-
 			{fullPhoto && <MoreInfo {...fullPhoto} />}
 		</ScrollView>
 	)
@@ -210,7 +236,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-end",
 		justifyContent: "flex-end",
 		marginTop: 8,
-		marginEnd: 8,
+		marginHorizontal: 8,
 	},
 	topBottomGroup: {
 		flexDirection: "row",

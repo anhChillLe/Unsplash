@@ -1,7 +1,7 @@
 import { NavigationContext } from "@react-navigation/native"
 import React, { useContext, useEffect, useState } from "react"
 import { ScrollView, StyleSheet } from "react-native"
-import { Button, Surface, Text, useTheme } from "react-native-paper"
+import { Button, Chip, Surface, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
 import { UserRoute } from "../../navigations/param_list"
@@ -83,6 +83,8 @@ export default function UserPage({ route }: UserRoute) {
 					{...{ total_likes, total_photos, followers_count, downloads }}
 					containerStyle={styles.stats}
 				/>
+
+				<SingleTag onPress={() => navigation?.navigate(Screens.userStatistics, {user: profile})}>Open Stats</SingleTag>
 
 				<ImageGrid
 					photos={photos}

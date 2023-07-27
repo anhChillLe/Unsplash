@@ -19,7 +19,10 @@ const API = axios.create({
 		try {
 			return JSON.parse(data)
 		} catch (error) {
-			throw Error(`Parse data error: ${error}, data: ${data}`)
+			if(data === 'Rate Limit Exceeded')
+				throw Error(data)
+			else
+				throw Error(`Parse data error: ${error}, data: ${data}`)
 		}
 	},
 })
@@ -30,7 +33,7 @@ API.interceptors.request.use(
 		config.headers.Authorization = credential ? `Bearer ${credential.password}` : `Client-ID ${ACCESS_KEY}`
 		return config
 	},
-	(error: any) => {
+	(error) => {
 		console.log("request error: ", error)
 		Promise.reject(error)
 	}

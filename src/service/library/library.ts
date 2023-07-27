@@ -4,6 +4,9 @@ export default abstract class LibraryService {
 	static getAlbum() {
 		return CameraRoll.getAlbums()
 	}
+	static async savePhotoAndroid(path: string){
+		return await CameraRoll.save(path, this.options)
+	}
 	static async savePhotoIOS(url: string) {
 		return await CameraRoll.save(url, this.options)
 	}

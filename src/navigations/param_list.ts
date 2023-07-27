@@ -17,6 +17,9 @@ export type AppParamList = {
 	[Screens.currentUser]: undefined
 	[Screens.userCollections]: { user: User }
 	[Screens.userPhotos]: { user: User }
+	[Screens.detailPager]: {photos: Photo[]; initPosition?: number}
+	[Screens.editUserProfile]: undefined
+	[Screens.userStatistics]: {user: User}
 }
 
 export type AuthParamList = {
@@ -25,6 +28,7 @@ export type AuthParamList = {
 }
 
 export type DetailRoute = { route: RouteProp<AppParamList, Screens.detail> }
+export type DetailPagerRoute = {route: RouteProp<AppParamList, Screens.detailPager>}
 export type CollectionPhotosRoute = { route: RouteProp<AppParamList, Screens.collectionPhotos> }
 export type TopicPhotosRoute = { route: RouteProp<AppParamList, Screens.topicPhotos> }
 export type SearchRoute = { route: RouteProp<AppParamList, Screens.search> }
@@ -33,3 +37,4 @@ export type UserRoute = { route: RouteProp<AppParamList, Screens.user> }
 export type UserCollectionsRoute = { route: RouteProp<AppParamList, Screens.userCollections> }
 export type UserPhotosRoute = { route: RouteProp<AppParamList, Screens.userPhotos> }
 export type LoginResultRoute = { route: RouteProp<AuthParamList, Screens.loginResult> }
+export type UserStatisticsRoute = {route: RouteProp<AppParamList, Screens.userStatistics>}

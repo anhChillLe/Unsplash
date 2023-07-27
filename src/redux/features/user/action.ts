@@ -12,3 +12,11 @@ export const getCurrentUser = createAsyncThunk<FullUser | undefined, void, { sta
 		return useProfile;
 	}
 );
+
+export const updateCurrentUser = createAsyncThunk<FullUser | undefined, UpdateUserProfieParams, { state: RootState }>(
+	'updateUser',
+	async (params, thunkApi) => {
+		const result = await unsplash.current_user.update(params)
+		return result
+	}
+)

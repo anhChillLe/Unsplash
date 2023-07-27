@@ -3,15 +3,14 @@ import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useSelector } from "react-redux"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
-import { RootState } from "../../redux/store/store"
+import { RootState, useUserState } from "../../redux/store/store"
 import { useContext } from "react"
 import { NavigationContext } from "@react-navigation/native"
 import { Screens } from "../../navigations/screen_name"
 
 export default function CurrentUserPage() {
-	const inset = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
-	const profile = useSelector((state: RootState) => state.user.profile)
+	const {profile} = useUserState()
 	if (!profile) return <LoadingScreen />
 
 	const {
@@ -66,6 +65,7 @@ export default function CurrentUserPage() {
 						followers_count,
 						downloads,
 					}}
+					containerStyle={styles.stats}
 				/>
 
 				{photos.length > 0 && (

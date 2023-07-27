@@ -2,6 +2,7 @@ package com.bap.unsplash;
 
 import androidx.annotation.NonNull;
 
+import com.bap.unsplash.modules.WallpaperModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;

@@ -29,6 +29,10 @@ export default function UserGroup() {
     closeMenu();
   };
 
+  const openEdit = () => {
+    navigation?.navigate(Screens.editUserProfile)
+    closeMenu()
+  }
   const logOut = () => dispatch(clearToken())
 
   return user ? (
@@ -48,6 +52,7 @@ export default function UserGroup() {
         <Menu.Item
           leadingIcon="arrow-up-circle-outline"
           title="Update Profile"
+          onPress={openEdit}
         />
         <Menu.Item leadingIcon="chart-arc" title="Stats" />
         <Menu.Item leadingIcon="logout" title="Logout" onPress={logOut}/>

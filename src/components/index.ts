@@ -17,6 +17,7 @@ import CollectionCard from "./Collection/Collection"
 import SocialGroup from "./Social/Social"
 import TextIcon from "./Info/TextIcon"
 import FilterCard from "./Filter/FilterCard"
+import TextField from "./TextField/TextField"
 
 export {
 	HorizontalImageList,
@@ -38,4 +39,5 @@ export {
 	SocialGroup,
 	TextIcon,
 	FilterCard,
+	TextField,
 }

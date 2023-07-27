@@ -33,11 +33,22 @@ function CollectionPhotos({
 
 	if (!detail) return <LoadingScreen />
 
+	// const handleItemPress = (photo: Photo, index: number) =>
+	// 	navigation?.navigate({
+	// 		name: Screens.detail,
+	// 		key: photo.id,
+	// 		params: { photo },
+	// 		merge: true,
+	// 	})
+
 	const handleItemPress = (photo: Photo, index: number) =>
 		navigation?.navigate({
-			name: Screens.detail,
+			name: Screens.detailPager,
 			key: photo.id,
-			params: { photo },
+			params: {
+				photos: [photo],
+				initPosition: index,
+			},
 			merge: true,
 		})
 

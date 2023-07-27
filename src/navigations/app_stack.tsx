@@ -15,6 +15,9 @@ import UserPhotoPage from "../pages/user/user_photo"
 import { options } from "./options"
 import { AppParamList } from "./param_list"
 import { Screens } from "./screen_name"
+import DetailPagerScreen from "../pages/detail/detail_pager"
+import EditUserProfile from "../pages/user/edit_profile"
+import UserStatisticsScreen from "../pages/user/user_statistics"
 
 const Stack = createStackNavigator<AppParamList>()
 
@@ -23,6 +26,7 @@ export default function AppStack() {
 		<Stack.Navigator initialRouteName={Screens.home} screenOptions={options}>
 			<Stack.Screen name={Screens.home} component={HomeScreen} />
 			<Stack.Screen name={Screens.detail} component={DetailScreen} />
+			<Stack.Screen name={Screens.detailPager} component={DetailPagerScreen}/>
 			<Stack.Screen name={Screens.topics} component={TopicScreen} />
 			<Stack.Screen name={Screens.collections} component={CollectionScreen} />
 			<Stack.Screen name={Screens.allImage} component={TopNavigationListImage} />
@@ -34,6 +38,8 @@ export default function AppStack() {
 			<Stack.Screen name={Screens.currentUser} component={CurrentUserPage} />
 			<Stack.Screen name={Screens.userCollections} component={UserCollectionPage} />
 			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
+			<Stack.Screen name={Screens.editUserProfile} component={EditUserProfile}/>
+			<Stack.Screen name={Screens.userStatistics} component={UserStatisticsScreen}/>
 		</Stack.Navigator>
 	)
 }

@@ -1,6 +1,9 @@
 package com.bap.unsplash;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -11,7 +14,6 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
-
   private final ReactNativeHost mReactNativeHost =
       new DefaultReactNativeHost(this) {
         @Override
@@ -50,11 +52,25 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    createNotificationChanel();
     SoLoader.init(this, /* native exopackage */ false);
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+  }
+
+  private void createNotificationChanel(){
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+          NotificationChannel chanel = new NotificationChannel(
+                  getString(R.string.channel_download),
+                  "ChillPaper",
+                  NotificationManager.IMPORTANCE_DEFAULT
+          );
+          chanel.setSound(null, null);
+          NotificationManager manager = getSystemService(NotificationManager.class);
+          manager.createNotificationChannel(chanel);
+      }
   }
 }

@@ -4,6 +4,7 @@ import { RESULTS } from "react-native-permissions"
 import LibraryService from "../library/library"
 import { requestLibraryPermissionIOS, requestToragePermissionAndroid } from "../permission/permission"
 import { Photo } from "../unsplash/models"
+import WallpaperManager from "../../modules/wallpaper/wallpaper"
 const { config, fs } = ReactNativeBlobUtil
 
 /* Static function not suport hot reload */
@@ -15,17 +16,12 @@ export default class DownloadService {
 			const result = await requestToragePermissionAndroid()
 			if (result !== RESULTS.GRANTED) return
 			const res = await this.downloadAndroid(url)
-			// ReactNativeBlobUtil.fs.scanFile([{ path: res.path() }])
+			ReactNativeBlobUtil.fs.scanFile([{ path: res.path() }])
 			LibraryService.savePhotoAndroid(res.path())
 			onCompleted && onCompleted(res)
 		} else {
 			const result = await requestLibraryPermissionIOS()
 			if (result !== RESULTS.GRANTED) return
-			// const res = await this.downloadIOS(url)
-			// const destPath = fs.dirs.PictureDir + '/image.jpg';
-			// await fs.cp(res.path(), destPath);
-			// fs.scanFile([{ path: destPath }]);
-			// onCompleted && onCompleted(res)
 			const res = await LibraryService.savePhotoIOS(url)
 			console.log(res)
 		}

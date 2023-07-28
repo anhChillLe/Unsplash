@@ -164,7 +164,8 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 
-    implementation("androidx.core:core-splashscreen:1.0.0") // add this line
+    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation 'androidx.lifecycle:lifecycle-service:2.6.1'// add this line
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
@@ -181,3 +182,4 @@ dependencies {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'org.jetbrains.kotlin.android'

@@ -1,19 +1,29 @@
 import { NavigationContext } from "@react-navigation/native"
-import React, { ReactElement, useContext, useEffect } from "react"
+import React, { ReactElement, useContext, useEffect, useState } from "react"
 import { Dimensions, Platform, ScrollView, StyleSheet, View } from "react-native"
-import { Button, Chip, Text, useTheme } from "react-native-paper"
+import { Button, Chip, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { GroupHeading, ImageCard, ListAlbums, TagGroup, TextIcon, UserElement, VerticalDivider } from "../../components"
+import {
+	Chart,
+	GroupHeading,
+	ImageCard,
+	ListAlbums,
+	TagGroup,
+	TextIcon,
+	UserElement,
+	VerticalDivider,
+} from "../../components"
 import Stat from "../../components/Stats/Stat"
 import WallpaperManager from "../../modules/wallpaper/wallpaper"
 import { Screens } from "../../navigations/screen_name"
 import DownloadService from "../../service/download/download"
 import ShareService from "../../service/sharing/share_action"
-import { BaseGroup, Tag } from "../../service/unsplash/models"
+import { BaseGroup, Statistics, Tag } from "../../service/unsplash/models"
 import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
 import "../../ultilities/date_distance"
 import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
 import { getImageUrl } from "../../ultilities/image_ulti"
+import unsplash from "../../service/unsplash"
 
 export default function PageContainer({ photo }: { photo: Photo }) {
 	const viewModel = getPhotoViewModel(photo)
@@ -36,6 +46,7 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 	const handleUserPress = () => navigation?.navigate(Screens.user, { username })
 	const handleWallpaperPress = () =>
 		WallpaperManager.setWallpaperFromStream(getImageUrl(photo.urls.raw, photo.width, photo.height))
+	const handleStatsPress = () => {}
 
 	const {
 		user: { profile_image, username, name },
@@ -115,12 +126,61 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 				<Chip mode="outlined" icon="share" compact style={styles.buttonShare} onPress={handleShare}>
 					Share
 				</Chip>
-				<Chip mode="outlined" icon="chart-arc" compact>
-					Stats
-				</Chip>
+				<Stats id={photo.id} />
 			</View>
 			{fullPhoto && <MoreInfo {...fullPhoto} />}
 		</ScrollView>
+	)
+}
+
+const Stats = ({ id }: { id: string }) => {
+	const [visible, setVisible] = useState(false)
+	const [statistics, setStatistic] = useState<Statistics>()
+
+	const openStats = () => setVisible((visible) => true)
+	const closeStats = () => setVisible((visible) => false)
+
+	const getData = async () => {
+		if (!statistics) {
+			const data = await unsplash.photo.statistics(id)
+			setStatistic(data)
+		}
+	}
+
+	const ButtonStats = () => (
+		<Chip mode="outlined" icon="chart-arc" compact onPress={openStats}>
+			Stats
+		</Chip>
+	)
+
+	useEffect(() => {
+		getData()
+	}, [])
+
+	const totalDownload = statistics?.downloads.total
+	const averageDownload = statistics?.downloads.historical.average
+	const totalView = statistics?.views.total
+	const averageView = statistics?.views.historical.average
+	const downloads = statistics?.downloads.historical.values.map((it) => it.value) ?? []
+	const views = statistics?.views.historical.values.map((it) => it.value) ?? []
+	return (
+		<Menu
+			visible={visible}
+			anchor={<ButtonStats />}
+			onDismiss={closeStats}
+			anchorPosition="bottom"
+			style={{ marginTop: 8 }}
+			contentStyle={{ padding: 8, borderRadius: 8 }}
+		>
+			<View>
+				{totalDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total downloads: {totalDownload.shorten()}</Text>}
+				{averageDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageDownload.shorten()}</Text>}
+				<Chart data={downloads} width={240} height={90} style={{ marginTop: 16, marginBottom: 16 }} />
+				{totalView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total downloads: {totalView.shorten()}</Text>}
+				{averageView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageView.shorten()}</Text>}
+				<Chart data={views} width={240} height={90} style={{ marginTop: 16 }} />
+			</View>
+		</Menu>
 	)
 }
 

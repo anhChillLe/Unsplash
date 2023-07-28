@@ -25,7 +25,6 @@ import java.util.Date
 
 class WallpaperService : LifecycleService() {
     companion object {
-        const val ACTION_DOWNLOAD = "ACTION_DOWNLOAD"
         const val ACTION_SET_WALLPAPER = "ACTION_SET_WALLPAPER"
         const val ACTION_SET_WALLPAPER_FROM_STREAM = "ACTION_SET_WALLPAPER_FROM_STREAM"
     }
@@ -49,13 +48,6 @@ class WallpaperService : LifecycleService() {
         if (intent == null) return START_NOT_STICKY
 
         when (intent.action) {
-            ACTION_DOWNLOAD -> {
-                val url = intent.getStringExtra("url")
-                if (url != null) {
-                    download(url)
-                }
-            }
-
             ACTION_SET_WALLPAPER -> {
                 val path = intent.getStringExtra("path")
                 if (path != null) {
@@ -72,25 +64,6 @@ class WallpaperService : LifecycleService() {
         }
 
         return START_NOT_STICKY
-    }
-
-    private fun download(url: String) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            startForeground(1, notification)
-            val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            val uri = Uri.parse(url)
-            val request = DownloadManager.Request(uri)
-                .setDestinationInExternalFilesDir(
-                    this@WallpaperService,
-                    "Pictures",
-                    Date().time.toString()
-                )
-            val res = downloadManager.enqueue(request)
-
-            Log.d("DownloadResult", res.toString())
-
-            stopSelf()
-        }
     }
 
     private fun setWallpaper(path: String) {

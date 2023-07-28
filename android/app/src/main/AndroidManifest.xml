@@ -12,7 +12,7 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".MainApplication"
@@ -23,7 +23,10 @@
         android:roundIcon="@drawable/logo"
         android:theme="@style/BootTheme"
         tools:ignore="DataExtractionRules">
-
+        <service
+            android:name=".services.DownloadService"
+            android:enabled="true"
+            android:exported="true"/>
         <service
             android:name=".services.WallpaperService"
             android:enabled="true"

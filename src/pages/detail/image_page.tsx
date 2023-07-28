@@ -137,8 +137,8 @@ const Stats = ({ id }: { id: string }) => {
 	const [visible, setVisible] = useState(false)
 	const [statistics, setStatistic] = useState<Statistics>()
 
-	const openStats = () => setVisible((visible) => true)
-	const closeStats = () => setVisible((visible) => false)
+	const openStats = () => setVisible(true)
+	const closeStats = () => setVisible(false)
 
 	const getData = async () => {
 		if (!statistics) {
@@ -176,7 +176,7 @@ const Stats = ({ id }: { id: string }) => {
 				{totalDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total downloads: {totalDownload.shorten()}</Text>}
 				{averageDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageDownload.shorten()}</Text>}
 				<Chart data={downloads} width={240} height={90} style={{ marginTop: 16, marginBottom: 16 }} />
-				{totalView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total downloads: {totalView.shorten()}</Text>}
+				{totalView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total views: {totalView.shorten()}</Text>}
 				{averageView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageView.shorten()}</Text>}
 				<Chart data={views} width={240} height={90} style={{ marginTop: 16 }} />
 			</View>

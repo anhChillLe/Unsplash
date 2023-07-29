@@ -6,7 +6,7 @@ import * as Permission from 'react-native-permissions'
   => clear DeliveredData (if needed) => run app
 */
 
-async function requestToragePermissionAndroid() {
+async function requestStoragePermissionAndroid() {
   const permission = Permission.PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
   const status = await Permission.check(permission)
   if(status === Permission.RESULTS.GRANTED) return status
@@ -22,4 +22,4 @@ async function requestLibraryPermissionIOS() {
   return result
 }
 
-export {requestToragePermissionAndroid, requestLibraryPermissionIOS}
+export {requestStoragePermissionAndroid, requestLibraryPermissionIOS}

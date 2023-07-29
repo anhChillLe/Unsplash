@@ -38,5 +38,6 @@ const styles = StyleSheet.create({
 	},
 	photoListContainer: {
 		marginTop: 12,
+		paddingHorizontal: 16
 	},
 })

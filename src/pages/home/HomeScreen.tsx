@@ -1,29 +1,25 @@
-import { Dimensions, ScrollView } from "react-native"
-import { Surface } from "react-native-paper"
-import { useDispatch } from "react-redux"
-import { AppDispatch } from "../../redux/store/store"
-import React, { useContext, useEffect } from "react"
 import { NavigationContext } from "@react-navigation/native"
-import { Screens } from "../../navigations/screen_name"
-import { fetchTopics } from "../../redux/features/topic/topics"
-import { fetchCollections } from "../../redux/features/collection/collections"
-import { getCurrentUser } from "../../redux/features/user/action"
-import { container } from "../../assets/style"
-import PhotoGroup from "./PhotoGroup"
-import UserGroup from "./UserGroup"
-import TopicGroup from "./TopicGroup"
-import CollectionGroup from "./CollectionGroup"
+import React, { useContext, useEffect } from "react"
+import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
+import { Surface } from "react-native-paper"
+import { SafeAreaView } from "react-native-safe-area-context"
 import ViewOnlySearchBar from "../../components/Search/ViewOnlySeachBar"
-import { getAppPadding } from "../../assets/style/padding_ulti"
+import { Screens } from "../../navigations/screen_name"
+import { fetchCollections } from "../../redux/features/collection/collections"
 import getPopularPhotos from "../../redux/features/photo/action"
+import { fetchTopics } from "../../redux/features/topic/topics"
+import { getCurrentUser } from "../../redux/features/user/action"
+import { useAppDispatch } from "../../redux/store/store"
+import CollectionGroup from "./CollectionGroup"
+import PhotoGroup from "./PhotoGroup"
+import TopicGroup from "./TopicGroup"
+import UserGroup from "./UserGroup"
 
 export default function HomeScreen() {
 	const navigation = useContext(NavigationContext)
 	const { width } = Dimensions.get("window")
-	const dispatch = useDispatch<AppDispatch>()
-
-	const appPadding = getAppPadding()
-	const safeAreaWidth = width - appPadding.paddingLeft - appPadding.paddingRight
+	const dispatch = useAppDispatch()
+	const safeAreaWidth = width - 32
 
 	useEffect(() => {
 		dispatch(getPopularPhotos())
@@ -33,17 +29,39 @@ export default function HomeScreen() {
 	}, [])
 
 	return (
-		<Surface style={[container.page]}>
-			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ ...appPadding }}>
-				<UserGroup />
-				<ViewOnlySearchBar
-					placeHolder="Search for image"
-					onPress={() => navigation?.navigate(Screens.search)}
-				/>
-				<PhotoGroup />
-				<TopicGroup width={safeAreaWidth} />
-				<CollectionGroup width={safeAreaWidth} />
-			</ScrollView>
-		</Surface>
+		<SafeAreaView style={{flex: 1}}>
+			<Surface style={styles.container}>
+				<ScrollView showsVerticalScrollIndicator={false}>
+					
+					<View style={styles.groupContainer}>
+						<UserGroup />
+						<ViewOnlySearchBar
+							placeHolder="Search for image"
+							onPress={() => navigation?.navigate(Screens.search)}
+							value=""
+							style={{ width: "100%" }}
+						/>
+					</View>
+
+					<PhotoGroup style={styles.groupContainer} />
+
+					<View style={styles.groupContainer}>
+						<TopicGroup width={safeAreaWidth} />
+						<CollectionGroup width={safeAreaWidth} />
+					</View>
+				</ScrollView>
+			</Surface>
+		</SafeAreaView>
 	)
 }
+
+export const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	groupContainer: {
+		paddingHorizontal: 16,
+		width: "100%",
+	},
+})

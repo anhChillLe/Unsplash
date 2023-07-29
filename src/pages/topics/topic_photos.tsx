@@ -49,6 +49,9 @@ const ListHeader = (topic: FullTopic) => {
 	const navigation = useContext(NavigationContext)
 	const { title, owners, description, total_photos } = topic
 
+	  // Remove <p></p>
+		const cleanedText = description?.replace(/<p>.*?<\/p>/g, '')?.trim()
+
 	return (
 		<Surface mode="flat" style={styles.headerContainer}>
 			<Text variant="headlineLarge" numberOfLines={1} style={styles.heading}>
@@ -69,7 +72,7 @@ const ListHeader = (topic: FullTopic) => {
 
 			{description && (
 				<Text variant="bodyMedium" style={styles.description}>
-					{description.trim()}
+					{cleanedText}
 				</Text>
 			)}
 

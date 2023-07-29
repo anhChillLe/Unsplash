@@ -38,15 +38,9 @@ function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): Reac
 	useEffect(getDetail, [])
 
 	const handleShare = () => ShareService.sharePhotoLink(photo)
-	const handleDownload = () =>
-		DownloadService.savePhoto(photo, (res) => {
-			const path = res.path()
-			WallpaperManager.setWallpaper(path)
-		})
+	const handleDownload = () => DownloadService.savePhoto(photo)
 	const handleUserPress = () => navigation?.navigate(Screens.user, { username })
-	const handleWallpaperPress = () =>
-		WallpaperManager.setWallpaperFromStream(getImageUrl(photo.urls.raw, photo.width, photo.height))
-	const handleStatsPress = () => {}
+	const handleWallpaperPress = () => photo.links.download && WallpaperManager.setWallpaperFromStream(photo.links.download)
 
 	const {
 		user: { profile_image, username, name },

@@ -1,7 +1,7 @@
 import { NavigationContext } from "@react-navigation/native"
 import React, { useContext, useEffect, useState } from "react"
-import { ScrollView, StyleSheet } from "react-native"
-import { Button, Chip, Surface, Text, useTheme } from "react-native-paper"
+import { ScrollView, StyleSheet, View } from "react-native"
+import { Button, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
 import { UserRoute } from "../../navigations/param_list"
@@ -63,45 +63,47 @@ export default function UserPage({ route }: UserRoute) {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={styles.contentContainer}
 			>
-				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
+				<View style={styles.groupContainer}>
+					<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
-				{location && (
-					<SingleTag mode="outlined" icon="map-marker-outline" onPress={handleLocationPress}>
-						{location}
-					</SingleTag>
-				)}
+					{location && (
+						<SingleTag mode="outlined" icon="map-marker-outline" onPress={handleLocationPress}>
+							{location}
+						</SingleTag>
+					)}
+				</View>
 
 				<SocialGroup social={social} containerStyle={styles.social} />
 
-				{bio && (
-					<Text numberOfLines={4} ellipsizeMode="tail">
-						{bio}
-					</Text>
-				)}
+				<View style={styles.groupContainer}>
+					{bio && (
+						<Text ellipsizeMode="tail">
+							{bio}
+						</Text>
+					)}
 
-				<StatGroup
-					{...{ total_likes, total_photos, followers_count, downloads }}
-					containerStyle={styles.stats}
-				/>
+					<StatGroup
+						{...{ total_likes, total_photos, followers_count, downloads }}
+						containerStyle={styles.stats}
+					/>
 
-				<SingleTag onPress={() => navigation?.navigate(Screens.userStatistics, {user: profile})}>Open Stats</SingleTag>
+					<ImageGrid
+						photos={photos}
+						containerStyle={styles.grid}
+						space={2}
+						mainAxis="row"
+						onPress={handlePhotosPress}
+					/>
 
-				<ImageGrid
-					photos={photos}
-					containerStyle={styles.grid}
-					space={2}
-					mainAxis="column"
-					onPress={handlePhotosPress}
-				/>
-
-				<Button
-					mode="contained-tonal"
-					style={styles.button}
-					labelStyle={styles.buttonLabel}
-					onPress={handleCollectionPress}
-				>
-					{total_collections} collections
-				</Button>
+					<Button
+						mode="contained-tonal"
+						style={styles.button}
+						labelStyle={styles.buttonLabel}
+						onPress={handleCollectionPress}
+					>
+						{total_collections} collections
+					</Button>
+				</View>
 			</ScrollView>
 		</Surface>
 	)
@@ -112,8 +114,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: "100%",
 	},
+	groupContainer: {
+		paddingHorizontal: 16, width: "100%"
+	},
 	contentContainer: {
-		paddingHorizontal: 16,
 		paddingBottom: 16,
 		alignItems: "flex-start",
 	},
@@ -123,7 +127,6 @@ const styles = StyleSheet.create({
 		marginTop: 4,
 	},
 	button: {
-		width: "100%",
 		paddingVertical: 50,
 		marginTop: 16,
 	},
@@ -137,5 +140,6 @@ const styles = StyleSheet.create({
 	},
 	social: {
 		marginVertical: 12,
+		paddingHorizontal: 16,
 	},
 })

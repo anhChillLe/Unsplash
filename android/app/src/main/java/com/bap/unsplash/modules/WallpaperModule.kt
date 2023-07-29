@@ -1,5 +1,7 @@
 package com.bap.unsplash.modules
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import com.bap.unsplash.services.WallpaperService
 import com.facebook.react.bridge.ReactApplicationContext

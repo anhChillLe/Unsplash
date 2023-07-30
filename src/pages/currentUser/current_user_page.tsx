@@ -70,7 +70,12 @@ export default function CurrentUserPage() {
 						onPress={handlePhotosPress}
 					/>
 				)}
-				<Button mode="contained-tonal" style={styles.button} labelStyle={styles.buttonLabel}>
+				<Button
+					mode="contained-tonal"
+					style={styles.button}
+					labelStyle={styles.buttonLabel}
+					onPress={handleCollectionPress}
+				>
 					Your collection
 				</Button>
 			</ScrollView>

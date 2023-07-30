@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/native"
 import { Screens } from "./screen_name"
 import { SearchPhotosParams } from "../service/unsplash/params/search_params"
-import { Collection, Photo, Topic, User } from "../service/unsplash/models"
+import { BaseGroup, Collection, Photo, Topic, User } from "../service/unsplash/models"
 
 export type AppParamList = {
 	[Screens.home]: undefined
@@ -9,7 +9,7 @@ export type AppParamList = {
 	[Screens.topics]: undefined
 	[Screens.collections]: undefined
 	[Screens.allImage]: undefined
-	[Screens.collectionPhotos]: { collection: Collection }
+	[Screens.collectionPhotos]: { collection: BaseGroup }
 	[Screens.topicPhotos]: { id_or_slug: string }
 	[Screens.search]: { query?: string }
 	[Screens.searchResult]: { searchInput: SearchPhotosParams }
@@ -20,6 +20,7 @@ export type AppParamList = {
 	[Screens.detailPager]: {photos: Photo[]; initPosition?: number}
 	[Screens.editUserProfile]: undefined
 	[Screens.userStatistics]: {user: User}
+	[Screens.curentUserCollection]: undefined
 }
 
 export type AuthParamList = {

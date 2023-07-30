@@ -1,32 +1,25 @@
 import { NavigationContext } from "@react-navigation/native"
-import React, { useContext, useEffect } from "react"
+import React, { useContext } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { Avatar, Chip, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { BackAppBar, ListPhoto, LoadingScreen } from "../../components"
+import { BackAppBar, ListPhoto } from "../../components"
+import { useTopic, useTopicPhotos } from "../../hooks"
 import { TopicPhotosRoute } from "../../navigations/param_list"
 import { Screens } from "../../navigations/screen_name"
 import { FullTopic, User } from "../../service/unsplash/models"
 import "../../ultilities/date_distance"
-import getTopicViewmodel, { TopicViewmodel } from "../../viewmodels/topic_viewmodel"
 
-export default function TopicPhotosContainer({ route }: TopicPhotosRoute) {
-	const viewmodel = getTopicViewmodel(route.params.id_or_slug)
-	return <TopicDetail {...viewmodel} />
-}
-
-function TopicDetail({ photos, detail, getTopic, getPhotos }: TopicViewmodel) {
+export default function TopicDetail({ route }: TopicPhotosRoute) {
 	const width = Dimensions.get("window").width
+	const id_or_slug = route.params.id_or_slug
+
 	const { top } = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
+	const {topic} = useTopic(id_or_slug)
+	const {photos, loadMore} = useTopicPhotos(id_or_slug)
 
-	useEffect(() => {
-		getTopic()
-		getPhotos()
-	}, [])
-
-	if (!detail) return <LoadingScreen />
 	return (
 		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
@@ -34,11 +27,11 @@ function TopicDetail({ photos, detail, getTopic, getPhotos }: TopicViewmodel) {
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader {...detail} />}
+				header={topic && <ListHeader {...topic} />}
 				onItemPress={(photo, index) => navigation?.navigate(Screens.detail, { photo })}
 				column={3}
 				itemThreshold={9}
-				onEndReached={getPhotos}
+				onEndReached={loadMore}
 				contentContainerStyle={styles.listContainer}
 			/>
 		</Surface>

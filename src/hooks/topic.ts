@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react"
 import unsplash from "../service/unsplash"
-import { FullCollection } from "../service/unsplash/models"
+import { FullTopic } from "../service/unsplash/models"
 
-export default function useCollection(id: string) {
+export default function useTopic(id: string) {
 	const [isLoading, setLoading] = useState(false)
-	const [collection, setCollection] = useState<FullCollection>()
+	const [topic, setTopic] = useState<FullTopic>()
 	const isMounted = useRef(true)
 
-	const getCollection = () => {
+	const getTopic = () => {
 		if (isLoading) return
 		setLoading(true)
-		unsplash.collection
+		unsplash.topic
 			.get(id)
-			.then((data) => isMounted.current && setCollection(data))
-			.catch((error) => console.error("getCollection: ", error))
+			.then((data) => isMounted.current && setTopic(data))
+			.catch((error) => console.error("getTopic: ", error))
 			.finally(() => isMounted.current && setLoading(false))
 	}
 
@@ -25,11 +25,11 @@ export default function useCollection(id: string) {
 	}, [])
 
 	useEffect(() => {
-		getCollection()
+		getTopic()
 	}, [id])
 
 	return {
 		isLoading,
-		collection,
+		topic,
 	}
 }

@@ -14,28 +14,21 @@ import {
 	VerticalDivider,
 } from "../../components"
 import Stat from "../../components/Stats/Stat"
+import { usePhoto } from "../../hooks"
 import WallpaperManager from "../../modules/wallpaper/wallpaper"
 import { Screens } from "../../navigations/screen_name"
 import DownloadService from "../../service/download/download"
 import ShareService from "../../service/sharing/share_action"
+import unsplash from "../../service/unsplash"
 import { BaseGroup, Statistics, Tag } from "../../service/unsplash/models"
 import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
 import "../../ultilities/date_distance"
-import { PhotoDetailViewModel, getPhotoViewModel } from "../../viewmodels/photo_viewmodel"
-import { getImageUrl } from "../../ultilities/image_ulti"
-import unsplash from "../../service/unsplash"
 
-export default function PageContainer({ photo }: { photo: Photo }) {
-	const viewModel = getPhotoViewModel(photo)
-	return <Page {...viewModel} />
-}
-
-function Page({ photo, getDetail, fullPhoto, like }: PhotoDetailViewModel): ReactElement {
+export default function Page({ photo }: { photo: Photo }): ReactElement {
 	const navigation = useContext(NavigationContext)
 	const inset = useSafeAreaInsets()
 	const theme = useTheme()
-
-	useEffect(getDetail, [])
+	const { fullPhoto, like } = usePhoto(photo.id)
 
 	const handleShare = () => ShareService.sharePhotoLink(photo)
 	const handleDownload = () => DownloadService.savePhoto(photo)
@@ -155,8 +148,8 @@ const Stats = ({ id }: { id: string }) => {
 	const averageDownload = statistics?.downloads.historical.average
 	const totalView = statistics?.views.total
 	const averageView = statistics?.views.historical.average
-	const downloads = statistics?.downloads.historical.values.map((it) => it.value) ?? []
-	const views = statistics?.views.historical.values.map((it) => it.value) ?? []
+	const downloads = statistics?.downloads.historical.values.map(it => it.value) ?? []
+	const views = statistics?.views.historical.values.map(it => it.value) ?? []
 	return (
 		<Menu
 			visible={visible}
@@ -167,11 +160,27 @@ const Stats = ({ id }: { id: string }) => {
 			contentStyle={{ padding: 8, borderRadius: 8 }}
 		>
 			<View>
-				{totalDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total downloads: {totalDownload.shorten()}</Text>}
-				{averageDownload && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageDownload.shorten()}</Text>}
+				{totalDownload && (
+					<Text variant="bodyMedium" style={{ fontWeight: "600" }}>
+						Total downloads: {totalDownload.shorten()}
+					</Text>
+				)}
+				{averageDownload && (
+					<Text variant="bodyMedium" style={{ fontWeight: "600" }}>
+						Average: {averageDownload.shorten()}
+					</Text>
+				)}
 				<Chart data={downloads} width={240} height={90} style={{ marginTop: 16, marginBottom: 16 }} />
-				{totalView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Total views: {totalView.shorten()}</Text>}
-				{averageView && <Text variant="bodyMedium" style={{fontWeight: '600'}}>Average: {averageView.shorten()}</Text>}
+				{totalView && (
+					<Text variant="bodyMedium" style={{ fontWeight: "600" }}>
+						Total views: {totalView.shorten()}
+					</Text>
+				)}
+				{averageView && (
+					<Text variant="bodyMedium" style={{ fontWeight: "600" }}>
+						Average: {averageView.shorten()}
+					</Text>
+				)}
 				<Chart data={views} width={240} height={90} style={{ marginTop: 16 }} />
 			</View>
 		</Menu>

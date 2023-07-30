@@ -1,45 +1,21 @@
 import { NavigationContext } from "@react-navigation/native"
-import { useContext, useEffect } from "react"
-import { Dimensions, StyleSheet, View } from "react-native"
-import { Avatar, Chip, Surface, Text } from "react-native-paper"
+import { useContext } from "react"
+import { Dimensions, StyleSheet } from "react-native"
+import { Avatar, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { BackAppBar, ListPhoto, LoadingScreen, SingleTag, TagGroup } from "../../components"
+import { BackAppBar, ListPhoto, SingleTag, TagGroup } from "../../components"
+import { useCollection, useCollectionPhotos } from "../../hooks"
 import { CollectionPhotosRoute } from "../../navigations/param_list"
 import { Screens } from "../../navigations/screen_name"
 import { FullCollection, Photo, Tag } from "../../service/unsplash/models"
-import getCollectionViewmodel, { CollectionViewmodel } from "../../viewmodels/collection_viewmodel"
 
-export default function CollectionPhotosContainer({ route }: CollectionPhotosRoute) {
-	const viewModel = getCollectionViewmodel(route.params.collection.id)
-	return <CollectionPhotos {...viewModel} />
-}
-
-function CollectionPhotos({
-	isLoadingDetail,
-	isLoadingPhotos,
-	photos,
-	detail,
-	getCollection,
-	getPhotos,
-}: CollectionViewmodel) {
+export default function CollectionPhotos({ route }: CollectionPhotosRoute) {
 	const width = Dimensions.get("window").width
 	const { top, bottom } = useSafeAreaInsets()
 	const navigation = useContext(NavigationContext)
-
-	useEffect(() => {
-		getPhotos()
-		getCollection()
-	}, [])
-
-	if (!detail) return <LoadingScreen />
-
-	// const handleItemPress = (photo: Photo, index: number) =>
-	// 	navigation?.navigate({
-	// 		name: Screens.detail,
-	// 		key: photo.id,
-	// 		params: { photo },
-	// 		merge: true,
-	// 	})
+	const id = route.params.collection.id
+	const { photos, loadMore } = useCollectionPhotos(id)
+	const { collection } = useCollection(id)
 
 	const handleItemPress = (photo: Photo, index: number) =>
 		navigation?.navigate({
@@ -59,12 +35,13 @@ function CollectionPhotos({
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader {...detail} />}
+				header={collection && <ListHeader {...collection} />}
 				onItemPress={handleItemPress}
 				column={3}
 				itemThreshold={9}
-				onEndReached={getPhotos}
+				onEndReached={loadMore}
 				contentContainerStyle={styles.listContainer}
+				showLoadingFooter={(collection?.total_photos ?? 0) > photos.length}
 			/>
 		</Surface>
 	)

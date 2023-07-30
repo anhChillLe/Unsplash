@@ -1,35 +1,42 @@
-import { useState, useRef, useCallback, useEffect } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import unsplash from "../service/unsplash"
-import { User, Collection } from "../service/unsplash/models"
+import { Collection } from "../service/unsplash/models"
 
-export function useUserCollections(username: string) {
+export default function useUserCollections(username: string) {
 	const [isLoading, setLoading] = useState(false)
 	const [collections, setCollections] = useState<Collection[]>([])
 	const page = useRef(0)
+	const isMounted = useRef(true)
 
-	const listCollection = useCallback(() => {
+	const getCollections = useCallback(() => {
+		if(isLoading) return
+
 		setLoading(true)
 		unsplash.user
 			.listCollection({ username, page: page.current + 1, per_page: 10 })
-			.then((data) => {
+			.then(data => {
+				if(!isMounted.current) return
 				setCollections([...collections, ...data])
 				page.current += 1
 			})
-			.catch((error) => {
-				console.error("Get current user collections: ", error)
-			})
-			.finally(() => {
-				setLoading(false)
-			})
+			.catch(error => console.error("Get current user collections: ", error))
+			.finally(() => isMounted.current && setLoading(false))
 	}, [username])
 
 	useEffect(() => {
-		listCollection()
+		isMounted.current = true
+		return () => {
+			isMounted.current = false
+		}
+	}, [])
+
+	useEffect(() => {
+		getCollections()
 	}, [username])
 
 	return {
 		isLoading,
 		collections,
-		loadMore: listCollection,
+		loadMore: getCollections,
 	}
 }

@@ -2,7 +2,7 @@ import { NavigationContext } from "@react-navigation/native"
 import React, { useContext, useEffect } from "react"
 import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
 import { Surface } from "react-native-paper"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import ViewOnlySearchBar from "../../components/Search/ViewOnlySeachBar"
 import { Screens } from "../../navigations/screen_name"
 import { fetchCollections } from "../../redux/features/collection/collections"
@@ -18,6 +18,7 @@ import UserGroup from "./UserGroup"
 export default function HomeScreen() {
 	const navigation = useContext(NavigationContext)
 	const { width } = Dimensions.get("window")
+	const { top, bottom } = useSafeAreaInsets()
 	const dispatch = useAppDispatch()
 	const safeAreaWidth = width - 32
 
@@ -29,29 +30,26 @@ export default function HomeScreen() {
 	}, [])
 
 	return (
-		<SafeAreaView style={{flex: 1}}>
-			<Surface style={styles.container}>
-				<ScrollView showsVerticalScrollIndicator={false}>
-					
-					<View style={styles.groupContainer}>
-						<UserGroup />
-						<ViewOnlySearchBar
-							placeHolder="Search for image"
-							onPress={() => navigation?.navigate(Screens.search)}
-							value=""
-							style={{ width: "100%" }}
-						/>
-					</View>
+		<Surface style={[styles.container, { paddingTop: top}]}>
+			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: bottom }}>
+				<View style={styles.groupContainer}>
+					<UserGroup />
+					<ViewOnlySearchBar
+						placeHolder="Search for image"
+						onPress={() => navigation?.navigate(Screens.search)}
+						value=""
+						style={{ width: "100%" }}
+					/>
+				</View>
 
-					<PhotoGroup style={styles.groupContainer} />
+				<PhotoGroup style={styles.groupContainer} />
 
-					<View style={styles.groupContainer}>
-						<TopicGroup width={safeAreaWidth} />
-						<CollectionGroup width={safeAreaWidth} />
-					</View>
-				</ScrollView>
-			</Surface>
-		</SafeAreaView>
+				<View style={styles.groupContainer}>
+					<TopicGroup width={safeAreaWidth} />
+					<CollectionGroup width={safeAreaWidth} />
+				</View>
+			</ScrollView>
+		</Surface>
 	)
 }
 

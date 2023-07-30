@@ -30,11 +30,11 @@ const CollectionService = {
 		return response.data
 	},
 	create: async (params: CreateCollectionParams) => {
-		const response = await API.post(`/collections`, { params })
+		const response = await API.post<Collection>(`/collections`, { params })
 		return response.data
 	},
 	update: async (id: string, params: CreateCollectionParams) => {
-		const response = await API.put(`/collections/${id}`, { params })
+		const response = await API.put<Collection>(`/collections/${id}`, { params })
 		return response.data
 	},
 	delete: async (id: string) => {

@@ -1,12 +1,13 @@
+import { useLayoutEffect, useRef, useState } from "react"
+import PagerView from "react-native-pager-view"
 import { Surface } from "react-native-paper"
 import { BackAppBar } from "../../components"
-import PagerView from "react-native-pager-view"
+import { useDetailPagerRoute } from "../../navigations/hooks"
 import { Photo } from "../../service/unsplash/models"
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PageContainer from "./image_page"
-import { DetailPagerRoute } from "../../navigations/param_list"
 
-export default function DetailPagerScreen({ route }: DetailPagerRoute) {
+export default function DetailPagerScreen() {
+	const route = useDetailPagerRoute()
 	const { photos, initPosition = 0 } = route.params
 
 	const ref = useRef<PagerView>(null)

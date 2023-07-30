@@ -7,9 +7,10 @@ import { RootState, useUserState } from "../../redux/store/store"
 import { useContext } from "react"
 import { NavigationContext } from "@react-navigation/native"
 import { Screens } from "../../navigations/screen_name"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function CurrentUserPage() {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const { profile } = useUserState()
 	if (!profile) return <LoadingScreen />
 
@@ -27,9 +28,9 @@ export default function CurrentUserPage() {
 		social,
 	} = profile
 
-	const handleLocationPress = () => navigation?.navigate(Screens.searchResult, { searchInput: { query: location } })
-	const handlePhotosPress = () => navigation?.navigate(Screens.userPhotos, { user: profile })
-	const handleCollectionPress = () => navigation?.navigate(Screens.userCollections, { user: profile })
+	const handleLocationPress = () => location && navigation.navigate(Screens.searchResult, { searchInput: { query: location } })
+	const handlePhotosPress = () => navigation.navigate(Screens.userPhotos, { user: profile })
+	const handleCollectionPress = () => navigation.navigate(Screens.userCollections, { user: profile })
 
 	return (
 		<SafeAreaView style={styles.container}>

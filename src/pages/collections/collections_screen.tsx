@@ -8,10 +8,11 @@ import { fetchCollections } from "../../redux/features/collection/collections"
 import { useContext } from "react"
 import { NavigationContext } from "@react-navigation/native"
 import { Screens } from "../../navigations/screen_name"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function CollectionScreen() {
 	const state = useSelector((state: RootState) => state.collection)
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const width = Dimensions.get("window").width
 	const { top, bottom } = useSafeAreaInsets()
 	const safeAreaWidth = width - 32
@@ -33,7 +34,7 @@ export default function CollectionScreen() {
 				style={styles.list}
 				header={<Header />}
 				onEndReached={loadMore}
-				onItemPress={(collection) => navigation?.navigate(Screens.collectionPhotos, { collection })}
+				onItemPress={(collection) => navigation.navigate(Screens.collectionPhotos, { collection })}
 				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom + 16 }]}
 				isLoading={state.isLoading}
 				width={safeAreaWidth}

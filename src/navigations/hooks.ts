@@ -4,8 +4,6 @@ import { AppParamList, AuthParamList } from "./param_list"
 import { Screens } from "./screen_name"
 
 type AppNavigationProps = StackNavigationProp<AppParamList>
-type AppRouteProps = RouteProp<AppParamList>
-
 export const useAppNavigation = useNavigation<AppNavigationProps>
 
 type DetailRoute = RouteProp<AppParamList, Screens.detail>

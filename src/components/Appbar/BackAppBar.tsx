@@ -2,9 +2,10 @@ import { NavigationContext } from "@react-navigation/native"
 import { ReactElement, useContext } from "react"
 import { StyleSheet } from "react-native"
 import { Appbar } from "react-native-paper"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function BackAppBar() : ReactElement{
-	const navigation = useContext(NavigationContext)
+	const navigation =useAppNavigation()
 
 	return (
 		<Appbar
@@ -18,7 +19,7 @@ export default function BackAppBar() : ReactElement{
 			}}
 			style={styles.container}
 		>
-			<Appbar.BackAction onPress={navigation?.goBack} />
+			<Appbar.BackAction onPress={navigation.goBack} />
 		</Appbar>
 	)
 }

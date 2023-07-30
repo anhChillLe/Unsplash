@@ -6,17 +6,18 @@ import { Avatar, Chip, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListPhoto } from "../../components"
 import { useTopic, useTopicPhotos } from "../../hooks"
-import { TopicPhotosRoute } from "../../navigations/param_list"
+import { useAppNavigation, useTopicPhotosRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import { FullTopic, User } from "../../service/unsplash/models"
 import "../../ultilities/date_distance"
 
-export default function TopicDetail({ route }: TopicPhotosRoute) {
+export default function TopicDetail() {
+	const route = useTopicPhotosRoute()
 	const width = Dimensions.get("window").width
 	const id_or_slug = route.params.id_or_slug
 
 	const { top } = useSafeAreaInsets()
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const {topic} = useTopic(id_or_slug)
 	const {photos, loadMore} = useTopicPhotos(id_or_slug)
 
@@ -28,7 +29,7 @@ export default function TopicDetail({ route }: TopicPhotosRoute) {
 				space={4}
 				photos={photos}
 				header={topic && <ListHeader {...topic} />}
-				onItemPress={(photo, index) => navigation?.navigate(Screens.detail, { photo })}
+				onItemPress={(photo, index) => navigation.navigate(Screens.detail, { photo })}
 				column={3}
 				itemThreshold={9}
 				onEndReached={loadMore}
@@ -39,7 +40,7 @@ export default function TopicDetail({ route }: TopicPhotosRoute) {
 }
 
 const ListHeader = (topic: FullTopic) => {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const { title, owners, description, total_photos } = topic
 
 	  // Remove <p></p>
@@ -56,7 +57,7 @@ const ListHeader = (topic: FullTopic) => {
 					<Chip
 						key={user.id}
 						avatar={<Avatar.Image size={24} source={{ uri: user.profile_image.medium }} />}
-						onPress={() => navigation?.navigate(Screens.user, { username: user.username })}
+						onPress={() => navigation.navigate(Screens.user, { username: user.username })}
 					>
 						{user.name}
 					</Chip>

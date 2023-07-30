@@ -8,16 +8,17 @@ import { Screens } from "../../navigations/screen_name"
 import { useUserState } from "../../redux/store/store"
 import { BaseGroup } from "../../service/unsplash/models"
 import { useUserCollections } from "../../hooks"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function CurentUserCollection() {
 	const { width } = Dimensions.get("window")
 
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const { top, bottom } = useSafeAreaInsets()
 	const { profile } = useUserState()
 	if (!profile) return <LoadingScreen />
 	const { isLoading, collections, loadMore } = useUserCollections(profile.username)
-	const handleItemPress = () => navigation?.navigate(Screens.curentUserCollection)
+	const handleItemPress = () => navigation.navigate(Screens.curentUserCollection)
 
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>

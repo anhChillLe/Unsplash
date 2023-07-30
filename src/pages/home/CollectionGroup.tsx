@@ -6,12 +6,13 @@ import { GroupHeading, ListAlbums } from "../../components"
 import { Screens } from "../../navigations/screen_name"
 import { StyleSheet } from "react-native"
 import { BaseGroup } from "../../service/unsplash/models"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function CollectionGroup({ width }: { width: number }) {
 	const collectionsState = useSelector((state: RootState) => state.collection)
-	const navigation = useContext(NavigationContext)
-	const handleItemPress = (collection: BaseGroup) => navigation?.navigate(Screens.collectionPhotos, { collection })
-	const handleMorePress = () => navigation?.navigate(Screens.collections)
+	const navigation = useAppNavigation()
+	const handleItemPress = (collection: BaseGroup) => navigation.navigate(Screens.collectionPhotos, { collection })
+	const handleMorePress = () => navigation.navigate(Screens.collections)
 
 	return (
 		<>

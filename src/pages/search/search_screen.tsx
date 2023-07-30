@@ -12,17 +12,18 @@ import { Orientation } from "../../service/unsplash/constants/Orientation"
 import { Fillter } from "../../service/unsplash/params/search_params"
 import { FilterCard } from "../../components"
 import { colorValues, contentFilters, orderBys, orientations } from "../../service/unsplash/data"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function SearchScreen() {
 	const { top } = useSafeAreaInsets()
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const [searchValue, setSearchValue] = useState<string>("")
 	const filter = useRef<Fillter>({})
 	const searchRef = useRef<TextInput>(null)
 	const [flag, setFlag] = useState(false)
 
 	const handleSearchSubmit = async (query: string) => {
-		navigation?.navigate(Screens.searchResult, {
+		navigation.navigate(Screens.searchResult, {
 			searchInput: {
 				query,
 				...filter.current,

@@ -23,16 +23,17 @@ import unsplash from "../../service/unsplash"
 import { BaseGroup, Statistics, Tag } from "../../service/unsplash/models"
 import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
 import "../../ultilities/date_distance"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function Page({ photo }: { photo: Photo }): ReactElement {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const inset = useSafeAreaInsets()
 	const theme = useTheme()
 	const { fullPhoto, like } = usePhoto(photo.id)
 
 	const handleShare = () => ShareService.sharePhotoLink(photo)
 	const handleDownload = () => DownloadService.savePhoto(photo)
-	const handleUserPress = () => navigation?.navigate(Screens.user, { username })
+	const handleUserPress = () => navigation.navigate(Screens.user, { username })
 	const handleWallpaperPress = () => photo.links.download && WallpaperManager.setWallpaperFromStream(photo.links.download)
 
 	const {
@@ -189,7 +190,7 @@ const Stats = ({ id }: { id: string }) => {
 
 function MoreInfo(fullPhoto: FullPhoto): ReactElement {
 	const { width } = Dimensions.get("window")
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 
 	const {
 		exif: { make, model, exposure_time, aperture, focal_length, iso },
@@ -205,13 +206,13 @@ function MoreInfo(fullPhoto: FullPhoto): ReactElement {
 
 	const handleTagPress = (tag: Tag) => {
 		if (tag.type === "search") {
-			navigation?.navigate(Screens.searchResult, {
+			navigation.navigate(Screens.searchResult, {
 				searchInput: { query: tag.title },
 			})
 		}
 	}
 	const handleCollectionPress = (collection: BaseGroup) => {
-		navigation?.navigate({
+		navigation.navigate({
 			name: Screens.collectionPhotos,
 			key: collection.id,
 			params: { collection },

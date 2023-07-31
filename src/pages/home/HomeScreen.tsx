@@ -1,9 +1,9 @@
-import { NavigationContext } from "@react-navigation/native"
-import React, { useContext, useEffect } from "react"
+import React, { useEffect } from "react"
 import { Dimensions, ScrollView, StyleSheet, View } from "react-native"
 import { Surface } from "react-native-paper"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import ViewOnlySearchBar from "../../components/Search/ViewOnlySeachBar"
+import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import { fetchCollections } from "../../redux/features/collection/collections"
 import getPopularPhotos from "../../redux/features/photo/action"
@@ -16,7 +16,7 @@ import TopicGroup from "./TopicGroup"
 import UserGroup from "./UserGroup"
 
 export default function HomeScreen() {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const { width } = Dimensions.get("window")
 	const { top, bottom } = useSafeAreaInsets()
 	const dispatch = useAppDispatch()
@@ -36,7 +36,7 @@ export default function HomeScreen() {
 					<UserGroup />
 					<ViewOnlySearchBar
 						placeHolder="Search for image"
-						onPress={() => navigation?.navigate(Screens.search)}
+						onPress={() => navigation.navigate(Screens.search)}
 						value=""
 						style={{ width: "100%" }}
 					/>

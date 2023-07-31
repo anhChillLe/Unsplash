@@ -8,6 +8,7 @@ import { Screens } from "../../navigations/screen_name"
 import { useAppDispatch, useTopicState } from "../../redux/store/store"
 import { fetchTopics } from "../../redux/features/topic/topics"
 import { BaseGroup } from "../../service/unsplash/models"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function TopicScreen() {
 	const state = useTopicState()
@@ -15,10 +16,10 @@ export default function TopicScreen() {
 	const { top, bottom } = useSafeAreaInsets()
 	const width = Dimensions.get("window").width
 	const safeAreaWidth = width - 32
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 
 	const loadMore = () => dispatch(fetchTopics())
-	const handleItemPress = (topic: BaseGroup) => navigation?.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
+	const handleItemPress = (topic: BaseGroup) => navigation.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
 
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>

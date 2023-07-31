@@ -1,10 +1,11 @@
-import { FlatList, StyleProp, View, ViewStyle } from "react-native"
+import { FlatList, NativeScrollEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { ActivityIndicator, Text } from "react-native-paper"
 import ImageCard from "../ImageCard/ImageCard"
 import SkeletonPlaceholder from "react-native-skeleton-placeholder"
 import CollectionCard from "../Collection/Collection"
 import { BaseGroup } from "../../service/unsplash/models/base"
 import ImageGrid from "./ImageGrid"
+import { NativeSyntheticEvent } from "react-native"
 
 type Props = {
 	data: BaseGroup[]
@@ -22,6 +23,7 @@ type Props = {
 	contentContainerStyle?: StyleProp<ViewStyle>
 	style?: StyleProp<ViewStyle>
 	onEndReached?: () => void
+	onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
 
 function ListAlbums({
@@ -40,6 +42,7 @@ function ListAlbums({
 	onItemPress,
 	contentContainerStyle,
 	style,
+	onScroll = () => {}
 }: Props) {
 	const itemWidth = (width - (column - 1) * space) / column
 	const itemHeight = itemWidth / itemRatio
@@ -60,7 +63,7 @@ function ListAlbums({
 	function SkeletonList() {
 		return (
 			<SkeletonPlaceholder borderRadius={8}>
-				<SkeletonPlaceholder.Item style={[{ flexDirection: "row", flexWrap: "wrap" }, style]}>
+				<SkeletonPlaceholder.Item style={[styles.skeletionItem, style]}>
 					{[...Array(maxItems)].map((_, index) => {
 						const marginEnd = getItemMarginEnd(index)
 						const marginBottom = getItemMarginBottom(index)
@@ -88,7 +91,7 @@ function ListAlbums({
 				collection={item}
 				space={2}
 				imageStyle={{ width: itemWidth, height: itemHeight }}
-				containerStyle={{ marginEnd, marginBottom}}
+				containerStyle={{ marginEnd, marginBottom }}
 				onPress={onItemPress ? () => onItemPress(item) : undefined}
 			/>
 		)
@@ -120,6 +123,7 @@ function ListAlbums({
 	}
 
 	const RenderItem = itemMode === "single" ? Single : Group
+	const LoadingIndicator = showLoadingFooter ? <ActivityIndicator size="small" style={styles.indicator} /> : null
 
 	switch (mode) {
 		case "compact":
@@ -140,15 +144,24 @@ function ListAlbums({
 					onEndReached={onEndReached}
 					style={style}
 					ListHeaderComponent={header}
-					ListFooterComponent={
-						showLoadingFooter ? <ActivityIndicator size="small" style={{ margin: 8 }} /> : null
-					}
+					ListFooterComponent={LoadingIndicator}
 					contentContainerStyle={contentContainerStyle}
 					showsVerticalScrollIndicator={false}
 					keyExtractor={(item: BaseGroup, index: number) => item.id}
+					onScroll={onScroll}
 				/>
 			)
 	}
 }
 
 export default ListAlbums
+
+const styles = StyleSheet.create({
+	indicator: {
+		margin: 8,
+	},
+	skeletionItem: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
+})

@@ -6,12 +6,13 @@ import { GroupHeading, HorizontalImageList } from "../../components"
 import { Screens } from "../../navigations/screen_name"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { Photo } from "../../service/unsplash/models"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function PhotoGroup({ style }: { style?: StyleProp<ViewStyle> }) {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const photosState = useSelector((state: RootState) => state.photoPopular)
-	const handleMorePress = () => navigation?.navigate(Screens.allImage)
-	const handlePhotoPress = (photo: Photo) => navigation?.navigate(Screens.detail, { photo })
+	const handleMorePress = () => navigation.navigate(Screens.allImage)
+	const handlePhotoPress = (photo: Photo) => navigation.navigate(Screens.detail, { photo })
 
 	return (
 		<>

@@ -10,6 +10,8 @@ type Props = {
 
 export default function ViewOnlySearchBar({ placeHolder, onPress, ...props }: Props & SearchBarProps) {
 	return (
-		<Searchbar {...props} mode="bar" placeholder={placeHolder} editable={false} onPressIn={onPress} />
+		<Pressable onPressIn={onPress}>
+			<Searchbar {...props} mode="bar" placeholder={placeHolder} editable={false} onPressIn={onPress} />
+		</Pressable>
 	)
 }

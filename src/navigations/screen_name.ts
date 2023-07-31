@@ -24,4 +24,5 @@ export enum Screens {
 	editUserProfile = "editUserProfile",
 	userStatistics = "userStatistics",
 	photoStatistics = "photoStatistics",
+	curentUserCollection = "curentUserCollection",
 }

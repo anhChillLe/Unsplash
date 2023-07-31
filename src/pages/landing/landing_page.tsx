@@ -5,11 +5,12 @@ import { Button, Text } from "react-native-paper"
 import { LoginWidthUnsplash } from "../../actions/link_actions"
 import { Images } from "../../assets/images"
 import { Icons } from "../../assets/images/icons"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function LandingPage() {
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const openApp = () => {
-		// navigation?.navigate(ScreenName.main)
+		// navigation.navigate(ScreenName.main)
 	}
 
 	return (

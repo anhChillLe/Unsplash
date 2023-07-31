@@ -1,23 +1,24 @@
 import { NavigationContext } from "@react-navigation/native"
 import { useContext } from "react"
 import { Dimensions, StyleSheet } from "react-native"
-import { Surface } from "react-native-paper"
+import { AnimatedFAB, Surface } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListAlbums, LoadingScreen, UserElement } from "../../components"
-import { useUserCollections } from "../../hooks/user_collections"
 import { Screens } from "../../navigations/screen_name"
 import { useUserState } from "../../redux/store/store"
 import { BaseGroup } from "../../service/unsplash/models"
+import { useUserCollections } from "../../hooks"
+import { useAppNavigation } from "../../navigations/hooks"
 
-export default function UserCollection() {
-	const navigation = useContext(NavigationContext)
-	const width = Dimensions.get("window").width
+export default function CurentUserCollection() {
+	const { width } = Dimensions.get("window")
+
+	const navigation = useAppNavigation()
 	const { top, bottom } = useSafeAreaInsets()
-	const safeAreaWidth = width - 32
 	const { profile } = useUserState()
 	if (!profile) return <LoadingScreen />
 	const { isLoading, collections, loadMore } = useUserCollections(profile.username)
-	const handleItemPress = (collection: BaseGroup) => navigation?.navigate(Screens.collectionPhotos, { collection })
+	const handleItemPress = () => navigation.navigate(Screens.curentUserCollection)
 
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>
@@ -37,8 +38,15 @@ export default function UserCollection() {
 					paddingHorizontal: 16,
 				}}
 				isLoading={isLoading}
-				width={safeAreaWidth}
-				showLoadingFooter={true}
+				width={width - 32}
+				showLoadingFooter={profile.total_collections > collections.length}
+			/>
+			<AnimatedFAB
+				icon="add"
+				label="Create new collection"
+				extended={false}
+				animateFrom="right"
+				iconMode="static"
 			/>
 		</Surface>
 	)

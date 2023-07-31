@@ -4,14 +4,15 @@ import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
-import { UserRoute } from "../../navigations/param_list"
+import { useAppNavigation, useUserRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import unsplash from "../../service/unsplash"
 import { FullUser } from "../../service/unsplash/models"
 
-export default function UserPage({ route }: UserRoute) {
+export default function UserPage() {
+	const route = useUserRoute()
 	const inset = useSafeAreaInsets()
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 	const username = route.params.username
 
 	const [profile, setProfile] = useState<FullUser | undefined>()
@@ -42,9 +43,9 @@ export default function UserPage({ route }: UserRoute) {
 		// tags: {custom},
 	} = profile
 
-	const handleLocationPress = () => navigation?.navigate(Screens.searchResult, { searchInput: { query: location } })
-	const handlePhotosPress = () => navigation?.navigate(Screens.userPhotos, { user: profile })
-	const handleCollectionPress = () => navigation?.navigate(Screens.userCollections, { user: profile })
+	const handleLocationPress = () => navigation.navigate(Screens.searchResult, { searchInput: { query: location ?? ""} })
+	const handlePhotosPress = () => navigation.navigate(Screens.userPhotos, { user: profile })
+	const handleCollectionPress = () => navigation.navigate(Screens.userCollections, { user: profile })
 
 	return (
 		<Surface

@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactElement, useState } from "react"
+import { PropsWithChildren, ReactElement } from "react"
 import { StyleProp, ViewStyle } from "react-native"
 import { Chip } from "react-native-paper"
 

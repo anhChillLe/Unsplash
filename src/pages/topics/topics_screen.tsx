@@ -1,14 +1,12 @@
-import { NavigationContext } from "@react-navigation/native"
-import { useContext } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListAlbums } from "../../components"
-import { Screens } from "../../navigations/screen_name"
-import { useAppDispatch, useTopicState } from "../../redux/store/store"
-import { fetchTopics } from "../../redux/features/topic/topics"
-import { BaseGroup } from "../../service/unsplash/models"
 import { useAppNavigation } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { fetchTopics } from "../../redux/features/topic/topics"
+import { useAppDispatch, useTopicState } from "../../redux/store/store"
+import { BaseGroup } from "../../service/unsplash/models"
 
 export default function TopicScreen() {
 	const state = useTopicState()

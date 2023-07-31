@@ -1,5 +1,4 @@
-import { NavigationContext } from "@react-navigation/native"
-import React, { ReactElement, useContext, useEffect, useState } from "react"
+import React, { ReactElement, useEffect, useState } from "react"
 import { Dimensions, Platform, ScrollView, StyleSheet, View } from "react-native"
 import { Button, Chip, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -16,6 +15,7 @@ import {
 import Stat from "../../components/Stats/Stat"
 import { usePhoto } from "../../hooks"
 import WallpaperManager from "../../modules/wallpaper/wallpaper"
+import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import DownloadService from "../../service/download/download"
 import ShareService from "../../service/sharing/share_action"
@@ -23,7 +23,6 @@ import unsplash from "../../service/unsplash"
 import { BaseGroup, Statistics, Tag } from "../../service/unsplash/models"
 import { FullPhoto, Photo } from "../../service/unsplash/models/Photo"
 import "../../ultilities/date_distance"
-import { useAppNavigation } from "../../navigations/hooks"
 
 export default function Page({ photo }: { photo: Photo }): ReactElement {
 	const navigation = useAppNavigation()

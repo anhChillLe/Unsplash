@@ -1,13 +1,9 @@
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native"
-import { Button, Surface, Text } from "react-native-paper"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useSelector } from "react-redux"
+import { Button, Text } from "react-native-paper"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
-import { RootState, useUserState } from "../../redux/store/store"
-import { useContext } from "react"
-import { NavigationContext } from "@react-navigation/native"
-import { Screens } from "../../navigations/screen_name"
 import { useAppNavigation } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { useUserState } from "../../redux/store/store"
 
 export default function CurrentUserPage() {
 	const navigation = useAppNavigation()
@@ -30,7 +26,7 @@ export default function CurrentUserPage() {
 
 	const handleLocationPress = () => location && navigation.navigate(Screens.searchResult, { searchInput: { query: location } })
 	const handlePhotosPress = () => navigation.navigate(Screens.userPhotos, { user: profile })
-	const handleCollectionPress = () => navigation.navigate(Screens.userCollections, { user: profile })
+	const handleCollectionPress = () => {}
 
 	return (
 		<SafeAreaView style={styles.container}>

@@ -1,12 +1,10 @@
-import { useSelector } from "react-redux"
-import { RootState } from "../../redux/store/store"
-import { useContext } from "react"
-import { NavigationContext } from "@react-navigation/native"
-import { GroupHeading, ListAlbums } from "../../components"
-import { Screens } from "../../navigations/screen_name"
 import { StyleSheet } from "react-native"
-import { BaseGroup } from "../../service/unsplash/models"
+import { useSelector } from "react-redux"
+import { GroupHeading, ListAlbums } from "../../components"
 import { useAppNavigation } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { RootState } from "../../redux/store/store"
+import { BaseGroup } from "../../service/unsplash/models"
 
 export default function CollectionGroup({ width }: { width: number }) {
 	const collectionsState = useSelector((state: RootState) => state.collection)

@@ -1,5 +1,5 @@
-import { StyleProp, ViewStyle, View, StyleSheet } from "react-native"
-import { useTheme, Card, Divider } from "react-native-paper"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { Divider, useTheme } from "react-native-paper"
 
 type Props = {
 	data: number[]

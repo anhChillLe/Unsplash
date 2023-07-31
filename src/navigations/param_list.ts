@@ -19,7 +19,7 @@ export type AppParamList = {
 	[Screens.detailPager]: { photos: Photo[]; initPosition?: number }
 	[Screens.editUserProfile]: undefined
 	[Screens.userStatistics]: { user: User }
-	[Screens.curentUserCollection]: undefined
+	[Screens.createCollection]?: { collection: BaseGroup }
 }
 
 export type AuthParamList = {

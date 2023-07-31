@@ -1,11 +1,10 @@
-import { useEffect } from "react"
 import { Dimensions, View } from "react-native"
 import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListPhoto, UserElement } from "../../components"
+import { useUserPhotos } from "../../hooks"
 import { useAppNavigation, useUserPhotosRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
-import { useUserPhotos } from "../../hooks"
 
 export default function UserPhotos() {
 	const { width } = Dimensions.get("window")

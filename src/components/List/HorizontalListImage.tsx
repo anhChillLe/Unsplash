@@ -1,9 +1,8 @@
-import { ScrollView, Share, View } from "react-native"
-import { StyleProp, ViewStyle } from "react-native"
-import { ImageCard } from ".."
-import SkeletonPlaceholder from "react-native-skeleton-placeholder"
-import { Photo } from "../../service/unsplash/models/Photo"
 import { ReactElement } from "react"
+import { ScrollView, StyleProp, ViewStyle } from "react-native"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
+import { ImageCard } from ".."
+import { Photo } from "../../service/unsplash/models/Photo"
 
 export interface Props {
 	data: Photo[]

@@ -1,5 +1,4 @@
-import { NavigationContext } from "@react-navigation/native"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"

@@ -3,7 +3,7 @@ import { BaseGroup, Links, Meta, Tag } from "./base"
 
 export interface Collection  extends BaseGroup{
   published_at: string
-  last_collected_at: string
+  last_collected_at: string | null
   updated_at: string
   curated: boolean
   featured: boolean

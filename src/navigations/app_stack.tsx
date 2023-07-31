@@ -18,7 +18,6 @@ import { Screens } from "./screen_name"
 import DetailPagerScreen from "../pages/detail/detail_pager"
 import EditUserProfile from "../pages/currentUser/edit_profile"
 import UserStatisticsScreen from "../pages/user/user_statistics"
-import CurentUserCollection from "../pages/currentUser/current_user_collection"
 
 const Stack = createStackNavigator<AppParamList>()
 
@@ -41,7 +40,6 @@ export default function AppStack() {
 			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
 			<Stack.Screen name={Screens.editUserProfile} component={EditUserProfile}/>
 			<Stack.Screen name={Screens.userStatistics} component={UserStatisticsScreen}/>
-			<Stack.Screen name={Screens.curentUserCollection} component={CurentUserCollection}/>
 		</Stack.Navigator>
 	)
 }

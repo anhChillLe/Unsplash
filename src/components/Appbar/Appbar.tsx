@@ -1,5 +1,4 @@
-import { NavigationContext } from "@react-navigation/native"
-import { ReactElement, useContext } from "react"
+import { ReactElement } from "react"
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { IconButton, Text } from "react-native-paper"
 import { useAppNavigation } from "../../navigations/hooks"

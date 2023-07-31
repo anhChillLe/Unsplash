@@ -1,19 +1,20 @@
-import { PropsWithChildren, ReactElement } from "react"
-import { Pressable, StyleProp, View, ViewStyle } from "react-native"
-import { Text, useTheme } from "react-native-paper"
+import { ReactElement } from "react"
+import { Pressable, StyleProp, ViewStyle } from "react-native"
+import { Text, TextProps, useTheme } from "react-native-paper"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
-type Props = PropsWithChildren<{
+type Props = {
 	style?: StyleProp<ViewStyle>
 	icon: string
-}>
-export default function TextIcon({ style, icon, children }: Props): ReactElement {
+	iconSize?: number
+} & TextProps<never>
+export default function TextIcon({ style, icon, iconSize = 20, ...props }: Props): ReactElement {
 	const theme = useTheme()
 
 	return (
-		<Pressable style={[{ flexDirection: "row", alignItems: 'center' }, style]}>
-			<Icon size={20} name={icon} color={theme.colors.onSurface}/>
-			<Text style={{marginStart: 8}}>{children}</Text>
+		<Pressable style={[{ flexDirection: "row", alignItems: "center" }, style]}>
+			<Icon size={iconSize} name={icon} color={theme.colors.onSurface} />
+			<Text style={{ marginStart: 8 }} {...props} />
 		</Pressable>
 	)
 }

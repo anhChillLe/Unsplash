@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native"
 import { Surface } from "react-native-paper"
-import { ListPhoto, LoadingScreen } from "../../components"
+import { ListPhoto } from "../../components"
 import { useListPhoto } from "../../hooks"
 import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"

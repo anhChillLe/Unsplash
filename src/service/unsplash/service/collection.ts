@@ -26,15 +26,15 @@ const CollectionService = {
 		return response.data
 	},
 	getRelated: async (id: string) => {
-		const response = await API.get<Collection[]>(`/collections/${id}//related`)
+		const response = await API.get<Collection[]>(`/collections/${id}/related`)
 		return response.data
 	},
 	create: async (params: CreateCollectionParams) => {
-		const response = await API.post<Collection>(`/collections`, { params })
+		const response = await API.post<Collection>(`/collections`, undefined,  { params })
 		return response.data
 	},
 	update: async (id: string, params: CreateCollectionParams) => {
-		const response = await API.put<Collection>(`/collections/${id}`, { params })
+		const response = await API.put<Collection>(`/collections/${id}`, undefined, { params })
 		return response.data
 	},
 	delete: async (id: string) => {
@@ -43,7 +43,7 @@ const CollectionService = {
 	},
 	addPhoto: async (input: AddPhotoToCollectionParams) => {
 		const { collection_id, ...params } = input
-		const response = await API.post(`/collections/${collection_id}/add`, { params })
+		const response = await API.post(`/collections/${collection_id}/add`, undefined, { params })
 		return response.data
 	},
 	removePhoto: async (input: RemovePhotoToCollectionParams) => {

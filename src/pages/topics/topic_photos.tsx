@@ -1,5 +1,4 @@
-import { NavigationContext } from "@react-navigation/native"
-import React, { useContext } from "react"
+import React from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { Avatar, Chip, Surface, Text } from "react-native-paper"

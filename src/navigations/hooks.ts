@@ -17,6 +17,7 @@ type UserCollectionsRoute = RouteProp<AppParamList, Screens.userCollections>
 type UserPhotosRoute = RouteProp<AppParamList, Screens.userPhotos>
 type LoginResultRoute = RouteProp<AuthParamList, Screens.loginResult>
 type UserStatisticsRoute = RouteProp<AppParamList, Screens.userStatistics>
+type CreateCollectionRoute = RouteProp<AppParamList, Screens.createCollection>
 
 export const useDetaiRoute = useRoute<DetailRoute>
 export const useDetailPagerRoute = useRoute<DetailPagerRoute>
@@ -29,3 +30,4 @@ export const useUserCollectionsRoute = useRoute<UserCollectionsRoute>
 export const useUserPhotosRoute = useRoute<UserPhotosRoute>
 export const useLoginResultRoute = useRoute<LoginResultRoute>
 export const useUserStatisticsRoute = useRoute<UserStatisticsRoute>
+export const useCreateCollectionRoute = useRoute<CreateCollectionRoute>

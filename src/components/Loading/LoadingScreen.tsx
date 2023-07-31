@@ -1,7 +1,5 @@
-import { ActivityIndicator, Surface } from "react-native-paper";
-import BackAppBar from "../Appbar/BackAppBar";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
+import { ActivityIndicator, Surface } from "react-native-paper";
 
 export default function LoadingScreen() {
 	return (

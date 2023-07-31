@@ -1,11 +1,9 @@
-import { FlatList, NativeScrollEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { ActivityIndicator, Text } from "react-native-paper"
-import ImageCard from "../ImageCard/ImageCard"
 import SkeletonPlaceholder from "react-native-skeleton-placeholder"
-import CollectionCard from "../Collection/Collection"
 import { BaseGroup } from "../../service/unsplash/models/base"
-import ImageGrid from "./ImageGrid"
-import { NativeSyntheticEvent } from "react-native"
+import CollectionCard from "../Collection/Collection"
+import ImageCard from "../ImageCard/ImageCard"
 
 type Props = {
 	data: BaseGroup[]

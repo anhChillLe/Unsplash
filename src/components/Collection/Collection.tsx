@@ -1,7 +1,8 @@
 import { ReactElement } from "react"
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
-import { Text } from "react-native-paper"
+import { Card, Text } from "react-native-paper"
 import { BaseGroup } from "../../service/unsplash/models/base"
+import TextIcon from "../Info/TextIcon"
 import ImageGrid from "../List/ImageGrid"
 
 type Props = {
@@ -23,7 +24,19 @@ export default function CollectionCard({
 
 	return (
 		<View style={containerStyle}>
-			<ImageGrid photos={photos} containerStyle={imageStyle} space={space} onPress={onPress} />
+			{photos.length > 0 ? (
+				<ImageGrid photos={photos} containerStyle={imageStyle} space={space} onPress={onPress} />
+			) : (
+				<Card
+					mode="contained"
+					style={[{ alignItems: "center", justifyContent: "center" }, imageStyle]}
+					onPress={onPress}
+				>
+					<TextIcon icon="plus" iconSize={24} variant="titleLarge">
+						Empty collection
+					</TextIcon>
+				</Card>
+			)}
 			<Text variant="titleMedium" numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
 				{collection.title}
 			</Text>

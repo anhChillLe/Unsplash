@@ -1,5 +1,3 @@
-import { NavigationContext } from "@react-navigation/native"
-import { useContext } from "react"
 import { ImageBackground, StyleSheet, View } from "react-native"
 import { Button, Text } from "react-native-paper"
 import { LoginWidthUnsplash } from "../../actions/link_actions"

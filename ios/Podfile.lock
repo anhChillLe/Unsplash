@@ -340,9 +340,6 @@ PODS:
   - React-jsinspector (0.71.11)
   - React-logger (0.71.11):
     - glog
-  - react-native-blob-util (0.18.4):
-    - RCT-Folly (= 2021.07.22.00)
-    - React-Core
   - react-native-blurhash (1.1.10):
     - React-Core
   - react-native-cameraroll (5.7.2):
@@ -514,7 +511,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-blurhash (from `../node_modules/react-native-blurhash`)
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -607,8 +603,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-blob-util:
-    :path: "../node_modules/react-native-blob-util"
   react-native-blurhash:
     :path: "../node_modules/react-native-blurhash"
   react-native-cameraroll:
@@ -700,7 +694,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 18b5b33c5f2687a784a61bc8176611b73524ae77
   React-jsinspector: b6ed4cb3ffa27a041cd440300503dc512b761450
   React-logger: 186dd536128ae5924bc38ed70932c00aa740cd5b
-  react-native-blob-util: 9d189661513d633317c65022ab69792b20ff3c9f
   react-native-blurhash: add4df9a937b4e021a24bc67a0714f13e0bd40b7
   react-native-cameraroll: 134805127580aed23403b8c2cb1548920dd77b3a
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df

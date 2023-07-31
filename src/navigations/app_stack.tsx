@@ -8,7 +8,7 @@ import SearchResultScreen from "../pages/search/search_result"
 import SearchScreen from "../pages/search/search_screen"
 import TopicDetail from "../pages/topics/topic_photos"
 import TopicScreen from "../pages/topics/topics_screen"
-import CurrentUserPage from "../pages/user/current_user_page"
+import CurrentUserPage from "../pages/currentUser/current_user_page"
 import UserCollectionPage from "../pages/user/user_collection"
 import UserPage from "../pages/user/user_page"
 import UserPhotoPage from "../pages/user/user_photo"
@@ -16,8 +16,9 @@ import { options } from "./options"
 import { AppParamList } from "./param_list"
 import { Screens } from "./screen_name"
 import DetailPagerScreen from "../pages/detail/detail_pager"
-import EditUserProfile from "../pages/user/edit_profile"
+import EditUserProfile from "../pages/currentUser/edit_profile"
 import UserStatisticsScreen from "../pages/user/user_statistics"
+import CurentUserCollection from "../pages/currentUser/current_user_collection"
 
 const Stack = createStackNavigator<AppParamList>()
 
@@ -40,6 +41,7 @@ export default function AppStack() {
 			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
 			<Stack.Screen name={Screens.editUserProfile} component={EditUserProfile}/>
 			<Stack.Screen name={Screens.userStatistics} component={UserStatisticsScreen}/>
+			<Stack.Screen name={Screens.curentUserCollection} component={CurentUserCollection}/>
 		</Stack.Navigator>
 	)
 }

@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native"
-import { Surface, Text } from "react-native-paper"
+import { Button, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useSelector } from "react-redux"
 import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components"
@@ -7,10 +7,11 @@ import { RootState, useUserState } from "../../redux/store/store"
 import { useContext } from "react"
 import { NavigationContext } from "@react-navigation/native"
 import { Screens } from "../../navigations/screen_name"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function CurrentUserPage() {
-	const navigation = useContext(NavigationContext)
-	const {profile} = useUserState()
+	const navigation = useAppNavigation()
+	const { profile } = useUserState()
 	if (!profile) return <LoadingScreen />
 
 	const {
@@ -27,25 +28,18 @@ export default function CurrentUserPage() {
 		social,
 	} = profile
 
-	const handleLocationPress = () => navigation?.navigate(Screens.searchResult, { searchInput: { query: location } })
-	const handlePhotosPress = () => navigation?.navigate(Screens.userPhotos, { user: profile })
-	const handleCollectionPress = () => navigation?.navigate(Screens.userCollections, { user: profile })
+	const handleLocationPress = () => location && navigation.navigate(Screens.searchResult, { searchInput: { query: location } })
+	const handlePhotosPress = () => navigation.navigate(Screens.userPhotos, { user: profile })
+	const handleCollectionPress = () => navigation.navigate(Screens.userCollections, { user: profile })
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<BackAppBar />
-			<ScrollView
-				style={styles.container}
-				contentContainerStyle={styles.contentContainer}
-			>
+			<ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
 				{location && (
-					<SingleTag
-						mode="outlined"
-						icon="map-marker-outline"
-						onPress={handleLocationPress}
-					>
+					<SingleTag mode="outlined" icon="map-marker-outline" onPress={handleLocationPress}>
 						{location}
 					</SingleTag>
 				)}
@@ -77,6 +71,14 @@ export default function CurrentUserPage() {
 						onPress={handlePhotosPress}
 					/>
 				)}
+				<Button
+					mode="contained-tonal"
+					style={styles.button}
+					labelStyle={styles.buttonLabel}
+					onPress={handleCollectionPress}
+				>
+					Your collection
+				</Button>
 			</ScrollView>
 		</SafeAreaView>
 	)
@@ -98,12 +100,12 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		width: "100%",
-		paddingVertical: 50,
+		paddingVertical: 16,
 		marginTop: 16,
 	},
 	buttonLabel: {
-		fontSize: 32,
-		padding: 12,
+		fontSize: 24,
+		padding: 8,
 	},
 	stats: {
 		width: "100%",

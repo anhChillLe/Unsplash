@@ -1,28 +1,19 @@
-import { NavigationContext } from "@react-navigation/native"
-import { useContext, useEffect } from "react"
 import { Dimensions, StyleSheet, View } from "react-native"
 import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar, ListPhoto } from "../../components"
-import { SearchResultRoute } from "../../navigations/param_list"
+import { useSearch } from "../../hooks"
+import { useAppNavigation, useSearchResultRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
-import getSearchViewModel, { SearchViewmodel } from "../../viewmodels/search_viewmodel"
 import { Photo } from "../../service/unsplash/models"
 
-export default function SearchResultContainer({ route }: SearchResultRoute) {
-	const input = route.params.searchInput
-	const viewModel = getSearchViewModel(input)
-
-	return <SearchResultScreen {...viewModel} />
-}
-
-function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: SearchViewmodel) {
+export default function SearchResultScreen() {
+	const route = useSearchResultRoute()
 	const { width } = Dimensions.get("window")
 	const { top, bottom } = useSafeAreaInsets()
-	const navigation = useContext(NavigationContext)
-	const handleItemPress = (photo: Photo, index: number) => navigation?.navigate(Screens.detail, { photo })
-
-	useEffect(getPhotos, [])
+	const navigation = useAppNavigation()
+	const handleItemPress = (photo: Photo, index: number) => navigation.navigate(Screens.detail, { photo })
+	const { photos, total, loadMore } = useSearch(route.params.searchInput)
 
 	return (
 		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
@@ -32,9 +23,9 @@ function SearchResultScreen({ isLoading, photos, query, total, getPhotos }: Sear
 				width={width - 8}
 				space={4}
 				photos={photos}
-				header={<SearchHeader query={query} total={total} />}
+				header={<SearchHeader query={route.params.searchInput.query} total={total} />}
 				column={2}
-				onEndReached={getPhotos}
+				onEndReached={loadMore}
 				itemThreshold={8}
 				onItemPress={handleItemPress}
 				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom }]}

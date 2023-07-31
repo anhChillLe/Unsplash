@@ -3,17 +3,23 @@ import { useContext } from "react"
 import { Dimensions, StyleSheet } from "react-native"
 import { Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useSelector } from "react-redux"
 import { BackAppBar, ListAlbums } from "../../components"
 import { Screens } from "../../navigations/screen_name"
-import { RootState } from "../../redux/store/store"
+import { useAppDispatch, useTopicState } from "../../redux/store/store"
+import { fetchTopics } from "../../redux/features/topic/topics"
+import { BaseGroup } from "../../service/unsplash/models"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function TopicScreen() {
-	const state = useSelector((state: RootState) => state.topic)
+	const state = useTopicState()
+	const dispatch = useAppDispatch()
 	const { top, bottom } = useSafeAreaInsets()
 	const width = Dimensions.get("window").width
 	const safeAreaWidth = width - 32
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
+
+	const loadMore = () => dispatch(fetchTopics())
+	const handleItemPress = (topic: BaseGroup) => navigation.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
 
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>
@@ -29,10 +35,8 @@ export default function TopicScreen() {
 				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom + 16 }]}
 				isLoading={state.isLoading}
 				width={safeAreaWidth}
-				onItemPress={(topic) => {
-					console.log(topic.id)
-					navigation?.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
-				}}
+				onEndReached={loadMore}
+				onItemPress={handleItemPress}
 			/>
 		</Surface>
 	)

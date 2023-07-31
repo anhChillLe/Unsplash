@@ -8,11 +8,12 @@ import {LoginWidthUnsplash as Login} from '../../actions/link_actions';
 import {NavigationContext} from '@react-navigation/native';
 import {Screens} from '../../navigations/screen_name';
 import { clearToken } from '../../redux/features/auth/action';
+import { useAppNavigation } from '../../navigations/hooks';
 
 export default function UserGroup() {
   const dispatch = useDispatch<AppDispatch>()
   const user = useSelector((state: RootState) => state.user.profile);
-  const navigation = useContext(NavigationContext);
+  const navigation = useAppNavigation()
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -21,16 +22,16 @@ export default function UserGroup() {
   
   const UserAvatar = () => (
     <Pressable onPress={openMenu}>
-      <Avatar.Image size={32} source={{uri: user?.profile_image.medium}} />
+      <Avatar.Image size={24} source={{uri: user?.profile_image.medium}} />
     </Pressable>
   );
   const openUserProfile = () => {
-    navigation?.navigate(Screens.currentUser);
+    navigation.navigate(Screens.currentUser);
     closeMenu();
   };
 
   const openEdit = () => {
-    navigation?.navigate(Screens.editUserProfile)
+    navigation.navigate(Screens.editUserProfile)
     closeMenu()
   }
   const logOut = () => dispatch(clearToken())
@@ -62,7 +63,7 @@ export default function UserGroup() {
     </View>
   ) : (
     <View style={styles.container}>
-      <Heading>Hi chill!</Heading>
+      <Heading>Hi!</Heading>
       <Menu
         visible={visible}
         onDismiss={closeMenu}

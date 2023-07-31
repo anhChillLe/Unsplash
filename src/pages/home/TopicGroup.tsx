@@ -6,13 +6,14 @@ import { GroupHeading, ListAlbums } from "../../components"
 import { Screens } from "../../navigations/screen_name"
 import { StyleSheet } from "react-native"
 import { BaseGroup } from "../../service/unsplash/models"
+import { useAppNavigation } from "../../navigations/hooks"
 
 export default function TopicGroup({ width }: { width: number }) {
 	const topicsState = useSelector((state: RootState) => state.topic)
-	const navigation = useContext(NavigationContext)
+	const navigation =  useAppNavigation()
 
-	const handleMorePress = () => navigation?.navigate(Screens.topics)
-	const handleTopicPress = (topic: BaseGroup) => navigation?.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
+	const handleMorePress = () => navigation.navigate(Screens.topics)
+	const handleTopicPress = (topic: BaseGroup) => navigation.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
 
 	return (
 		<>

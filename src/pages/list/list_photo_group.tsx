@@ -33,7 +33,7 @@ export default function TopNavigationListImage() {
 		<Surface mode="flat" style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}>
 			<BackAppBar />
 			<Divider />
-			<Tab.Navigator initialRouteName={Screens.imagesPopular} offscreenPageLimit={2} screenOptions={options}>
+			<Tab.Navigator initialRouteName={Screens.imagesLatest} offscreenPageLimit={2} screenOptions={options}>
 				<Tab.Screen name={Screens.imagesLatest} component={ListLatest} options={{ title: "Latest" }} />
 				<Tab.Screen name={Screens.imagesOldest} component={ListOldest} options={{ title: "Oldest" }} />
 				<Tab.Screen name={Screens.imagesPopular} component={ListPopular} options={{ title: "Popular" }} />

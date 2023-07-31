@@ -1,11 +1,12 @@
+import { StyleSheet } from "react-native"
 import { Surface } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackAppBar } from "../../components"
-import { DetailRoute } from "../../navigations/param_list"
+import { useDetaiRoute } from "../../navigations/hooks"
 import PageContainer from "./image_page"
-import { StyleSheet } from "react-native"
 
-export default function DetailScreen({ route }: DetailRoute) {
+export default function DetailScreen() {
+	const route = useDetaiRoute()
 	const photo = route.params.photo
 	const { top } = useSafeAreaInsets()
 

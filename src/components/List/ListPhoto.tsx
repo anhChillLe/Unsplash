@@ -18,8 +18,9 @@ type Props = {
 	contentContainerStyle?: StyleProp<ViewStyle>
 	itemPlaceHolderMode?: PlaceHolderMode
 	header?: React.ReactElement
+	showLoadingFooter?: boolean
 }
-export default function ListImageLite({
+export default function ListPhoto({
 	width,
 	space,
 	photos,
@@ -30,6 +31,7 @@ export default function ListImageLite({
 	onItemPress = (photo, index) => {},
 	contentContainerStyle,
 	header,
+	showLoadingFooter = true
 }: Props) {
 	const itemWidth = (width - column * space) / column
 	const itemHeight = (itemWidth * 4) / 3
@@ -54,7 +56,7 @@ export default function ListImageLite({
 			numColumns={column}
 			keyExtractor={(item) => item.id}
 			style={style}
-			ListFooterComponent={<ActivityIndicator style={{ margin: 8 }} />}
+			ListFooterComponent={showLoadingFooter ? <ActivityIndicator style={{ margin: 8 }} /> : null}
 			ListHeaderComponent={header}
 			onEndReached={photos.length !== 0 ? onEndReached : () => {}}
 			onEndReachedThreshold={threshold}

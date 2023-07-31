@@ -2,6 +2,7 @@ import { NavigationContext } from "@react-navigation/native"
 import { ReactElement, useContext } from "react"
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import { IconButton, Text } from "react-native-paper"
+import { useAppNavigation } from "../../navigations/hooks"
 
 type Props = {
 	onMore?: () => void
@@ -12,11 +13,11 @@ type Props = {
 
 export default function MyAppBar(props: Props): ReactElement {
 	const { title, onMore, style, color } = props
-	const navigation = useContext(NavigationContext)
+	const navigation = useAppNavigation()
 
 	return (
 		<View style={[styles.container, style]}>
-			<IconButton mode="contained" icon="arrow-left" onPress={navigation?.goBack} />
+			<IconButton mode="contained" icon="arrow-left" onPress={navigation.goBack} />
 			{title && <Text variant="titleLarge" style={styles.title}>
 				{title}
 			</Text>}

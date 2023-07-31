@@ -1,7 +1,6 @@
-import { RouteProp } from "@react-navigation/native"
-import { Screens } from "./screen_name"
+import { BaseGroup, Photo, User } from "../service/unsplash/models"
 import { SearchPhotosParams } from "../service/unsplash/params/search_params"
-import { Collection, Photo, Topic, User } from "../service/unsplash/models"
+import { Screens } from "./screen_name"
 
 export type AppParamList = {
 	[Screens.home]: undefined
@@ -9,32 +8,21 @@ export type AppParamList = {
 	[Screens.topics]: undefined
 	[Screens.collections]: undefined
 	[Screens.allImage]: undefined
-	[Screens.collectionPhotos]: { collection: Collection }
+	[Screens.collectionPhotos]: { collection: BaseGroup }
 	[Screens.topicPhotos]: { id_or_slug: string }
-	[Screens.search]: { query?: string }
+	[Screens.search]: undefined
 	[Screens.searchResult]: { searchInput: SearchPhotosParams }
 	[Screens.user]: { username: string }
 	[Screens.currentUser]: undefined
 	[Screens.userCollections]: { user: User }
 	[Screens.userPhotos]: { user: User }
-	[Screens.detailPager]: {photos: Photo[]; initPosition?: number}
+	[Screens.detailPager]: { photos: Photo[]; initPosition?: number }
 	[Screens.editUserProfile]: undefined
-	[Screens.userStatistics]: {user: User}
+	[Screens.userStatistics]: { user: User }
+	[Screens.curentUserCollection]: undefined
 }
 
 export type AuthParamList = {
 	[Screens.login]: undefined
 	[Screens.loginResult]: { code: string }
 }
-
-export type DetailRoute = { route: RouteProp<AppParamList, Screens.detail> }
-export type DetailPagerRoute = {route: RouteProp<AppParamList, Screens.detailPager>}
-export type CollectionPhotosRoute = { route: RouteProp<AppParamList, Screens.collectionPhotos> }
-export type TopicPhotosRoute = { route: RouteProp<AppParamList, Screens.topicPhotos> }
-export type SearchRoute = { route: RouteProp<AppParamList, Screens.search> }
-export type SearchResultRoute = { route: RouteProp<AppParamList, Screens.searchResult> }
-export type UserRoute = { route: RouteProp<AppParamList, Screens.user> }
-export type UserCollectionsRoute = { route: RouteProp<AppParamList, Screens.userCollections> }
-export type UserPhotosRoute = { route: RouteProp<AppParamList, Screens.userPhotos> }
-export type LoginResultRoute = { route: RouteProp<AuthParamList, Screens.loginResult> }
-export type UserStatisticsRoute = {route: RouteProp<AppParamList, Screens.userStatistics>}

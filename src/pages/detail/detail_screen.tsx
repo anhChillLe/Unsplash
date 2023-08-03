@@ -1,20 +1,26 @@
-import { NavigationContext } from "@react-navigation/native";
-import { useContext } from "react";
-import { Surface } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BackAppBar } from "../../components";
-import { DetailRoute } from "../../navigations/param_list";
-import PageContainer from "./image_page";
+import { StyleSheet } from "react-native"
+import { Surface } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar } from "../../components"
+import { useDetaiRoute } from "../../navigations/hooks"
+import PageContainer from "./image_page"
 
-export default function DetailScreen({ route }: DetailRoute) {
-	const photo = route.params.photo;
-	const navigation = useContext(NavigationContext);
-	const { top } = useSafeAreaInsets();
+export default function DetailScreen() {
+	const route = useDetaiRoute()
+	const photo = route.params.photo
+	const { top } = useSafeAreaInsets()
 
 	return (
-		<Surface style={{ flex: 1, height: "100%", paddingTop: top }}>
+		<Surface key={photo.id} style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
 			<PageContainer photo={photo} />
 		</Surface>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+})

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store/store";
-import unsplash from "../../../services/unsplash";
-import { FullUser } from "../../../services/unsplash/models";
+import unsplash from "../../../service/unsplash";
+import { FullUser } from "../../../service/unsplash/models";
 
 export const getCurrentUser = createAsyncThunk<FullUser | undefined, void, { state: RootState }>(
 	"getCurrentUser",
@@ -12,3 +12,11 @@ export const getCurrentUser = createAsyncThunk<FullUser | undefined, void, { sta
 		return useProfile;
 	}
 );
+
+export const updateCurrentUser = createAsyncThunk<FullUser | undefined, UpdateUserProfieParams, { state: RootState }>(
+	'updateUser',
+	async (params, thunkApi) => {
+		const result = await unsplash.current_user.update(params)
+		return result
+	}
+)

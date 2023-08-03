@@ -1,29 +1,28 @@
-import { FlatList, StyleProp, View, ViewStyle } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
-import { Collection, Topic } from "../../services/api/type";
-import ImageCard from "../ImageCard/ImageCard";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import CollectionCard from "../Collection/Collection";
-
-type Album = Topic | Collection;
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { ActivityIndicator, Text } from "react-native-paper"
+import SkeletonPlaceholder from "react-native-skeleton-placeholder"
+import { BaseGroup } from "../../service/unsplash/models/base"
+import CollectionCard from "../Collection/Collection"
+import ImageCard from "../ImageCard/ImageCard"
 
 type Props = {
-	data: Topic[] | Collection[];
-	column: number;
-	space: number;
-	width: number;
-	showLoadingFooter?: boolean;
-	header?: React.ReactElement;
-	onItemPress?: (item: Album) => void;
-	isLoading?: boolean;
-	mode?: "compact" | "list";
-	itemMode?: "single" | "group";
-	itemRatio?: number;
-	maxItems?: number;
-	contentContainerStyle?: StyleProp<ViewStyle>;
-	style?: StyleProp<ViewStyle>;
-	onEndReached?: () => void;
-};
+	data: BaseGroup[]
+	column: number
+	space: number
+	width: number
+	showLoadingFooter?: boolean
+	header?: React.ReactElement
+	onItemPress?: (item: BaseGroup) => void
+	isLoading?: boolean
+	mode?: "compact" | "list"
+	itemMode?: "single" | "group"
+	itemRatio?: number
+	maxItems?: number
+	contentContainerStyle?: StyleProp<ViewStyle>
+	style?: StyleProp<ViewStyle>
+	onEndReached?: () => void
+	onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+}
 
 function ListAlbums({
 	data,
@@ -41,30 +40,31 @@ function ListAlbums({
 	onItemPress,
 	contentContainerStyle,
 	style,
+	onScroll = () => {}
 }: Props) {
-	const itemWidth = (width - (column - 1) * space) / column;
-	const itemHeight = itemWidth / itemRatio;
+	const itemWidth = (width - (column - 1) * space) / column
+	const itemHeight = itemWidth / itemRatio
 
 	const getItemMarginEnd = (index: number) => {
-		if ((index + 1) % column == 0) return 0;
-		else return space;
-	};
+		if ((index + 1) % column == 0) return 0
+		else return space
+	}
 
 	const getItemMarginBottom = (index: number) => {
-		if (index < data.length - column) return space;
-		else return 0;
-	};
+		if (index < data.length - column) return space
+		else return 0
+	}
 
 	if (maxItems && data.length > maxItems) {
-		data = data.slice(0, maxItems);
+		data = data.slice(0, maxItems)
 	}
 	function SkeletonList() {
 		return (
 			<SkeletonPlaceholder borderRadius={8}>
-				<SkeletonPlaceholder.Item style={[{ flexDirection: "row", flexWrap: "wrap" }, style]}>
+				<SkeletonPlaceholder.Item style={[styles.skeletionItem, style]}>
 					{[...Array(maxItems)].map((_, index) => {
-						const marginEnd = getItemMarginEnd(index);
-						const marginBottom = getItemMarginBottom(index);
+						const marginEnd = getItemMarginEnd(index)
+						const marginBottom = getItemMarginBottom(index)
 
 						return (
 							<SkeletonPlaceholder.Item
@@ -73,31 +73,33 @@ function ListAlbums({
 								height={itemWidth / itemRatio}
 								style={{ marginEnd, marginBottom }}
 							/>
-						);
+						)
 					})}
 				</SkeletonPlaceholder.Item>
 			</SkeletonPlaceholder>
-		);
+		)
 	}
 
-	const Group = ({ item, index }: { item: Album; index: number }) => {
-		const marginEnd = getItemMarginEnd(index);
-		const marginBottom = getItemMarginBottom(index);
+	const Group = ({ item, index }: { item: BaseGroup; index: number }) => {
+		const marginEnd = getItemMarginEnd(index)
+		const marginBottom = getItemMarginBottom(index)
+
 		return (
 			<CollectionCard
 				collection={item}
 				space={2}
-				style={{ marginEnd, marginBottom, width: itemWidth, height: itemHeight }}
+				imageStyle={{ width: itemWidth, height: itemHeight }}
+				containerStyle={{ marginEnd, marginBottom }}
 				onPress={onItemPress ? () => onItemPress(item) : undefined}
 			/>
-		);
-	};
+		)
+	}
 
-	function Single({ item, index }: { item: Album; index: number }) {
-		const marginEnd = getItemMarginEnd(index);
-		const marginBottom = getItemMarginBottom(index);
+	function Single({ item, index }: { item: BaseGroup; index: number }) {
+		const marginEnd = getItemMarginEnd(index)
+		const marginBottom = getItemMarginBottom(index)
 
-		if (!item.cover_photo) return null;
+		if (!item.cover_photo) return null
 
 		return (
 			<View style={{ marginEnd, marginBottom, width: itemWidth }}>
@@ -115,21 +117,22 @@ function ListAlbums({
 					{item.total_photos} wallpapers
 				</Text>
 			</View>
-		);
+		)
 	}
 
-	const RenderItem = itemMode === "single" ? Single : Group;
+	const RenderItem = itemMode === "single" ? Single : Group
+	const LoadingIndicator = showLoadingFooter ? <ActivityIndicator size="small" style={styles.indicator} /> : null
 
 	switch (mode) {
 		case "compact":
-			if (isLoading) return <SkeletonList />;
+			if (isLoading) return <SkeletonList />
 			return (
 				<View style={[{ flexDirection: "row", flexWrap: "wrap" }, style]}>
 					{data.map((item, index) => (
 						<RenderItem key={index} item={item} index={index} />
 					))}
 				</View>
-			);
+			)
 		case "list":
 			return (
 				<FlatList
@@ -139,15 +142,24 @@ function ListAlbums({
 					onEndReached={onEndReached}
 					style={style}
 					ListHeaderComponent={header}
-					ListFooterComponent={
-						showLoadingFooter ? <ActivityIndicator size="small" style={{ margin: 8 }} /> : null
-					}
+					ListFooterComponent={LoadingIndicator}
 					contentContainerStyle={contentContainerStyle}
 					showsVerticalScrollIndicator={false}
-					keyExtractor={(item: Topic | Collection, index: number) => item.id}
+					keyExtractor={(item: BaseGroup, index: number) => item.id}
+					onScroll={onScroll}
 				/>
-			);
+			)
 	}
 }
 
-export default ListAlbums;
+export default ListAlbums
+
+const styles = StyleSheet.create({
+	indicator: {
+		margin: 8,
+	},
+	skeletionItem: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
+})

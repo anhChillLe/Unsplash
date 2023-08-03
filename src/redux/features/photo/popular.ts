@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PhotoState } from "./state";
-import { getPhotosPopular } from "./action";
+import getPopularPhotos from "./action";
+import { Photo } from "../../../service/unsplash/models";
+
+export interface PhotoState {
+  isLoading: boolean;
+  photos: Photo[];
+  page: number;
+}
 
 const initialState: PhotoState = {
   isLoading: false,
@@ -13,15 +19,15 @@ export const photoPopularSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(getPhotosPopular.pending, (state, action) => {
+    builder.addCase(getPopularPhotos.pending, (state, action) => {
       state.isLoading = true;
     });
-    builder.addCase(getPhotosPopular.fulfilled, (state, action) => {
+    builder.addCase(getPopularPhotos.fulfilled, (state, action) => {
       state.photos = state.photos.concat(action.payload);
       state.page = state.page + 1;
       state.isLoading = false;
     });
-    builder.addCase(getPhotosPopular.rejected, (state, action) => {
+    builder.addCase(getPopularPhotos.rejected, (state, action) => {
       state.isLoading = false;
     });
   },

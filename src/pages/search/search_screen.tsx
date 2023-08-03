@@ -1,43 +1,44 @@
-import { NavigationContext } from "@react-navigation/native";
-import React, { useContext, useRef, useState } from "react";
-import { ScrollView, StyleProp, TextInput, View, ViewStyle } from "react-native";
-import { Chip, Searchbar, Surface, Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { ColorId, ContentFilter, Orientation, SearchOrderBy } from "unsplash-js";
-import { SearchRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import { SearchInput } from "../../redux/features/search/actions";
-import { removeHistory } from "../../redux/features/search/search";
-import { AppDispatch, RootState } from "../../redux/store/store";
-import { SearchFilterParams } from "../../services/api/type";
+import React, { useEffect, useRef, useState } from "react"
+import { StyleSheet, TextInput, View } from "react-native"
+import { Chip, Searchbar, Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { FilterCard } from "../../components"
+import { useAppNavigation } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import History from "../../service/storage/shared_preferences"
+import { ColorId } from "../../service/unsplash/constants/Color"
+import { ContentFilter } from "../../service/unsplash/constants/ContentFilter"
+import { SearchOrderBy } from "../../service/unsplash/constants/OrderBy"
+import { Orientation } from "../../service/unsplash/constants/Orientation"
+import { colorValues, contentFilters, orderBys, orientations } from "../../service/unsplash/data"
+import { Fillter } from "../../service/unsplash/params/search_params"
 
-export default function SearchScreen({ route }: SearchRoute) {
-	const { top, bottom } = useSafeAreaInsets();
-	const navigation = useContext(NavigationContext);
-	const [searchValue, setSearchValue] = useState<string>("");
-	const filter = useRef<SearchFilterParams>({});
-	const searchRef = useRef<TextInput>(null);
+export default function SearchScreen() {
+	const { top } = useSafeAreaInsets()
+	const navigation = useAppNavigation()
+	const [searchValue, setSearchValue] = useState<string>("")
+	const filter = useRef<Fillter>({})
+	const searchRef = useRef<TextInput>(null)
+	const [flag, setFlag] = useState(false)
 
-	const onSearchSubmit = (query: string) => {
-		const input: SearchInput = {
-			query,
-			...filter.current,
-		};
-		navigation?.navigate(ScreenName.searchResult, { searchInput: input });
-		setSearchValue("");
-	};
+	const handleSearchSubmit = async (query: string) => {
+		navigation.navigate({
+			name: Screens.searchResult,
+			params: {
+				searchInput: {
+					query,
+					...filter.current,
+				},
+			},
+		})
+		await History.save(query)
+		setSearchValue("")
+		setFlag(!flag)
+	}
 
 	return (
-		<Surface
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingHorizontal: 16,
-				paddingTop: 16 + top,
-			}}
-		>
-			<View style={{ flexDirection: "row", alignItems: "center" }}>
+		<Surface style={[styles.container, { paddingTop: 16 + top }]}>
+			<View style={styles.searchContainer}>
 				<Searchbar
 					mode="bar"
 					placeholder="Search for image"
@@ -46,137 +47,113 @@ export default function SearchScreen({ route }: SearchRoute) {
 					onLayout={() => searchRef.current?.focus()}
 					autoCapitalize="none"
 					onChangeText={setSearchValue}
-					onSubmitEditing={() => onSearchSubmit(searchValue)}
-					style={{ flex: 1 }}
+					onSubmitEditing={() => handleSearchSubmit(searchValue)}
+					style={styles.search}
 				/>
 			</View>
 
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 16 }}>
+			<Text variant="headlineLarge" style={styles.cardHeader}>
 				Histories
 			</Text>
 
-			<Histories onItemPress={onSearchSubmit} />
+			<Histories onItemPress={handleSearchSubmit} flag={flag} />
 
-			<Text variant="headlineLarge" style={{ fontWeight: "bold", marginTop: 32 }}>
+			<Text variant="headlineLarge" style={styles.cardHeader}>
 				Filter
 			</Text>
 
 			<FilterCard
 				title="Order by"
-				data={["latest", "relevant", "editorial"]}
-				style={{ marginTop: 8 }}
-				onSelected={(value) => (filter.current.orderBy = value as SearchOrderBy)}
+				data={orderBys}
+				style={styles.filterCard}
+				onSelected={value => (filter.current.order_by = value as SearchOrderBy)}
 			/>
 			<FilterCard
 				title="Content filter"
-				data={["low", "high"]}
-				style={{ marginTop: 8 }}
-				onSelected={(value) => (filter.current.contentFilter = value as ContentFilter)}
+				data={contentFilters}
+				style={styles.filterCard}
+				onSelected={value => (filter.current.content_filter = value as ContentFilter)}
 			/>
 			<FilterCard
 				title="Color"
-				data={[
-					"black_and_white",
-					"black",
-					"white",
-					"yellow",
-					"orange",
-					"red",
-					"purple",
-					"magenta",
-					"green",
-					"teal",
-					"blue",
-				]}
-				style={{ marginTop: 8 }}
-				onSelected={(value) => (filter.current.color = value as ColorId)}
+				data={colorValues}
+				style={styles.filterCard}
+				onSelected={value => (filter.current.color = value as ColorId)}
 			/>
 			<FilterCard
 				title="Orientation"
-				data={["landscape", "portrait", "squarish"]}
-				style={{ marginTop: 8 }}
-				onSelected={(value) => (filter.current.orientation = value as Orientation)}
+				data={orientations}
+				style={styles.filterCard}
+				onSelected={value => (filter.current.orientation = value as Orientation)}
 			/>
 		</Surface>
-	);
+	)
 }
 
-function FilterCard({
-	data,
-	title,
-	onSelected,
-	style,
-}: {
-	data: string[];
-	title: string;
-	onSelected?: (value: string | undefined) => void;
-	style?: StyleProp<ViewStyle>;
-}) {
-	const [currentValue, setValue] = useState<string | undefined>(undefined);
+function Histories({ onItemPress, flag }: { flag: boolean; onItemPress: (query: string) => void }) {
+	const [histories, setHistories] = useState<string[]>([])
+	const nonDuplicateHistories = Array.from(new Set(histories))
 
-	const onValueChange = (newValue: string | undefined) => {
-		const nextValue = newValue === currentValue ? undefined : newValue;
-		setValue(nextValue);
-		onSelected && onSelected(nextValue);
-	};
+	function getHistories() {
+		History.get().then(data => {
+			setHistories(data)
+		})
+	}
+
+	function removeHistory(query: string) {
+		History.remove(query)
+		setHistories(histories.filter(history => history != query))
+	}
+
+	useEffect(getHistories, [flag])
 
 	return (
-		<View style={style}>
-			<Text variant="bodyLarge" style={{ fontWeight: "bold" }}>
-				{title}
-			</Text>
-			<ScrollView
-				horizontal
-				showsHorizontalScrollIndicator={false}
-				contentContainerStyle={{ marginHorizontal: -4 }}
-			>
-				{data.map((value) => (
-					<Chip
-						key={value + (value === currentValue)}
-						onPress={() => onValueChange(value)}
-						selected={value === currentValue}
-						style={{ margin: 4 }}
-					>
-						{value}
-					</Chip>
-				))}
-			</ScrollView>
-		</View>
-	);
-}
-
-function Histories({ onItemPress }: { onItemPress: (query: string) => void }) {
-	const state = useSelector((state: RootState) => state.search);
-	const navigation = useContext(NavigationContext);
-	const dispatch = useDispatch<AppDispatch>();
-
-	const removeItem = (value: string) => {
-		dispatch(removeHistory({ value }));
-	};
-
-	let histories = [...state.histories].reverse();
-	const nonDuplicateHistories = Array.from(new Set(histories));
-
-	return (
-		<View
-			style={{
-				flexDirection: "row",
-				flexWrap: "wrap",
-				marginHorizontal: -4,
-				marginTop: 8,
-			}}
-		>
+		<View style={styles.historiesContainer}>
 			{nonDuplicateHistories.map((query, index) => (
 				<Chip
 					key={index}
-					style={{ margin: 4 }}
+					style={styles.history}
 					mode="outlined"
-					onClose={() => removeItem(query)}
+					onClose={() => removeHistory(query)}
 					onPress={() => onItemPress(query)}
 				>
 					{query}
 				</Chip>
 			))}
 		</View>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	searchContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingHorizontal: 16,
+	},
+	search: {
+		flex: 1,
+	},
+	cardHeader: {
+		fontWeight: "bold",
+		marginTop: 16,
+		paddingHorizontal: 16,
+	},
+	filterCard: {
+		marginTop: 8,
+		marginStart: 16,
+	},
+	historiesContainer: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		marginHorizontal: -4,
+		marginTop: 8,
+		paddingHorizontal: 16,
+	},
+	history: {
+		margin: 4,
+	},
+})

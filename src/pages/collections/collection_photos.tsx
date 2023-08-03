@@ -1,124 +1,118 @@
-import '../../ultilities/date_distance'
-import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect } from "react";
-import { Dimensions, View } from "react-native";
-import { Avatar, Chip, Surface, Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { BackAppBar, ListImageLite } from "../../components";
-import { CollectionPhotosRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import { clear, getCollectionDetail, getCollectionPhotos } from "../../redux/features/collection/photos";
-import { SearchInput } from "../../redux/features/search/actions";
-import { AppDispatch, RootState } from "../../redux/store/store";
-import { Tag } from "../../services/api/type";
+import { Dimensions, StyleSheet } from "react-native"
+import { Avatar, Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar, ListPhoto, SingleTag, TagGroup } from "../../components"
+import { useCollection, useCollectionPhotos } from "../../hooks"
+import { useAppNavigation, useCollectionPhotosRoute } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { FullCollection, Photo, Tag } from "../../service/unsplash/models"
 
-export default function CollectionPhoto({ route }: CollectionPhotosRoute) {
-	const width = Dimensions.get("window").width;
-	const { top, bottom } = useSafeAreaInsets();
-	const navigation = useContext(NavigationContext);
-	const collection = route.params?.collection;
-	const photos = useSelector((state: RootState) => state.collectionPhotos.photos);
+export default function CollectionPhotos() {
+	const route = useCollectionPhotosRoute()
+	const width = Dimensions.get("window").width
+	const { top, bottom } = useSafeAreaInsets()
+	const navigation = useAppNavigation()
+	const id = route.params.collection.id
+	const { photos, loadMore } = useCollectionPhotos(id)
+	const { collection } = useCollection(id)
 
-	const dispatch = useDispatch<AppDispatch>();
-	useEffect(() => {
-		dispatch(getCollectionPhotos(collection.id));
-		dispatch(getCollectionDetail(collection.id));
-
-		return () => {
-			dispatch(clear());
-		};
-	}, []);
-
-	const loadMore = () => {
-		dispatch(getCollectionPhotos(collection.id));
-	};
+	const handleItemPress = (photo: Photo, index: number) =>
+		navigation.navigate({
+			name: Screens.detailPager,
+			key: photo.id,
+			params: {
+				photos: [photo],
+				initPosition: index,
+			},
+			merge: false,
+		})
 
 	return (
-		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top }}>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
-			<ListImageLite
+			<ListPhoto
 				width={width - 16}
 				space={4}
 				photos={photos}
-				header={<ListHeader />}
-				onItemPress={(photo, index) =>
-					navigation?.navigate(ScreenName.detailPager, {
-						position: index,
-						type: "collection",
-					})
-				}
+				header={collection && <ListHeader {...collection} />}
+				onItemPress={handleItemPress}
 				column={3}
-				itemThreshold={6}
+				itemThreshold={9}
 				onEndReached={loadMore}
-				contentContainerStyle={{
-					paddingHorizontal: 8,
-				}}
+				contentContainerStyle={styles.listContainer}
+				showLoadingFooter={(collection?.total_photos ?? 0) > photos.length}
 			/>
 		</Surface>
-	);
+	)
 }
 
-const ListHeader = () => {
-	const state = useSelector((state: RootState) => state.collectionPhotos);
-	const navigation = useContext(NavigationContext);
-	const collection = state.detail;
+const ListHeader = (collection: FullCollection) => {
+	const navigation = useAppNavigation()
 
-	if (collection === null) return null;
+	const {
+		user: { username, profile_image, name },
+		published_at,
+		description,
+		tags,
+		total_photos,
+	} = collection
+
+	const handleTagPress = (tag: Tag) => {
+		if (tag.type !== "search") return
+		navigation.navigate(Screens.searchResult, { searchInput: { query: tag.title } })
+	}
 
 	return (
-		<Surface
-			mode="flat"
-			style={{
-				paddingVertical: 4,
-			}}
-		>
-			<Text variant="headlineLarge" numberOfLines={1} style={{ fontWeight: "bold" }}>
+		<Surface mode="flat" style={styles.headerContainer}>
+			<Text variant="headlineLarge" numberOfLines={1} style={styles.title}>
 				{collection.title}
 			</Text>
 
-			<View style={{ flexDirection: "row" }}>
-				<Chip
-					avatar={<Avatar.Image size={24} source={{ uri: collection.user.profile_image.medium }} />}
-					onPress={() => navigation?.navigate(ScreenName.user, { username: collection.user.username })}
-				>
-					{collection.user.name}
-				</Chip>
-			</View>
-
-			{collection.description ? (
-				<Text variant="bodyMedium" style={{ marginVertical: 4 }}>
-					{collection.description}
-				</Text>
-			) : null}
-			<Text style={{ fontSize: 12, opacity: 0.6, marginVertical: 2 }}>
-				{collection.total_photos} photos · {collection.published_at.formatAsDate()}
-			</Text>
-			<View
-				style={{
-					flexDirection: "row",
-					flexWrap: "wrap",
-					marginTop: 8,
-					marginHorizontal: -4,
-				}}
+			<SingleTag
+				avatar={<Avatar.Image size={24} source={{ uri: profile_image.medium }} />}
+				onPress={() => navigation.navigate(Screens.user, { username })}
 			>
-				{collection.tags.map((tag: Tag, index: number) => (
-					<Chip
-						key={tag.title}
-						style={{ margin: 4 }}
-						onPress={() => {
-							const input: SearchInput = {
-								query: tag.title,
-							};
-							navigation?.navigate(ScreenName.searchResult, {
-								searchInput: input,
-							});
-						}}
-					>
-						{tag.title}
-					</Chip>
-				))}
-			</View>
+				{name}
+			</SingleTag>
+
+			{description && (
+				<Text variant="bodyMedium" style={styles.description}>
+					{description}
+				</Text>
+			)}
+
+			<Text style={styles.date}>
+				{total_photos} photos · {published_at.formatAsDate()}
+			</Text>
+
+			<TagGroup tags={tags} onItemPress={handleTagPress} containerStyle={styles.tags} />
 		</Surface>
-	);
-};
+	)
+}
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	listContainer: {
+		paddingHorizontal: 8,
+	},
+	headerContainer: {
+		paddingVertical: 4,
+	},
+	title: {
+		fontWeight: "bold",
+	},
+	description: {
+		marginVertical: 4,
+	},
+	date: {
+		fontSize: 12,
+		opacity: 0.6,
+		marginVertical: 2,
+	},
+	tags: {
+		marginBottom: 4,
+	},
+})

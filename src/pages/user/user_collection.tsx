@@ -1,28 +1,27 @@
-import { NavigationContext, RouteProp } from "@react-navigation/native";
-import { useContext, useEffect } from "react";
-import { Dimensions } from "react-native";
-import { Surface } from "react-native-paper";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { BackAppBar, ListAlbums, UserElement } from "../../components";
-import { AppParamList, UserCollectionsRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import { UserCollectionViewModel, getUserCollectionViewmodel } from "../../viewmodels/user_collection_viewmodel";
+import { Dimensions } from "react-native"
+import { Surface } from "react-native-paper"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar, ListAlbums, UserElement } from "../../components"
+import { useUserCollections } from "../../hooks"
+import { useAppNavigation, useUserCollectionsRoute } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { BaseGroup } from "../../service/unsplash/models"
 
-export default function UserCollectionPage({ route }: UserCollectionsRoute) {
-	const user = route.params.user;
-	const viewModel = getUserCollectionViewmodel(user);
-	return <UserCollection {...viewModel} />;
-}
+export default function UserCollection() {
+	const route = useUserCollectionsRoute()
+	const user = route.params.user
+	const { width } = Dimensions.get("window")
+	const navigation = useAppNavigation()
+	const { top, bottom } = useSafeAreaInsets()
+	const { isLoading, collections, loadMore } = useUserCollections(user.username)
 
-function UserCollection({ isLoading, user, collections, listCollection, loadMore }: UserCollectionViewModel) {
-	const navigation = useContext(NavigationContext);
-	const width = Dimensions.get("window").width;
-	const { top, bottom } = useSafeAreaInsets();
-	const safeAreaWidth = width - 32;
-
-	useEffect(() => {
-		listCollection();
-	}, []);
+	const handleItemPress = (collection: BaseGroup) =>
+		navigation.navigate({
+			key: collection.id,
+			name: Screens.collectionPhotos,
+			params: { collection },
+			merge: false,
+		})
 
 	return (
 		<SafeAreaView style={{ flex: 1 }} edges={[]}>
@@ -43,16 +42,16 @@ function UserCollection({ isLoading, user, collections, listCollection, loadMore
 					style={{ flex: 1 }}
 					header={<UserElement {...user} style={{ marginBottom: 16 }} />}
 					onEndReached={loadMore}
-					onItemPress={(collection) => navigation?.navigate(ScreenName.collectionPhotos, { collection })}
+					onItemPress={handleItemPress}
 					contentContainerStyle={{
 						paddingBottom: bottom + 16,
 						paddingHorizontal: 16,
 					}}
 					isLoading={isLoading}
-					width={safeAreaWidth}
-					showLoadingFooter={true}
+					width={width - 32}
+					showLoadingFooter={collections.length < user.total_collections}
 				/>
 			</Surface>
 		</SafeAreaView>
-	);
+	)
 }

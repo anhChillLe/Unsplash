@@ -1,1 +1,0 @@
-export type ListType = 'latest' | 'oldest' | 'popular' | 'topic' | 'collection' | 'search'

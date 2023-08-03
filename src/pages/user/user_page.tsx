@@ -1,39 +1,33 @@
-import { NavigationContext } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
-import { ScrollView } from "react-native";
-import { Button, Surface, Text, useTheme } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Full } from "unsplash-js/dist/methods/users/types";
-import { BackAppBar, ImageGrid, LoadingScreen, SingleTag, SocialGroup, StatGroup, UserElement } from "../../components";
-import { UserRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import unsplash from "../../services/api/unsplash";
+import React from "react"
+import { ScrollView, StyleSheet, View } from "react-native"
+import { Card, Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import {
+	BackAppBar,
+	ImageGrid,
+	LoadingScreen,
+	SingleTag,
+	SocialGroup,
+	StatGroup,
+	TagGroup,
+	UserElement,
+} from "../../components"
+import { useUser } from "../../hooks"
+import { useAppNavigation, useUserRoute } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { useUserState } from "../../redux/store/store"
 
-export default function UserPage({ route }: UserRoute) {
-	const inset = useSafeAreaInsets();
-	const colors = useTheme().colors;
-	const navigation = useContext(NavigationContext);
-	const username = route.params.username;
-
-	const [profile, setProfile] = useState<Full | undefined>();
-
-	async function getUser() {
-		const apiResponse = await unsplash.users.get({ username: username });
-		const data = apiResponse.response;
-		setProfile(data);
-	}
-
-	useEffect(() => {
-		getUser();
-	}, []);
-
-	if (!profile) return <LoadingScreen />;
+export default function UserPage() {
+	const route = useUserRoute()
+	const usn = route.params?.username
+	const { profile, isLoading } = usn ? useUser(usn) : useUserState()
+	const inset = useSafeAreaInsets()
+	const navigation = useAppNavigation()
+	if (!profile) return <LoadingScreen />
 
 	const {
+		username,
 		profile_image,
-		portfolio_url,
-		twitter_username,
-		instagram_username,
 		name,
 		bio,
 		total_collections,
@@ -43,78 +37,117 @@ export default function UserPage({ route }: UserRoute) {
 		followers_count,
 		location,
 		photos,
-		// tags: {custom},
-	} = profile;
+		social,
+		tags: { custom },
+	} = profile
+
+	const handleLocationPress = () =>
+		location &&
+		navigation.navigate({
+			key: location,
+			name: Screens.searchResult,
+			params: { searchInput: { query: location } },
+			merge: false,
+		})
+	const handlePhotosPress = () =>
+		navigation.navigate({
+			key: profile.id,
+			name: Screens.userPhotos,
+			params: { user: profile },
+			merge: false,
+		})
+	const handleCollectionPress = () =>
+		navigation.navigate({
+			key: profile.id,
+			name: Screens.userCollections,
+			params: { user: profile },
+			merge: false,
+		})
 
 	return (
-		<Surface
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: inset.top,
-				paddingBottom: inset.bottom,
-			}}
-		>
+		<Surface style={[styles.container, { paddingTop: inset.top }]}>
 			<BackAppBar />
 			<ScrollView
-				style={{
-					flex: 1,
-				}}
+				style={{ flex: 1 }}
 				showsVerticalScrollIndicator={false}
-				contentContainerStyle={{
-					paddingHorizontal: 16,
-					paddingBottom: 16,
-					alignItems: "flex-start",
-				}}
+				contentContainerStyle={[styles.contentContainer, { paddingBottom: inset.bottom }]}
 			>
-				<UserElement profile_image={profile_image} username={username} name={name} size="large" />
+				<View style={styles.groupContainer}>
+					<UserElement profile_image={profile_image} username={username} name={name} size="large" />
 
-				{location ? (
-					<SingleTag mode="outlined" icon="map-marker-outline">
-						{location}
-					</SingleTag>
-				) : null}
+					{location && (
+						<SingleTag mode="outlined" icon="map-marker-outline" onPress={handleLocationPress}>
+							{location}
+						</SingleTag>
+					)}
+				</View>
 
-				<SocialGroup
-					instagram_username={instagram_username}
-					twitter_username={twitter_username}
-					portfolio_url={portfolio_url}
-				/>
+				<SocialGroup social={social} containerStyle={styles.social} />
 
-				{bio && (
-					<Text numberOfLines={4} ellipsizeMode="tail">
-						{bio}
-					</Text>
-				)}
-				<StatGroup
-					{...{
-						total_likes,
-						total_photos,
-						followers_count,
-						downloads,
-					}}
-				/>
+				<View style={styles.groupContainer}>
+					{custom.length > 0 && <TagGroup tags={custom} containerStyle={{ paddingBottom: 12 }} />}
 
-				{photos.length > 0 && (
-					<ImageGrid
-						photos={photos}
-						style={{ height: 200, marginTop: 4 }}
-						space={4}
-						onPress={() => navigation?.navigate(ScreenName.userPhotos, { user: profile })}
+					{bio && <Text ellipsizeMode="tail">{bio}</Text>}
+
+					<StatGroup
+						{...{ total_likes, total_photos, followers_count, downloads }}
+						containerStyle={styles.stats}
 					/>
-				)}
 
-				<Button
-					mode="contained-tonal"
-					style={{ width: "100%", paddingVertical: 50, marginTop: 16 }}
-					labelStyle={{ fontSize: 32, padding: 12 }}
-					// onPress={() =>
-					//   navigation?.navigate(ScreenName.userCollections, {user: profile})
-					// }
-				>
-					{total_collections} collections
-				</Button>
+					{photos.length > 0 && (
+						<ImageGrid
+							photos={photos}
+							containerStyle={styles.grid}
+							space={2}
+							mainAxis="row"
+							onPress={handlePhotosPress}
+						/>
+					)}
+
+					<Card mode="contained" style={styles.button} onPress={handleCollectionPress}>
+						<Text variant="headlineMedium" style={styles.buttonLabel}>
+							{total_collections} collections
+						</Text>
+					</Card>
+				</View>
 			</ScrollView>
 		</Surface>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	groupContainer: {
+		paddingHorizontal: 16,
+		width: "100%",
+	},
+	contentContainer: {
+		paddingBottom: 16,
+		alignItems: "flex-start",
+	},
+	grid: {
+		height: 240,
+		width: "100%",
+		marginTop: 4,
+	},
+	button: {
+		alignItems: "center",
+		justifyContent: "center",
+		height: 128,
+		marginTop: 16,
+	},
+	buttonLabel: {
+		fontWeight: "600",
+	},
+	stats: {
+		width: "100%",
+		paddingVertical: 12,
+	},
+	social: {
+		marginVertical: 12,
+		paddingHorizontal: 16,
+	},
+})

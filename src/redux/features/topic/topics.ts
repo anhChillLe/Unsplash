@@ -1,41 +1,54 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {Topic} from '../../../services/api/type';
-import unsplash from '../../../services/api/unsplash';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import unsplash from "../../../service/unsplash"
+import { Topic } from "../../../service/unsplash/models"
+import { RootState } from "../../store/store"
 
 interface TopicsState {
-  isLoadingTopics: boolean;
-  topics: Topic[];
+	isLoading: boolean
+	topics: Topic[]
+	page: number
 }
 
 const initialState: TopicsState = {
-  isLoadingTopics: true,
-  topics: [],
-};
+	isLoading: false,
+	topics: [],
+	page: 0,
+}
 
-export const fetchTopics = createAsyncThunk('fetchTopics', async () => {
-  const result = await unsplash.topics.list({
-    orderBy: 'latest'
-  })
+const condition = (arg: void, { getState }: { getState: () => RootState }) => !getState().topic.isLoading
+export const fetchTopics = createAsyncThunk<Topic[], undefined, { state: RootState }>(
+	"fetchTopics",
+	async (_, thunkApi) => {
+		const { topic } = thunkApi.getState()
 
-  return result.response?.results ?? []
-})
+		const data = await unsplash.topic.list({
+			page: topic.page + 1,
+			per_page: 10,
+			order_by: "featured",
+		})
+		return data
+	},
+	{ condition }
+)
 
 export const topicSlice = createSlice({
-  name: 'topic',
-  initialState,
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(fetchTopics.pending, state => {
-      state.isLoadingTopics = true
-    });
-    builder.addCase(fetchTopics.fulfilled, (state, action) => {
-      state.topics = action.payload
-      state.isLoadingTopics = false
-    });
-    builder.addCase(fetchTopics.rejected, (state, action) => {
-      state.isLoadingTopics = false
-    });
-  },
-});
+	name: "topic",
+	initialState,
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(fetchTopics.pending, (state) => {
+				state.isLoading = true
+			})
+			.addCase(fetchTopics.fulfilled, (state, action) => {
+				state.topics = [...state.topics, ...action.payload]
+				state.page += 1
+				state.isLoading = false
+			})
+			.addCase(fetchTopics.rejected, (state, action) => {
+				state.isLoading = false
+			})
+	},
+})
 
-export default topicSlice.reducer;
+export default topicSlice.reducer

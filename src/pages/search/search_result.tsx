@@ -1,69 +1,68 @@
-import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect } from "react";
-import { Dimensions, View } from "react-native";
-import { Surface, Text } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { BackAppBar, ListImageLite } from "../../components";
-import { SearchResultRoute } from "../../navigations/param_list";
-import { ScreenName } from "../../navigations/screen_name";
-import { loadMoreSearchResult, searchImage } from "../../redux/features/search/actions";
-import { SearchState } from "../../redux/features/search/search";
-import { AppDispatch, RootState } from "../../redux/store/store";
+import { Dimensions, StyleSheet, View } from "react-native"
+import { Surface, Text } from "react-native-paper"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackAppBar, ListPhoto } from "../../components"
+import { useSearch } from "../../hooks"
+import { useAppNavigation, useSearchResultRoute } from "../../navigations/hooks"
+import { Screens } from "../../navigations/screen_name"
+import { Photo } from "../../service/unsplash/models"
 
-export default function SearchResultScreen({ route }: SearchResultRoute) {
-	const { width } = Dimensions.get("window");
-	const { top, bottom } = useSafeAreaInsets();
-	const input = route.params;
-	const state = useSelector((state: RootState) => state.search);
-	const navigation = useContext(NavigationContext);
-
-	const dispatch = useDispatch<AppDispatch>();
-
-	const loadMore = () => {
-		dispatch(loadMoreSearchResult(input.searchInput));
-	};
-
-	useEffect(() => {
-		dispatch(searchImage(input.searchInput));
-	}, []);
+export default function SearchResultScreen() {
+	const route = useSearchResultRoute()
+	const { width } = Dimensions.get("window")
+	const { top, bottom } = useSafeAreaInsets()
+	const navigation = useAppNavigation()
+	const handleItemPress = (photo: Photo, index: number) =>
+		navigation.navigate({
+			key: photo.id,
+			name: Screens.detail,
+			params: { photo },
+			merge: false,
+		})
+	const { photos, total, loadMore } = useSearch(route.params.searchInput)
 
 	return (
-		<Surface
-			mode="flat"
-			style={{
-				flex: 1,
-				height: "100%",
-				paddingTop: top,
-				paddingBottom: bottom,
-			}}
-		>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
-
-			<ListImageLite
+			<ListPhoto
 				width={width - 8}
 				space={4}
-				photos={state.photos}
-				header={<SearchHeader state={state} />}
+				photos={photos}
+				header={<SearchHeader query={route.params.searchInput.query} total={total} />}
 				column={2}
 				onEndReached={loadMore}
-				itemThreshold={6}
-				onItemPress={(photo, index) =>
-					navigation?.navigate(ScreenName.detailPager, { position: index, type: "search" })
-				}
-				contentContainerStyle={{ paddingHorizontal: 4 }}
+				itemThreshold={8}
+				onItemPress={handleItemPress}
+				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom }]}
 			/>
 		</Surface>
-	);
+	)
 }
 
-function SearchHeader({ state }: { state: SearchState }) {
+function SearchHeader({ total, query }: { total: number; query: string }) {
 	return (
-		<View style={{ paddingStart: 8, paddingBottom: 8 }}>
+		<View style={styles.headerContainer}>
 			<Text variant="headlineLarge">
-				Found <Text style={{ fontWeight: "bold" }}>{state.total}</Text> images for{" "}
-				<Text style={{ fontWeight: "bold" }}>{state.histories[state.histories.length - 1]}</Text>
+				Found <Text style={styles.highlightText}>{total}</Text> images for{" "}
+				<Text style={styles.highlightText}>{query}</Text>
 			</Text>
 		</View>
-	);
+	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		height: "100%",
+	},
+	listContainer: {
+		paddingHorizontal: 4,
+	},
+	headerContainer: {
+		paddingStart: 8,
+		paddingBottom: 8,
+	},
+	highlightText: {
+		fontWeight: "bold",
+	},
+})

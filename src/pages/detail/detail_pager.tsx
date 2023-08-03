@@ -1,80 +1,37 @@
-import PagerView from "react-native-pager-view";
-import { Surface } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useDispatch, useSelector } from "react-redux";
-import { BackAppBar } from "../../components";
-import { DetailPagerRoute } from "../../navigations/param_list";
-import { getCollectionPhotos } from "../../redux/features/collection/photos";
-import { getPhotosLatest, getPhotosOldest, getPhotosPopular } from "../../redux/features/photo/action";
-import { getTopicPhotos } from "../../redux/features/topic/detail";
-import { AppDispatch, RootState } from "../../redux/store/store";
-import { Photo } from "../../services/api/type";
-import PageContainer from "./image_page";
+import { useLayoutEffect, useRef, useState } from "react"
+import PagerView from "react-native-pager-view"
+import { Surface } from "react-native-paper"
+import { BackAppBar } from "../../components"
+import { useDetailPagerRoute } from "../../navigations/hooks"
+import { Photo } from "../../service/unsplash/models"
+import PageContainer from "./image_page"
 
-export default function DetailViewPager({ route }: DetailPagerRoute) {
-	const { top, bottom } = useSafeAreaInsets();
-	const dispatch = useDispatch<AppDispatch>();
-	const initalPage = route.params.position;
-	const state = useSelector((state: RootState) => {
-		switch (route.params.type) {
-			case "latest":
-				return state.photoLatest;
-			case "oldest":
-				return state.photoOldest;
-			case "popular":
-				return state.photoPopular;
-			case "topic":
-				return state.topicPhotos;
-			case "collection":
-				return state.collectionPhotos;
-			case "search":
-				return state.search;
-		}
-	});
+export default function DetailPagerScreen() {
+	const route = useDetailPagerRoute()
+	const { photos, initPosition = 0 } = route.params
 
-	const loadMore = () => {
-		switch (route.params.type) {
-			case "latest":
-				dispatch(getPhotosLatest());
-				break;
-			case "oldest":
-				dispatch(getPhotosOldest());
-				break;
-			case "popular":
-				dispatch(getPhotosPopular());
-				break;
-			case "topic":
-				dispatch(getTopicPhotos("nextPage"));
-				break;
-			case "collection":
-				dispatch(getCollectionPhotos("nextPage"));
-				break;
-		}
-	};
+	const ref = useRef<PagerView>(null)
+	const [data, setData] = useState<Photo[]>(() => {
+		const currentPhoto = photos[initPosition]
+		return [currentPhoto]
+	})
 
-	const onPageChange = (index: number) => {
-		if (index > state.photos.length - 4) {
-			loadMore();
-		}
-	};
+	useLayoutEffect(() => {
+    console.log(photos.length)
+		setData([...photos])
+		// ref.current?.setPage(initPosition)
+	}, [photos])
+
+  console.log(data.length)
 
 	return (
-		<Surface mode="flat" style={{ flex: 1, height: "100%", paddingTop: top, paddingBottom: bottom }}>
+		<Surface style={{ flex: 1, height: "100%" }}>
 			<BackAppBar />
-			<PagerView
-				style={{ flex: 1 }}
-				offscreenPageLimit={1}
-				initialPage={initalPage}
-				pageMargin={8}
-				overdrag={false}
-				onPageSelected={(position) => {
-					onPageChange(position.nativeEvent.position);
-				}}
-			>
-				{state.photos.map((photo: Photo) => (
-					<PageContainer key={photo.id} photo={photo} />
-				))}
+			<PagerView ref={ref} style={{flex: 1}} offscreenPageLimit={1} collapsable={false} pageMargin={8}>
+				{data.map((photo) => {
+					return <PageContainer key={photo.id} photo={photo} />
+				})}
 			</PagerView>
 		</Surface>
-	);
+	)
 }

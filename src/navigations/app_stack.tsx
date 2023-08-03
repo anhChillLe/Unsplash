@@ -1,41 +1,43 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import CollectionPhoto from "../pages/collections/collection_photos";
-import CollectionScreen from "../pages/collections/collections_screen";
-import DetailViewPager from "../pages/detail/detail_pager";
-import DetailScreen from "../pages/detail/detail_screen";
-import HomeScreen from "../pages/home/HomeScreen";
-import TopNavigationListImage from "../pages/list/list_wallpaper_group";
-import SearchResultScreen from "../pages/search/search_result";
-import SearchScreen from "../pages/search/search_screen";
-import TopicDetail from "../pages/topics/topic_photos";
-import TopicScreen from "../pages/topics/topics_screen";
-import CurrentUserPage from "../pages/user/current_user_page";
-import UserCollectionPage from "../pages/user/user_collection";
-import UserPage from "../pages/user/user_page";
-import UserPhotoPage from "../pages/user/user_photo";
-import { options } from "./options";
-import { AppParamList } from "./param_list";
-import { ScreenName } from "./screen_name";
+import { createStackNavigator } from "@react-navigation/stack"
+import CollectionPhoto from "../pages/collections/collection_photos"
+import CollectionScreen from "../pages/collections/collections_screen"
+import DetailScreen from "../pages/detail/detail_screen"
+import HomeScreen from "../pages/home/HomeScreen"
+import TopNavigationListImage from "../pages/list/list_photo_group"
+import SearchResultScreen from "../pages/search/search_result"
+import SearchScreen from "../pages/search/search_screen"
+import TopicDetail from "../pages/topics/topic_photos"
+import TopicScreen from "../pages/topics/topics_screen"
+import UserCollectionPage from "../pages/user/user_collection"
+import UserPage from "../pages/user/user_page"
+import UserPhotoPage from "../pages/user/user_photo"
+import { options } from "./options"
+import { AppParamList } from "./param_list"
+import { Screens } from "./screen_name"
+import DetailPagerScreen from "../pages/detail/detail_pager"
+import EditUserProfile from "../pages/currentUser/edit_profile"
+import UserStatisticsScreen from "../pages/user/user_statistics"
 
-const Stack = createStackNavigator<AppParamList>();
+const Stack = createStackNavigator<AppParamList>()
 
 export default function AppStack() {
 	return (
-		<Stack.Navigator initialRouteName={ScreenName.home} screenOptions={options}>
-			<Stack.Screen name={ScreenName.home} component={HomeScreen} />
-			<Stack.Screen name={ScreenName.detail} component={DetailScreen} />
-			<Stack.Screen name={ScreenName.topics} component={TopicScreen} />
-			<Stack.Screen name={ScreenName.collections} component={CollectionScreen} />
-			<Stack.Screen name={ScreenName.allImage} component={TopNavigationListImage} />
-			<Stack.Screen name={ScreenName.collectionPhotos} component={CollectionPhoto} />
-			<Stack.Screen name={ScreenName.topicPhotos} component={TopicDetail} />
-			<Stack.Screen name={ScreenName.detailPager} component={DetailViewPager} />
-			<Stack.Screen name={ScreenName.search} component={SearchScreen} />
-			<Stack.Screen name={ScreenName.searchResult} component={SearchResultScreen} />
-			<Stack.Screen name={ScreenName.user} component={UserPage} />
-			<Stack.Screen name={ScreenName.currentUser} component={CurrentUserPage} />
-			<Stack.Screen name={ScreenName.userCollections} component={UserCollectionPage} />
-			<Stack.Screen name={ScreenName.userPhotos} component={UserPhotoPage} />
+		<Stack.Navigator initialRouteName={Screens.home} screenOptions={options}>
+			<Stack.Screen name={Screens.home} component={HomeScreen} />
+			<Stack.Screen name={Screens.detail} component={DetailScreen} />
+			<Stack.Screen name={Screens.detailPager} component={DetailPagerScreen}/>
+			<Stack.Screen name={Screens.topics} component={TopicScreen} />
+			<Stack.Screen name={Screens.collections} component={CollectionScreen} />
+			<Stack.Screen name={Screens.allImage} component={TopNavigationListImage} />
+			<Stack.Screen name={Screens.collectionPhotos} component={CollectionPhoto} />
+			<Stack.Screen name={Screens.topicPhotos} component={TopicDetail} />
+			<Stack.Screen name={Screens.search} component={SearchScreen} />
+			<Stack.Screen name={Screens.searchResult} component={SearchResultScreen} />
+			<Stack.Screen name={Screens.user} component={UserPage} />
+			<Stack.Screen name={Screens.userCollections} component={UserCollectionPage} />
+			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
+			<Stack.Screen name={Screens.editUserProfile} component={EditUserProfile}/>
+			<Stack.Screen name={Screens.userStatistics} component={UserStatisticsScreen}/>
 		</Stack.Navigator>
-	);
+	)
 }

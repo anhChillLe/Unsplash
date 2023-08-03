@@ -16,12 +16,13 @@ import { Fillter } from "../../service/unsplash/params/search_params"
 export default function SearchScreen() {
 	const { top } = useSafeAreaInsets()
 	const navigation = useAppNavigation()
-	const [searchValue, setSearchValue] = useState<string>("")
+	const [searchValue, setSearchValue] = useState("")
 	const filter = useRef<Fillter>({})
 	const searchRef = useRef<TextInput>(null)
 	const [flag, setFlag] = useState(false)
 
 	const handleSearchSubmit = async (query: string) => {
+		if (searchValue === "") return
 		navigation.navigate({
 			name: Screens.searchResult,
 			params: {
@@ -44,17 +45,13 @@ export default function SearchScreen() {
 					placeholder="Search for image"
 					ref={searchRef}
 					value={searchValue}
-					onLayout={() => searchRef.current?.focus()}
+					onLayout={searchRef.current?.focus}
 					autoCapitalize="none"
 					onChangeText={setSearchValue}
 					onSubmitEditing={() => handleSearchSubmit(searchValue)}
 					style={styles.search}
 				/>
 			</View>
-
-			<Text variant="headlineLarge" style={styles.cardHeader}>
-				Histories
-			</Text>
 
 			<Histories onItemPress={handleSearchSubmit} flag={flag} />
 
@@ -90,37 +87,46 @@ export default function SearchScreen() {
 	)
 }
 
-function Histories({ onItemPress, flag }: { flag: boolean; onItemPress: (query: string) => void }) {
+type HistoriesProps = {
+	flag: boolean
+	onItemPress: (query: string) => void
+}
+function Histories({ onItemPress, flag }: HistoriesProps) {
 	const [histories, setHistories] = useState<string[]>([])
 	const nonDuplicateHistories = Array.from(new Set(histories))
 
-	function getHistories() {
-		History.get().then(data => {
-			setHistories(data)
-		})
+	const getHistories = () => {
+		History.get().then(data => setHistories(data))
 	}
 
-	function removeHistory(query: string) {
+	const removeHistory = (query: string) => {
 		History.remove(query)
 		setHistories(histories.filter(history => history != query))
 	}
 
 	useEffect(getHistories, [flag])
 
+	if (histories.length === 0) return null
+
 	return (
-		<View style={styles.historiesContainer}>
-			{nonDuplicateHistories.map((query, index) => (
-				<Chip
-					key={index}
-					style={styles.history}
-					mode="outlined"
-					onClose={() => removeHistory(query)}
-					onPress={() => onItemPress(query)}
-				>
-					{query}
-				</Chip>
-			))}
-		</View>
+		<>
+			<Text variant="headlineLarge" style={styles.cardHeader}>
+				Histories
+			</Text>
+			<View style={styles.historiesContainer}>
+				{nonDuplicateHistories.map((query, index) => (
+					<Chip
+						key={index}
+						style={styles.history}
+						mode="outlined"
+						onClose={() => removeHistory(query)}
+						onPress={() => onItemPress(query)}
+					>
+						{query}
+					</Chip>
+				))}
+			</View>
+		</>
 	)
 }
 

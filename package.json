@@ -6,10 +6,11 @@
     "connect": "adb connect 192.168.200.31",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "ios-release":"npx react-native run-ios --mode Release",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "release": "cd android && ./gradlew assembleRelease && cd app/build/outputs/apk/release && adb install app-release.apk",
+    "android-release": "cd android && ./gradlew assembleRelease && cd app/build/outputs/apk/release && adb install app-release.apk",
     "build-release": "cd android && ./gradlew assembleRelease",
     "install-release": "cd android/app/build/outputs/apk/release && adb install app-release.apk",
     "setup-permission": "react-native setup-ios-permissions && cd ios && pod install"

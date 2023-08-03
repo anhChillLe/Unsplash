@@ -22,7 +22,7 @@ export default function TopicGroup({ width }: { width: number }) {
 	return (
 		<>
 			<GroupHeading containerStyle={styles.heading} onMorePress={handleMorePress}>
-				Hot topics
+				Topics
 			</GroupHeading>
 			<ListAlbums
 				data={topicsState.topics}

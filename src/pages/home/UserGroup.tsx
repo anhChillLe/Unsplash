@@ -2,7 +2,7 @@ import { PropsWithChildren, useState } from "react"
 import { Pressable, StyleSheet, View } from "react-native"
 import { Avatar, Divider, IconButton, Menu, Text } from "react-native-paper"
 import { useDispatch, useSelector } from "react-redux"
-import { LoginWidthUnsplash as Login } from "../../actions/link_actions"
+import { LoginWithUnsplash as Login } from "../../actions/link_actions"
 import { Icons } from "../../assets/images/icons"
 import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
@@ -30,12 +30,12 @@ export default function UserGroup() {
 	}
 
 	const openEdit = () => {
-		navigation.navigate(Screens.editUserProfile)
+		// navigation.navigate(Screens.editUserProfile)
 		closeMenu()
 	}
 
 	const openCreateCollection = () => {
-		navigation.navigate(Screens.createCollection)
+		// navigation.navigate(Screens.createCollection)
 		closeMenu()
 	}
 

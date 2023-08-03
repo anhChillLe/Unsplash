@@ -10,7 +10,6 @@ export default function useUserCollections(username: string) {
 
 	const getCollections = useCallback(() => {
 		if(isLoading) return
-
 		setLoading(true)
 		unsplash.user
 			.listCollection({ username, page: page.current + 1, per_page: 10 })
@@ -19,7 +18,7 @@ export default function useUserCollections(username: string) {
 				setCollections([...collections, ...data])
 				page.current += 1
 			})
-			.catch(error => console.error("Get current user collections: ", error))
+			.catch(error => console.error("Get user collections: ", error))
 			.finally(() => isMounted.current && setLoading(false))
 	}, [username])
 

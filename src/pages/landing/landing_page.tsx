@@ -1,19 +1,10 @@
-import { ImageBackground, Platform, StatusBar, StyleSheet, View } from "react-native"
+import { ImageBackground, StyleSheet, View } from "react-native"
 import { Button, Text } from "react-native-paper"
 import { LoginWithUnsplash } from "../../actions/link_actions"
 import { Images } from "../../assets/images"
 import { Icons } from "../../assets/images/icons"
-import { useEffect } from "react"
 
 export default function LandingPage() {
-	Platform.OS === "android" &&
-		useEffect(() => {
-			StatusBar.setTranslucent(true)
-			return () => {
-				StatusBar.setTranslucent(false)
-			}
-		}, [])
-
 	return (
 		<ImageBackground source={Images.landing2} style={styles.container}>
 			<View style={{ alignItems: "flex-start" }}>

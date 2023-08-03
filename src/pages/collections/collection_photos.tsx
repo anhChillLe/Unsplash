@@ -18,12 +18,9 @@ export default function CollectionPhotos() {
 
 	const handleItemPress = (photo: Photo, index: number) =>
 		navigation.navigate({
-			name: Screens.detailPager,
+			name: Screens.detail,
 			key: photo.id,
-			params: {
-				photos: [photo],
-				initPosition: index,
-			},
+			params: { photo },
 			merge: false,
 		})
 

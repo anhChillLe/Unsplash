@@ -8,11 +8,12 @@ import { Screens } from "../../navigations/screen_name"
 import { BaseGroup } from "../../service/unsplash/models"
 
 export default function UserCollection() {
-	const route = useUserCollectionsRoute()
-	const user = route.params.user
 	const { width } = Dimensions.get("window")
-	const navigation = useAppNavigation()
 	const { top, bottom } = useSafeAreaInsets()
+
+	const route = useUserCollectionsRoute()
+	const navigation = useAppNavigation()
+	const user = route.params.user
 	const { isLoading, collections, loadMore } = useUserCollections(user.username)
 
 	const handleItemPress = (collection: BaseGroup) =>

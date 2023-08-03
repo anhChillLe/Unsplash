@@ -10,7 +10,13 @@ export default function PhotoGroup({ style }: { style?: StyleProp<ViewStyle> }) 
 	const navigation = useAppNavigation()
 	const photosState = useSelector((state: RootState) => state.photoPopular)
 	const handleMorePress = () => navigation.navigate(Screens.allImage)
-	const handlePhotoPress = (photo: Photo) => navigation.navigate(Screens.detail, { photo })
+	const handlePhotoPress = (photo: Photo) =>
+		navigation.navigate({
+			key: photo.id,
+			name: Screens.detail,
+			params: { photo },
+			merge: false,
+		})
 
 	return (
 		<>
@@ -37,6 +43,6 @@ const styles = StyleSheet.create({
 	},
 	photoListContainer: {
 		marginTop: 12,
-		paddingHorizontal: 16
+		paddingHorizontal: 16,
 	},
 })

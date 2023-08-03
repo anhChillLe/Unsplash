@@ -12,8 +12,7 @@ export type AppParamList = {
 	[Screens.topicPhotos]: { id_or_slug: string }
 	[Screens.search]: undefined
 	[Screens.searchResult]: { searchInput: SearchPhotosParams }
-	[Screens.user]: { username: string }
-	[Screens.currentUser]: undefined
+	[Screens.user]: { username: string } | undefined
 	[Screens.userCollections]: { user: User }
 	[Screens.userPhotos]: { user: User }
 	[Screens.detailPager]: { photos: Photo[]; initPosition?: number }

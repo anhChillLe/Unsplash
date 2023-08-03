@@ -12,9 +12,7 @@ export default function App(): ReactElement {
 	const isDarkMode = colorScheme === "dark"
 	const theme = isDarkMode ? darkTheme : lightTheme
 
-	if (Platform.OS === "android") {
-		StatusBar.setBackgroundColor(theme.colors.elevation.level1)
-	}
+	Platform.OS === "android" && StatusBar.setBackgroundColor(theme.colors.elevation.level1)
 	StatusBar.setBarStyle(isDarkMode ? "light-content" : "dark-content")
 
 	return (

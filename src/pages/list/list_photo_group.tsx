@@ -30,7 +30,7 @@ export default function TopNavigationListImage() {
 	}
 
 	return (
-		<Surface mode="flat" style={[styles.container, { paddingTop: top, paddingBottom: bottom }]}>
+		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
 			<Divider />
 			<Tab.Navigator initialRouteName={Screens.imagesLatest} offscreenPageLimit={2} screenOptions={options}>

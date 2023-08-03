@@ -7,6 +7,7 @@ import useTopicPhotos from "./topic_photos"
 import useUserPhotos from "./user_photos"
 import useListPhoto from "./photos"
 import useSearch from "./search"
+import useUser from "./user"
 
 export {
 	useCollection,
@@ -17,5 +18,6 @@ export {
 	useTopicPhotos,
 	useUserPhotos,
 	useListPhoto,
-  useSearch
+  useSearch,
+	useUser,
 }

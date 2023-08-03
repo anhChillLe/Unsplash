@@ -8,7 +8,6 @@ import SearchResultScreen from "../pages/search/search_result"
 import SearchScreen from "../pages/search/search_screen"
 import TopicDetail from "../pages/topics/topic_photos"
 import TopicScreen from "../pages/topics/topics_screen"
-import CurrentUserPage from "../pages/currentUser/current_user_page"
 import UserCollectionPage from "../pages/user/user_collection"
 import UserPage from "../pages/user/user_page"
 import UserPhotoPage from "../pages/user/user_photo"
@@ -35,7 +34,6 @@ export default function AppStack() {
 			<Stack.Screen name={Screens.search} component={SearchScreen} />
 			<Stack.Screen name={Screens.searchResult} component={SearchResultScreen} />
 			<Stack.Screen name={Screens.user} component={UserPage} />
-			<Stack.Screen name={Screens.currentUser} component={CurrentUserPage} />
 			<Stack.Screen name={Screens.userCollections} component={UserCollectionPage} />
 			<Stack.Screen name={Screens.userPhotos} component={UserPhotoPage} />
 			<Stack.Screen name={Screens.editUserProfile} component={EditUserProfile}/>

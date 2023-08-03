@@ -5,6 +5,7 @@ import { BackAppBar, ListAlbums, UserElement } from "../../components"
 import { useUserCollections } from "../../hooks"
 import { useAppNavigation, useUserCollectionsRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
+import { BaseGroup } from "../../service/unsplash/models"
 
 export default function UserCollection() {
 	const route = useUserCollectionsRoute()
@@ -13,6 +14,14 @@ export default function UserCollection() {
 	const navigation = useAppNavigation()
 	const { top, bottom } = useSafeAreaInsets()
 	const { isLoading, collections, loadMore } = useUserCollections(user.username)
+
+	const handleItemPress = (collection: BaseGroup) =>
+		navigation.navigate({
+			key: collection.id,
+			name: Screens.collectionPhotos,
+			params: { collection },
+			merge: false,
+		})
 
 	return (
 		<SafeAreaView style={{ flex: 1 }} edges={[]}>
@@ -33,14 +42,14 @@ export default function UserCollection() {
 					style={{ flex: 1 }}
 					header={<UserElement {...user} style={{ marginBottom: 16 }} />}
 					onEndReached={loadMore}
-					onItemPress={collection => navigation.navigate(Screens.collectionPhotos, {collection})}
+					onItemPress={handleItemPress}
 					contentContainerStyle={{
 						paddingBottom: bottom + 16,
 						paddingHorizontal: 16,
 					}}
 					isLoading={isLoading}
 					width={width - 32}
-					showLoadingFooter={true}
+					showLoadingFooter={collections.length < user.total_collections}
 				/>
 			</Surface>
 		</SafeAreaView>

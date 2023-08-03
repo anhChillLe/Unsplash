@@ -22,10 +22,13 @@ export default function SearchScreen() {
 	const [flag, setFlag] = useState(false)
 
 	const handleSearchSubmit = async (query: string) => {
-		navigation.navigate(Screens.searchResult, {
-			searchInput: {
-				query,
-				...filter.current,
+		navigation.navigate({
+			name: Screens.searchResult,
+			params: {
+				searchInput: {
+					query,
+					...filter.current,
+				},
 			},
 		})
 		await History.save(query)
@@ -63,25 +66,25 @@ export default function SearchScreen() {
 				title="Order by"
 				data={orderBys}
 				style={styles.filterCard}
-				onSelected={(value) => (filter.current.order_by = value as SearchOrderBy)}
+				onSelected={value => (filter.current.order_by = value as SearchOrderBy)}
 			/>
 			<FilterCard
 				title="Content filter"
 				data={contentFilters}
 				style={styles.filterCard}
-				onSelected={(value) => (filter.current.content_filter = value as ContentFilter)}
+				onSelected={value => (filter.current.content_filter = value as ContentFilter)}
 			/>
 			<FilterCard
 				title="Color"
 				data={colorValues}
 				style={styles.filterCard}
-				onSelected={(value) => (filter.current.color = value as ColorId)}
+				onSelected={value => (filter.current.color = value as ColorId)}
 			/>
 			<FilterCard
 				title="Orientation"
 				data={orientations}
 				style={styles.filterCard}
-				onSelected={(value) => (filter.current.orientation = value as Orientation)}
+				onSelected={value => (filter.current.orientation = value as Orientation)}
 			/>
 		</Surface>
 	)
@@ -92,14 +95,14 @@ function Histories({ onItemPress, flag }: { flag: boolean; onItemPress: (query: 
 	const nonDuplicateHistories = Array.from(new Set(histories))
 
 	function getHistories() {
-		History.get().then((data) => {
+		History.get().then(data => {
 			setHistories(data)
 		})
 	}
 
 	function removeHistory(query: string) {
 		History.remove(query)
-		setHistories(histories.filter((history) => history != query))
+		setHistories(histories.filter(history => history != query))
 	}
 
 	useEffect(getHistories, [flag])

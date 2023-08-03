@@ -24,7 +24,7 @@ export default function CollectionPhotos() {
 				photos: [photo],
 				initPosition: index,
 			},
-			merge: true,
+			merge: false,
 		})
 
 	return (

@@ -17,7 +17,13 @@ export default function TopicScreen() {
 	const navigation = useAppNavigation()
 
 	const loadMore = () => dispatch(fetchTopics())
-	const handleItemPress = (topic: BaseGroup) => navigation.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
+	const handleItemPress = (topic: BaseGroup) =>
+		navigation.navigate({
+			key: topic.id,
+			name: Screens.topicPhotos,
+			params: { id_or_slug: topic.id },
+			merge: false,
+		})
 
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>
@@ -53,14 +59,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: "100%",
 	},
-	list:{
-		flex: 1
+	list: {
+		flex: 1,
 	},
 
 	listContainer: {
 		paddingHorizontal: 16,
 	},
 	heading: {
-		fontWeight: "500", marginVertical: 16
-	}
+		fontWeight: "500",
+		marginVertical: 16,
+	},
 })

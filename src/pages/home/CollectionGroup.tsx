@@ -9,7 +9,13 @@ import { BaseGroup } from "../../service/unsplash/models"
 export default function CollectionGroup({ width }: { width: number }) {
 	const collectionsState = useSelector((state: RootState) => state.collection)
 	const navigation = useAppNavigation()
-	const handleItemPress = (collection: BaseGroup) => navigation.navigate(Screens.collectionPhotos, { collection })
+	const handleItemPress = (collection: BaseGroup) =>
+		navigation.navigate({
+			key: collection.id,
+			name: Screens.collectionPhotos,
+			params: { collection },
+			merge: false,
+		})
 	const handleMorePress = () => navigation.navigate(Screens.collections)
 
 	return (

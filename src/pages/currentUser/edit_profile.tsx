@@ -5,8 +5,8 @@ import { Avatar, Button, IconButton, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as yup from "yup"
 import { BackAppBar, LoadingScreen, TextField } from "../../components"
-import { useAppDispatch, useUserState } from "../../redux/store/store"
 import { updateCurrentUser } from "../../redux/features/user/action"
+import { useAppDispatch, useUserState } from "../../redux/store/store"
 
 export default function EditUserProfile() {
 	const state = useUserState()
@@ -135,7 +135,7 @@ export default function EditUserProfile() {
 						title="About"
 						control={control}
 						name="bio"
-						initValue={bio}
+						initValue={bio ?? ""}
 						placeholder="Description about you"
 						errors={errors}
 						style={styles.field}
@@ -144,7 +144,7 @@ export default function EditUserProfile() {
 						title="Instagram"
 						control={control}
 						name="instagram_username"
-						initValue={instagram_username}
+						initValue={instagram_username ?? ""}
 						placeholder="Instagram username"
 						errors={errors}
 						style={styles.field}

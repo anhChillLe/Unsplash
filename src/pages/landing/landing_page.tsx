@@ -1,16 +1,10 @@
 import { ImageBackground, StyleSheet, View } from "react-native"
 import { Button, Text } from "react-native-paper"
-import { LoginWidthUnsplash } from "../../actions/link_actions"
+import { LoginWithUnsplash } from "../../actions/link_actions"
 import { Images } from "../../assets/images"
 import { Icons } from "../../assets/images/icons"
-import { useAppNavigation } from "../../navigations/hooks"
 
 export default function LandingPage() {
-	const navigation = useAppNavigation()
-	const openApp = () => {
-		// navigation.navigate(ScreenName.main)
-	}
-
 	return (
 		<ImageBackground source={Images.landing2} style={styles.container}>
 			<View style={{ alignItems: "flex-start" }}>
@@ -22,7 +16,7 @@ export default function LandingPage() {
 				</Text>
 			</View>
 			<View style={styles.buttonGroup}>
-				<Button
+				{/* <Button
 					mode="contained"
 					rippleColor="transparent"
 					onPress={openApp}
@@ -30,10 +24,10 @@ export default function LandingPage() {
 					labelStyle={styles.buttonLabel}
 				>
 					Maybe laster
-				</Button>
+				</Button> */}
 				<Button
 					mode="contained"
-					onPress={LoginWidthUnsplash}
+					onPress={LoginWithUnsplash}
 					icon={Icons.unsplash}
 					rippleColor="transparent"
 					style={[styles.button, styles.buttonLogin]}

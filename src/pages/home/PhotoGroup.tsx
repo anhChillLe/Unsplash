@@ -21,7 +21,7 @@ export default function PhotoGroup({ style }: { style?: StyleProp<ViewStyle> }) 
 	return (
 		<>
 			<GroupHeading containerStyle={[styles.photoHeading, style]} onMorePress={handleMorePress}>
-				Top of the week
+				Photos
 			</GroupHeading>
 			<HorizontalImageList
 				data={photosState.photos}

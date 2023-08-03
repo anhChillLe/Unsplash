@@ -60,9 +60,6 @@
                     android:host="app"
                     android:scheme="unsplash" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-            </intent-filter>
         </activity>
     </application>
 

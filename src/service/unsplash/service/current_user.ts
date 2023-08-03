@@ -7,7 +7,7 @@ const CurrentUserService = {
 		return response.data
 	},
 	update: async (params: UpdateUserProfieParams) => {
-		const response = await API.put<FullUser>("/me", { params })
+		const response = await API.put<FullUser>("/me", undefined, { params })
 		return response.data
 	},
 }

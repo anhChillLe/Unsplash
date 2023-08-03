@@ -21,7 +21,7 @@ export default function CollectionGroup({ width }: { width: number }) {
 	return (
 		<>
 			<GroupHeading containerStyle={styles.collectionHeading} onMorePress={handleMorePress}>
-				Hot collections
+				Collections
 			</GroupHeading>
 			<ListAlbums
 				data={collectionsState.collections}

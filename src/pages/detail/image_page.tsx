@@ -32,8 +32,15 @@ export default function Page({ photo }: { photo: Photo }): ReactElement {
 
 	const handleShare = () => ShareService.sharePhotoLink(photo)
 	const handleDownload = () => DownloadService.savePhoto(photo)
-	const handleUserPress = () => navigation.navigate(Screens.user, { username })
-	const handleWallpaperPress = () => photo.links.download && WallpaperManager.setWallpaperFromStream(photo.links.download)
+	const handleUserPress = () =>
+		navigation.navigate({
+			key: username,
+			name: Screens.user,
+			params: { username },
+			merge: false,
+		})
+	const handleWallpaperPress = () =>
+		photo.links.download && WallpaperManager.setWallpaperFromStream(photo.links.download)
 
 	const {
 		user: { profile_image, username, name },

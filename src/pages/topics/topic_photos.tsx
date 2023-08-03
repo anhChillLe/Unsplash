@@ -7,7 +7,7 @@ import { BackAppBar, ListPhoto } from "../../components"
 import { useTopic, useTopicPhotos } from "../../hooks"
 import { useAppNavigation, useTopicPhotosRoute } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
-import { FullTopic, User } from "../../service/unsplash/models"
+import { FullTopic, Photo, User } from "../../service/unsplash/models"
 import "../../ultilities/date_distance"
 
 export default function TopicDetail() {
@@ -17,8 +17,16 @@ export default function TopicDetail() {
 
 	const { top } = useSafeAreaInsets()
 	const navigation = useAppNavigation()
-	const {topic} = useTopic(id_or_slug)
-	const {photos, loadMore} = useTopicPhotos(id_or_slug)
+	const { topic } = useTopic(id_or_slug)
+	const { photos, loadMore } = useTopicPhotos(id_or_slug)
+
+	const handleItemPress = (photo: Photo) =>
+		navigation.navigate({
+			key: photo.id,
+			name: Screens.detail,
+			params: { photo },
+			merge: false,
+		})
 
 	return (
 		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
@@ -28,7 +36,7 @@ export default function TopicDetail() {
 				space={4}
 				photos={photos}
 				header={topic && <ListHeader {...topic} />}
-				onItemPress={(photo, index) => navigation.navigate(Screens.detail, { photo })}
+				onItemPress={handleItemPress}
 				column={3}
 				itemThreshold={9}
 				onEndReached={loadMore}
@@ -41,9 +49,16 @@ export default function TopicDetail() {
 const ListHeader = (topic: FullTopic) => {
 	const navigation = useAppNavigation()
 	const { title, owners, description, total_photos } = topic
+	// Remove <p></p>
+	const cleanedText = description?.replace(/<p>.*?<\/p>/g, "")?.trim()
 
-	  // Remove <p></p>
-		const cleanedText = description?.replace(/<p>.*?<\/p>/g, '')?.trim()
+	const handleUserPress = (user: User) =>
+		navigation.navigate({
+			key: user.username,
+			name: Screens.user,
+			params: { username: user.username },
+			merge: false,
+		})
 
 	return (
 		<Surface mode="flat" style={styles.headerContainer}>
@@ -56,7 +71,7 @@ const ListHeader = (topic: FullTopic) => {
 					<Chip
 						key={user.id}
 						avatar={<Avatar.Image size={24} source={{ uri: user.profile_image.medium }} />}
-						onPress={() => navigation.navigate(Screens.user, { username: user.username })}
+						onPress={() => handleUserPress(user)}
 					>
 						{user.name}
 					</Chip>
@@ -86,7 +101,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 4,
 	},
 	listContainer: {
-		paddingHorizontal: 8
+		paddingHorizontal: 8,
 	},
 	heading: {
 		fontWeight: "bold",

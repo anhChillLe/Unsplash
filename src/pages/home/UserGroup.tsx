@@ -1,14 +1,13 @@
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../../redux/store/store"
+import { PropsWithChildren, useState } from "react"
 import { Pressable, StyleSheet, View } from "react-native"
 import { Avatar, Divider, IconButton, Menu, Text } from "react-native-paper"
-import { PropsWithChildren, useContext, useState } from "react"
-import { Icons } from "../../assets/images/icons"
+import { useDispatch, useSelector } from "react-redux"
 import { LoginWidthUnsplash as Login } from "../../actions/link_actions"
-import { NavigationContext } from "@react-navigation/native"
+import { Icons } from "../../assets/images/icons"
+import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import { clearToken } from "../../redux/features/auth/action"
-import { useAppNavigation } from "../../navigations/hooks"
+import { AppDispatch, RootState } from "../../redux/store/store"
 
 export default function UserGroup() {
 	const dispatch = useDispatch<AppDispatch>()
@@ -26,7 +25,7 @@ export default function UserGroup() {
 		</Pressable>
 	)
 	const openUserProfile = () => {
-		navigation.navigate(Screens.currentUser)
+		navigation.navigate(Screens.user)
 		closeMenu()
 	}
 
@@ -36,7 +35,7 @@ export default function UserGroup() {
 	}
 
 	const openCreateCollection = () => {
-		navigation.navigate(Screens.createCollection, {})
+		navigation.navigate(Screens.createCollection)
 		closeMenu()
 	}
 

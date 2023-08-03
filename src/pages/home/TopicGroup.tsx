@@ -8,10 +8,16 @@ import { BaseGroup } from "../../service/unsplash/models"
 
 export default function TopicGroup({ width }: { width: number }) {
 	const topicsState = useSelector((state: RootState) => state.topic)
-	const navigation =  useAppNavigation()
+	const navigation = useAppNavigation()
 
 	const handleMorePress = () => navigation.navigate(Screens.topics)
-	const handleTopicPress = (topic: BaseGroup) => navigation.navigate(Screens.topicPhotos, { id_or_slug: topic.id })
+	const handleTopicPress = (topic: BaseGroup) =>
+		navigation.navigate({
+			key: topic.id,
+			name: Screens.topicPhotos,
+			params: { id_or_slug: topic.id },
+			merge: false,
+		})
 
 	return (
 		<>

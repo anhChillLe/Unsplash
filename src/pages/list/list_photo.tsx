@@ -11,7 +11,13 @@ export default function ListImage({ order }: { order: OrderBy }) {
 	const navigation = useAppNavigation()
 	const width = Dimensions.get("window").width
 	const { loadMore, photos, isLoading } = useListPhoto(order)
-	const handleItemPress = (photo: Photo, index: number) => navigation.navigate(Screens.detail, { photo })
+	const handleItemPress = (photo: Photo, index: number) =>
+		navigation.navigate({
+			key: photo.id,
+			name: Screens.detail,
+			params: { photo },
+			merge: false,
+		})
 
 	return (
 		<Surface style={styles.container}>

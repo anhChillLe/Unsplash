@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Dimensions } from "react-native"
-import { Surface, useTheme } from "react-native-paper"
+import { Surface } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Chart } from "../../components"
 import { useUserStatisticsRoute } from "../../navigations/hooks"
@@ -11,14 +11,12 @@ export default function UserStatisticsScreen() {
 	const route = useUserStatisticsRoute()
 	const username = route.params.user.username
 	const inset = useSafeAreaInsets()
-	const theme = useTheme()
 	const { width, height } = Dimensions.get("window")
 	const safeWidth = width - 32
 
 	const [statistics, setStatistics] = useState<UserStatistics>()
 	const getStatistics = async () => {
 		const statistics = await unsplash.user.statistics({ username })
-		console.log(statistics)
 		setStatistics(statistics)
 	}
 
@@ -33,6 +31,7 @@ export default function UserStatisticsScreen() {
 		<Surface
 			style={{
 				flex: 1,
+				height: "100%",
 				paddingHorizontal: 16,
 				paddingTop: inset.top,
 				paddingBottom: inset.bottom,

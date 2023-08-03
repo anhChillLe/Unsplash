@@ -12,13 +12,18 @@ export default function SearchResultScreen() {
 	const { width } = Dimensions.get("window")
 	const { top, bottom } = useSafeAreaInsets()
 	const navigation = useAppNavigation()
-	const handleItemPress = (photo: Photo, index: number) => navigation.navigate(Screens.detail, { photo })
+	const handleItemPress = (photo: Photo, index: number) =>
+		navigation.navigate({
+			key: photo.id,
+			name: Screens.detail,
+			params: { photo },
+			merge: false,
+		})
 	const { photos, total, loadMore } = useSearch(route.params.searchInput)
 
 	return (
 		<Surface mode="flat" style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
-
 			<ListPhoto
 				width={width - 8}
 				space={4}

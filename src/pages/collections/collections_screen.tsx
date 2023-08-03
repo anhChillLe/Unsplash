@@ -9,6 +9,7 @@ import { useContext } from "react"
 import { NavigationContext } from "@react-navigation/native"
 import { Screens } from "../../navigations/screen_name"
 import { useAppNavigation } from "../../navigations/hooks"
+import { BaseGroup } from "../../service/unsplash/models"
 
 export default function CollectionScreen() {
 	const state = useSelector((state: RootState) => state.collection)
@@ -22,6 +23,14 @@ export default function CollectionScreen() {
 		dispatch(fetchCollections())
 	}
 
+	const handleItemPress = (collection: BaseGroup) =>
+	navigation.navigate({
+		key: collection.id,
+		name: Screens.collectionPhotos,
+		params: { collection },
+		merge: false,
+	})
+
 	return (
 		<Surface style={[styles.container, { paddingTop: top }]}>
 			<BackAppBar />
@@ -34,7 +43,7 @@ export default function CollectionScreen() {
 				style={styles.list}
 				header={<Header />}
 				onEndReached={loadMore}
-				onItemPress={(collection) => navigation.navigate(Screens.collectionPhotos, { collection })}
+				onItemPress={handleItemPress}
 				contentContainerStyle={[styles.listContainer, { paddingBottom: bottom + 16 }]}
 				isLoading={state.isLoading}
 				width={safeAreaWidth}

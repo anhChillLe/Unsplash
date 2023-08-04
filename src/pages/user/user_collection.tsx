@@ -42,7 +42,7 @@ export default function UserCollection() {
 					itemMode="group"
 					style={{ flex: 1 }}
 					header={<UserElement {...user} style={{ marginBottom: 16 }} />}
-					onEndReached={loadMore}
+					onEndReached={collections.length < user.total_collections ? loadMore : undefined}
 					onItemPress={handleItemPress}
 					contentContainerStyle={{
 						paddingBottom: bottom + 16,

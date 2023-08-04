@@ -8,7 +8,7 @@
     "ios": "react-native run-ios",
     "ios-release":"npx react-native run-ios --mode Release",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
     "test": "jest",
     "android-release": "cd android && ./gradlew assembleRelease && cd app/build/outputs/apk/release && adb install app-release.apk",
     "build-release": "cd android && ./gradlew assembleRelease",

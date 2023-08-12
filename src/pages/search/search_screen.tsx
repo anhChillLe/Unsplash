@@ -39,7 +39,7 @@ export default function SearchScreen() {
 
 	return (
 		<Surface style={[styles.container, { paddingTop: 16 + top }]}>
-			<BackAppBar />
+			<BackAppBar  />
 
 			<View style={styles.searchContainer}>
 				<Searchbar

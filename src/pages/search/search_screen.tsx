@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { StyleSheet, TextInput, View } from "react-native"
 import { Chip, Searchbar, Surface, Text } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { FilterCard } from "../../components"
+import { BackAppBar, FilterCard } from "../../components"
 import { useAppNavigation } from "../../navigations/hooks"
 import { Screens } from "../../navigations/screen_name"
 import History from "../../service/storage/shared_preferences"
@@ -39,6 +39,8 @@ export default function SearchScreen() {
 
 	return (
 		<Surface style={[styles.container, { paddingTop: 16 + top }]}>
+			<BackAppBar  />
+
 			<View style={styles.searchContainer}>
 				<Searchbar
 					mode="bar"
